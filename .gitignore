@@ -1,0 +1,44 @@
+# Node modules
+node_modules/
+
+# 환경 변수
+.env
+.env.*
+
+# 로그 파일
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 운영체제별
+.DS_Store
+Thumbs.db
+
+# 에디터/IDE 설정
+.vscode/
+*.swp
+
+# 빌드 결과물
+dist/
+build/
+
+# 커스텀 파일
+logs/
+*.log
+
+# 테스트 커버리지
+coverage/
+
+# 프로젝트 내 임시 파일
+*.local
+*.cache
+.tmp/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
