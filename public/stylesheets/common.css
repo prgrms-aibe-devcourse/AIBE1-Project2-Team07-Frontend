@@ -1,0 +1,117 @@
+/* Common CSS for PetTalk - Used across different pages */
+
+/* Font settings */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+:root {
+    --primary-color: #fbd01e;
+    --secondary-color: #FF9800;
+    --dark-color: #333333;
+    --light-color: #F8F9FA;
+    --text-color: #212529;
+    --gray-color: #6C757D;
+    --white-color: #FFFFFF;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    padding-top: 80px;
+}
+
+/* Navigation styles */
+.navbar {
+    position: fixed;      /* 고정 위치 */
+    top: 0;               /* 상단에 고정 */
+    left: 0;
+    width: 100%;          /* 전체 너비 */
+    height: 80px;
+    z-index: 1000;        /* 다른 요소보다 위에 */
+    background-color: white; /* 배경색 명시 (겹침 방지) */
+}
+
+.navbar-brand img {
+    max-height: 40px;
+}
+
+.navbar .nav-item {
+    margin: 0 10px;
+}
+
+.navbar .nav-link {
+    color: var(--dark-color);
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.navbar .nav-link:hover {
+    color: var(--primary-color);
+}
+
+.login-btn {
+    font-weight: 500;
+    padding: 8px 20px;
+}
+
+/* Button styles */
+.btn-warning {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--dark-color);
+    font-weight: 500;
+}
+
+.btn-warning:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: var(--dark-color);
+}
+
+.btn-outline-warning {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.btn-outline-warning:hover {
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+}
+
+/* Footer styles */
+.footer {
+    background-color: var(--light-color);
+    padding: 30px 0;
+    color: var(--gray-color);
+}
+
+.footer-link {
+    color: var(--gray-color);
+    margin-left: 15px;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+.footer-link:hover {
+    color: var(--dark-color);
+}
+
+/* Container width for 1444px wireframe */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1444px;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar .nav-item {
+        margin: 5px 0;
+    }
+
+    .login-btn {
+        display: inline-block;
+        margin-top: 10px;
+    }
+}
