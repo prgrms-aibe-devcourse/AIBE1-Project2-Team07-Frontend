@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>헤더와 푸터만 있는 템플릿입니당</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="stylesheets/common.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-white">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">훈련사</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">커뮤니티</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">내 프로필</a>
+        </li>
+        <li class="nav-item">
+          <a class="btn btn-warning rounded-pill login-btn" href="#">로그인</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<footer class="bg-dark text-white py-5 mt-5">
+  <div class="container">
+    <div class="row justify-content-center text-center">
+      <!-- 회사 정보 -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+        <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+        <p class="mb-1">사업자등록번호: 123-45-67890</p>
+        <p class="mb-1">대표: Lucky0111</p>
+        <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+      </div>
+
+      <!-- 고객센터 -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3">고객센터</h5>
+        <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+        <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+        <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+        <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+      </div>
+
+      <!-- 펫톡 소개 -->
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3">펫톡 소개</h5>
+        <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+        <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+        <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+      </div>
+    </div>
+
+    <hr class="my-4 border-light">
+
+    <div class="text-center small">
+      <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap & JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="javascripts/trainerList.js"></script>
+</body>
+</html>
