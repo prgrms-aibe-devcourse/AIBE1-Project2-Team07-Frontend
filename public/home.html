@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PetTalk</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+    <link rel="stylesheet" href="./stylesheets/common.css">
+    <link rel="stylesheet" href="./stylesheets/home.css">
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container position-relative">
+        <a class="navbar-brand" href="/">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-items">
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="#">훈련사</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="#">커뮤니티</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="#">내 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section with Search -->
+<section class="hero-section py-5">
+    <div class="container">
+        <div class="messages-container" id="messagesContainer">
+            <h2 class="text-center mb-5">무엇을 도와드릴까요?</h2>
+            <div class="row justify-content-center mb-3">
+                <!-- Category Boxes -->
+                <div class="col-lg-7">
+                    <div class="row gy-4">
+                        <div class="col-md-4">
+                            <div class="category-box" data-category="visit-request">
+                                <h4>방문지도 요청</h4>
+                                <p>반려동물의 문제점을 고치기 위해 방문 지도를 신청하고 싶어요.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-box" data-category="symptom-search">
+                                <h4>비슷한 증상 검색</h4>
+                                <p>반려동물의 증상과 유사한 사례가 있는지 검색하고 싶어요.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-box" data-category="trainer-matching">
+                                <h4>훈련사 매칭</h4>
+                                <p>저에게 어울리는 훈련사를 찾고 싶어요.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-box" data-category="package-search">
+                                <h4>패키지 검색</h4>
+                                <p>저에게 어울리는 패키지를 검색하고 싶어요.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="category-box" data-category="trainer-review">
+                                <h4>훈련사 후기 찾기</h4>
+                                <p>훈련사에 대한 후기를 알고 싶어요.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-9 chat-boxes" id="chatBoxes">
+                    <!-- 여기에 프롬프트 메시지가 추가됨 -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-8">
+                <div class="search-box">
+                    <input type="text" class="form-control" id="messageInput" placeholder="무엇이든 물어보세요">
+                    <button class="search-btn" id="sendBtn">
+                        <img src="./images/icons/cursor-fill.svg" alt="Search">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trainers Section -->
+<section class="trainers-section py-5">
+    <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <h2 class="text-center mb-5">어떤 훈련사들이 있나요?</h2>
+        <div class="cl"></div>
+        <div class="row g-5 justify-content-center">
+            <!-- Trainer Card 1 -->
+            <div class="col-md-3">
+                <div class="trainer-card">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="trainer-img-container">
+                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
+                    </div>
+                    <h4>김형욱 훈련사</h4>
+                    <div class="trainer-specialty">
+                        <span>16년 경력</span>
+                        <span>반려동물 전문</span>
+                        <span>동물행동 전문</span>
+                    </div>
+                    <p class="trainer-location">의왕, 안양, 과천 주변 지역 상담가능</p>
+                    <ul class="trainer-features">
+                        <li>애견 교육 자격 코칭과정</li>
+                        <li>초보자도 배울 수 있는 훈련법</li>
+                        <li>디액션 애니멀 케어센터 대표</li>
+                        <li>반려동물 행동 교정 전문가</li>
+                        <li>국제 반려동물 관리사 1급 보유</li>
+                    </ul>
+                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
+                </div>
+            </div>
+            <!-- Trainer Card 2 -->
+            <div class="col-md-3">
+                <div class="trainer-card">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="trainer-img-container">
+                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
+                    </div>
+                    <h4>김형욱 훈련사</h4>
+                    <div class="trainer-specialty">
+                        <span>16년 경력</span>
+                        <span>반려동물 전문</span>
+                        <span>동물행동 전문</span>
+                    </div>
+                    <p class="trainer-location">강남, 서초 주변 지역 상담가능</p>
+                    <ul class="trainer-features">
+                        <li>애견 교육 자격 코칭과정</li>
+                        <li>초보자도 배울 수 있는 훈련법</li>
+                        <li>디액션 애니멀 케어센터 대표</li>
+                        <li>반려동물 행동 교정 전문가</li>
+                        <li>국제 반려동물 관리사 1급 보유</li>
+                    </ul>
+                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
+                </div>
+            </div>
+            <!-- Trainer Card 3 -->
+            <div class="col-md-3">
+                <div class="trainer-card">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="trainer-img-container">
+                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
+                    </div>
+                    <h4>김형욱 훈련사</h4>
+                    <div class="trainer-specialty">
+                        <span>16년 경력</span>
+                        <span>반려동물 전문</span>
+                        <span>동물행동 전문</span>
+                    </div>
+                    <p class="trainer-location">일산, 김포 주변 지역 상담가능</p>
+                    <ul class="trainer-features">
+                        <li>애견 교육 자격 코칭과정</li>
+                        <li>초보자도 배울 수 있는 훈련법</li>
+                        <li>디액션 애니멀 케어센터 대표</li>
+                        <li>반려동물 행동 교정 전문가</li>
+                        <li>국제 반려동물 관리사 1급 보유</li>
+                    </ul>
+                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/trainer" class="btn btn-warning rounded-pill px-4 py-2">+ 훈련사 더 보기</a>
+        </div>
+    </div>
+</section>
+
+<!-- Card Carousel Section -->
+<section class="card-carousel-section py-5">
+    <div class="container" data-aos="fade-up" data-aos-duration="1000">
+        <h2 class="text-center mb-5">다양한 후기를 찾아보세요!</h2>
+
+        <div class="carousel-container position-relative">
+            <div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <!-- 첫 슬라이드 -->
+                    <div class="carousel-item active">
+                        <div class="review-cards-wrapper">
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp-2.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>강형욱 훈련사</h5>
+                                    <p>정말 이게 될까 하면서 교육 요청드린거였는데... 다음번에 산책 교육으로 또 뵙겠습니다!!</p>
+                                </div>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>김형 훈련사</h5>
+                                    <p>... 다음번에 산책 교육으로 또 뵙겠습니다!!</p>
+                                </div>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp-2.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>누구요 훈련사</h5>
+                                    <p>다시는 만나지 말아요. 정말 이게 될까 하면서 교육 요청드린거였는데..!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 두 번째 슬라이드 (추가 예시) -->
+                    <div class="carousel-item">
+                        <div class="review-cards-wrapper">
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>홍길동 훈련사</h5>
+                                    <p>정말 이게 될까 하면서 교육 요청드린거였는데, 강아지도 저도 양쪽 다 스트레스 받지 않는 쪽으로 교육할 수 있을거라는 희망을 얻었습니다.
+                                        해박하시고 이해가 쏙쏙 되게 설명도 잘해주시고, 이럴 수도 있구나 알게되었어요.</p>
+                                </div>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>이순신 훈련사</h5>
+                                    <p>정확한 진단과 꼼꼼한 설명으로 많은 도움이 되었습니다!</p>
+                                </div>
+                            </div>
+                            <div class="review-card">
+                                <div class="review-img-container">
+                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
+                                </div>
+                                <div class="review-content">
+                                    <h5>김유신 훈련사</h5>
+                                    <p>처음엔 걱정했는데 정말 만족스러운 결과였습니다. 감사합니다!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 이전/다음 버튼 -->
+                <button class="carousel-control-prev" type="button" data-bs-target="#reviewCarousel"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#reviewCarousel"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Expert Trainers Section -->
+<section class="expert-section py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">훈련사들이 소지하고 있는 주요 자격증을 소개합니다.</h2>
+        <!-- Trainer Type 1 -->
+        <div class="expert-row" data-aos="fade-up" data-aos-duration="1000">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="expert-img-container">
+                        <img src="./images/temp.jpg" alt="반려동물행동교정사" class="expert-img">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h3 class="expert-title">반려동물행동교정사</h3>
+                    <p class="expert-desc">반려견 행동 교정전문가로, 문제행동 교정과 해결을 위한 전문 지식과 경험을 갖춘 자격증입니다. 반려견의 행동과 심리를 정확히 이해하고 문제
+                        행동을 교정하고, 행동의 원인을 파악해 해결책을 제시합니다.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trainer Type 2 -->
+        <div class="expert-row mt-5" data-aos="fade-up" data-aos-duration="1000">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h3 class="expert-title">수의 행동학 전문가</h3>
+                    <p class="expert-desc">수의학 지식과 동물 행동학을 접목한 전문가입니다. 반려 동물의 행동적 특성과 심리적인 문제를 이해하고, 의학적인 접근과 함께 행동 치료를
+                        할 수 있습니다. 반려견 학대와 같은 이상 행동에 수의적 관점에서 문제를 해결하는 전문가 입니다.</p>
+                </div>
+                <div class="col-md-4">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="expert-img-container">
+                        <img src="./images/temp.jpg" alt="수의 행동학 전문가" class="expert-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trainer Type 3 -->
+        <div class="expert-row mt-5" data-aos="fade-up" data-aos-duration="1000">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <!-- 훈련사 이미지 위치 -->
+                    <div class="expert-img-container">
+                        <img src="./images/temp.jpg" alt="반려동물훈련사" class="expert-img">
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <h3 class="expert-title">반려동물훈련사</h3>
+                    <p class="expert-desc">강아지 훈련 전문가라는 기본적인 특성 외에도 가정에서 효과적으로 훈련할 수 있도록 지도하는 역할도 수행합니다. 견종별 특성과 개별 성향에
+                        맞는 맞춤형 훈련 프로그램을 설계하고, 일관성 있게 훈련을 진행하는 방법을 알려드립니다.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <!-- 로고 이미지 -->
+                <div class="logo-container my-5">
+                    <img src="./images/logo_large.png" alt="PetTalk Logo" class="modal-logo">
+                </div>
+
+                <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
+
+                <!-- 카카오 로그인 버튼 -->
+                <div class="d-grid login-buttons">
+                    <button class="btn btn-kakao">
+                        <img src="./images/kakao_login.png" alt="Kakao" class="login-img">
+                    </button>
+
+                    <!-- 네이버 로그인 버튼 -->
+                    <button class="btn btn-naver">
+                        <img src="./images/naver_login.png" alt="Naver" class="login-img">
+                    </button>
+                </div>
+
+                <p class="text-muted mt-4 small">로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <!-- 회사 정보 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+                <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+                <p class="mb-1">사업자등록번호: 123-45-67890</p>
+                <p class="mb-1">대표: Lucky0111</p>
+                <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+            </div>
+
+            <!-- 고객센터 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">고객센터</h5>
+                <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+                <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+                <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+                <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+            </div>
+
+            <!-- 펫톡 소개 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">펫톡 소개</h5>
+                <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+                <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+                <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+            </div>
+        </div>
+
+        <hr class="my-4 border-light">
+
+        <div class="text-center small">
+            <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.0.2/marked.min.js"></script>
+<script src="./javascripts/common.js"></script>
+<script src="./javascripts/home.js"></script>
+<script>
+    // Initialize AOS
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        mirror: true,
+        once: false
+    });
+</script>
+</body>
+</html>

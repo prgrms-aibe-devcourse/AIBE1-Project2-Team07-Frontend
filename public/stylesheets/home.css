@@ -1,0 +1,478 @@
+/* Hero Section */
+.hero-section {
+    background-color: #FFF9E6;
+    padding: 60px 0;
+}
+
+.hero-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+}
+
+/* Category Boxes */
+.category-box {
+    background-color: #FFF2CC;
+    border-radius: 10px;
+    padding: 20px;
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.category-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.category-box h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--dark-color);
+}
+
+.category-box p {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    margin-bottom: 0;
+}
+
+/* Search Box */
+.search-box {
+    position: relative;
+    max-width: 100%;
+    height: 58px;
+    margin: 0 auto;
+}
+
+.search-box input {
+    width: 100%;
+    border-radius: 50px;
+    border: 2px solid #fbd01e;
+    font-size: 1rem;
+    padding: 15px 50px 15px 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.search-box .search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+}
+
+.search-box .search-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Prompt Messages */
+.messages-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    max-height: 500px;
+}
+
+.messages-container::-webkit-scrollbar {
+    display: none;
+}
+
+.messages-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.message {
+    width: fit-content;
+    max-width: 65%;
+    word-break: break-word;
+    margin-bottom: 20px;
+    position: relative;
+    background-color: #FFF2CC;
+    border-radius: 15px;
+    padding: 20px;
+    font-size: 1rem;
+    color: #000000;
+    animation: slideUp 0.6s ease-out;
+}
+
+.user-message {
+    background-color: #FFF2CC;
+    color: black;
+    margin-left: auto;
+    border-top-right-radius: 0;
+}
+
+.bot-message {
+    background-color: #ffebae;
+    color: #000000;
+    margin-right: auto;
+    border-top-left-radius: 0;
+}
+
+.bot-typing {
+    display: flex;
+    margin-bottom: 20px;
+    opacity: 0.7;
+}
+
+.typing-dot {
+    width: 8px;
+    height: 8px;
+    background-color: #6c757d;
+    border-radius: 50%;
+    margin: 0 2px;
+    animation: typing-animation 1.5s infinite;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: 0.5s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 1s;
+}
+
+@keyframes typing-animation {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Trainers Section */
+.trainers-section {
+    padding: 60px 0;
+    background-color: var(--white-color);
+}
+
+.trainers-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+}
+
+.trainer-card {
+    background-color: var(--white-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    transition: transform 0.3s ease;
+}
+
+.trainer-card:hover {
+    transform: translateY(-5px);
+}
+
+.trainer-img-container {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.trainer-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.trainer-card h4 {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.trainer-specialty {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.trainer-specialty span {
+    background-color: #FFE082;
+    color: var(--dark-color);
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 50px;
+    font-weight: 500;
+}
+
+.trainer-location {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    margin-bottom: 15px;
+}
+
+.trainer-features {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 20px;
+}
+
+.trainer-features li {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.trainer-features li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+/* Card Carousel Section */
+.card-carousel-section {
+    background-color: var(--light-color);
+    padding: 60px 0;
+}
+
+.card-carousel-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+}
+
+.carousel-container {
+    position: relative;
+    padding: 0 50px;
+}
+
+.carousel-inner {
+    overflow: hidden;
+}
+
+.review-cards-wrapper {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.review-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--white-color);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: auto;
+    min-height: 400px;
+    width: 100%;
+    max-width: 350px;
+    transition: all 0.3s ease;
+}
+
+.review-card p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.4em;
+    max-height: calc(1.4em * 3);
+}
+
+.review-img-container {
+    height: 250px;
+    width: 100%;
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.review-img-container .review-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1; /* 남은 공간 차지 */
+    width: 100%;
+}
+
+.review-card h5 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.review-card p {
+    font-size: 0.9rem;
+    color: var(--gray-color);
+    margin-bottom: 0;
+}
+
+/* Carousel Controls */
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    opacity: 1;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+    left: -40px;
+}
+
+.carousel-control-next {
+    right: -40px;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* Expert Trainers Section */
+.expert-section {
+    padding: 60px 0;
+    background-color: var(--white-color);
+}
+
+.expert-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+}
+
+.expert-row {
+    margin-bottom: 40px;
+}
+
+.expert-img-container {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.expert-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+}
+
+.expert-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--dark-color);
+}
+
+.expert-desc {
+    font-size: 1rem;
+    color: var(--gray-color);
+    line-height: 1.7;
+}
+
+/* 반응형 설정 */
+@media (min-width: 992px) {
+    .carousel-container {
+        padding: 0 60px;
+    }
+
+    .review-card {
+        flex: 0 0 calc(33.333% - 20px);
+        max-width: calc(33.333% - 20px);
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+    .carousel-container {
+        padding: 0 40px;
+    }
+
+    .review-card {
+        flex: 0 0 calc(50% - 15px);
+        max-width: calc(50% - 15px);
+    }
+
+    /* 태블릿에서는 2개씩 표시 */
+    .carousel-item .review-cards-wrapper .review-card:nth-child(3) {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-container {
+        padding: 0 15px;
+    }
+
+    .card-carousel-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 25px;
+    }
+
+    .review-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+        min-height: 400px;
+    }
+
+    /* 모바일에서는 캐러셀 1개씩 표시 */
+    .carousel-item .review-cards-wrapper .review-card:not(:first-child) {
+        display: none;
+    }
+
+    .carousel-control-prev {
+        width: 30px;
+        height: 30px;
+        left: -20px;
+    }
+
+    .carousel-control-next {
+        width: 30px;
+        height: 30px;
+        right: -20px;
+    }
+}
