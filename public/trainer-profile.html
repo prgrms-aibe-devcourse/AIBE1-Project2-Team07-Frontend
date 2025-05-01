@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>훈련사 프로필</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="stylesheets/common.css">
+    <link rel="stylesheet" href="stylesheets/trainer-profile.css">
+    <link rel="stylesheet" href="stylesheets/trainer-profile-modal.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">훈련사</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">커뮤니티</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">내 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill login-btn" href="#">로그인</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- 로딩 표시 -->
+<div id="loading-spinner" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2">트레이너 정보를 불러오는 중입니다...</p>
+</div>
+
+<!-- 에러 메시지 -->
+<div id="error-message" class="alert alert-danger mx-5 my-4 d-none" role="alert">
+    트레이너 정보를 불러오는 데 문제가 발생했습니다. 다시 시도해주세요.
+</div>
+
+<!-- 메인 컨텐츠 컨테이너 - JavaScript가 이 부분을 채웁니다 -->
+<div id="trainer-profile-container" class="d-none">
+    <!-- JavaScript에 의해 동적으로 채워질 예정 -->
+</div>
+
+<!-- 교육 문의 모달 -->
+<div class="modal fade inquiry-modal" id="inquiryModal" tabindex="-1" aria-labelledby="inquiryModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5 class="modal-title mb-1" id="inquiryModalLabel">포토샵의모든것해피디자인</h5>
+                <p class="average-response-time mb-4">평균 응답 시간: 10분 이내</p>
+
+                <div class="form-group mb-3">
+                    <textarea class="form-control" id="inquiryMessage" placeholder="정확하고 빠른 답변을 위해 요구사항을 상세하게 알려주세요 - 업종, 준비상황, 기한, 예산 등 (최소 20자이상)"></textarea>
+                    <div class="char-count"><span id="charCount">0</span>/1000</div>
+                </div>
+
+                <div class="mb-4">
+                    <button class="file-attachment-btn" id="fileAttachmentBtn">
+                        <i class="me-2">📎</i> 파일 첨부
+                    </button>
+                    <p class="file-attachment-info">하나당 최대 500MB의 파일을 3개까지 첨부할 수 있습니다.</p>
+                </div>
+
+                <button class="btn btn-warning w-100" id="submitInquiry">문의하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <!-- 회사 정보 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+                <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+                <p class="mb-1">사업자등록번호: 123-45-67890</p>
+                <p class="mb-1">대표: Lucky0111</p>
+                <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+            </div>
+
+            <!-- 고객센터 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">고객센터</h5>
+                <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+                <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+                <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+                <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+            </div>
+
+            <!-- 펫톡 소개 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">펫톡 소개</h5>
+                <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+                <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+                <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+            </div>
+        </div>
+
+        <hr class="my-4 border-light">
+
+        <div class="text-center small">
+            <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- 트레이너 프로필 템플릿 -->
+<template id="trainer-profile-template">
+    <div class="container my-5">
+        <!-- 훈련사 프로필 상단 영역 -->
+        <div class="row">
+            <!-- 훈련사 사진 및 프로필 정보 -->
+            <div class="col-12 mb-4">
+                <div class="profile-header">
+                    <!-- 고양이 사진 슬라이더 -->
+                    <div class="cat-photos">
+                        <div class="row g-0" id="trainer-photos">
+                            <!-- 사진은 동적으로 삽입됩니다 -->
+                        </div>
+                    </div>
+
+                    <!-- 훈련사 프로필 이미지 (원형) -->
+                    <div class="profile-image-container">
+                        <img src="" alt="훈련사 프로필" class="profile-image" id="trainer-profile-image">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 훈련사 소개 및 정보 -->
+        <div class="row">
+            <div class="col-md-8">
+                <!-- 훈련사 제목 및 평점 -->
+                <h1 class="trainer-title" id="trainer-title"></h1>
+
+                <div class="d-flex align-items-center mb-4">
+                    <h4 class="trainer-name me-3 mb-0" id="trainer-name"></h4>
+                    <div class="rating d-flex align-items-center">
+                        <span class="star-icon me-2">★</span>
+                        <span class="rating-score me-2" id="trainer-rating"></span>
+                        <span class="review-count text-muted" id="review-count"></span>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- 훈련사 정보 테이블 -->
+                <div class="trainer-info mb-4">
+                    <div class="row mb-3">
+                        <div class="col-md-3 info-label">대표 경력</div>
+                        <div class="col-md-9 info-content" id="trainer-career"></div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 info-label">전문 분야</div>
+                        <div class="col-md-9 info-content" id="trainer-specialties"></div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-3 info-label">방문 지역</div>
+                        <div class="col-md-9 info-content" id="trainer-locations"></div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- 자격/경력 -->
+                <div class="qualification mb-4">
+                    <h4 class="section-title mb-3">자격·경력</h4>
+                    <div id="qualifications-container">
+                        <!-- 자격증은 동적으로 삽입됩니다 -->
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- 리뷰 섹션 -->
+                <div class="reviews mb-4">
+                    <h4 class="section-title mb-3" id="reviews-title"></h4>
+
+                    <div id="reviews-container">
+                        <!-- 리뷰는 동적으로 삽입됩니다 -->
+                    </div>
+
+                    <button class="btn btn-warning btn-sm d-flex align-items-center mx-auto mt-3" id="load-more-reviews">
+                        <span class="me-1">+ 후기 더보기</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 오른쪽 사이드바 - 가격 및 예약 정보 -->
+            <div class="col-md-4">
+                <!-- 전문 훈련사 소개 -->
+                <div class="trainer-intro p-4 mb-4">
+                    <p class="mb-3">궁금한 내용이 있다면, 채팅을 통해 간단히 문의사항을 교육 문의를 보내보세요!</p>
+                    <button class="btn btn-warning w-100" id="inquiry-button">교육문의하기</button>
+                </div>
+
+                <!-- 이용 요금 -->
+                <div class="price-info p-4 mb-4">
+                    <h4 class="mb-4">이용 요금</h4>
+                    <table class="table price-table">
+                        <tbody id="price-table-body">
+                        <!-- 가격 정보는 동적으로 삽입됩니다 -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 소개글 -->
+                <div class="trainer-description p-4">
+                    <h4 class="mb-3">자기소개</h4>
+                    <p id="trainer-description" class="collapsed"></p>
+                    <button id="toggle-description-btn" class="btn btn-warning btn-sm d-flex align-items-center mx-auto mt-3">
+                        <span class="me-1">더보기</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<!-- Bootstrap & JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="javascripts/trainer-profile.js"></script>
+<script src="javascripts/trainer-profile-modal.js"></script>
+</body>
+</html>

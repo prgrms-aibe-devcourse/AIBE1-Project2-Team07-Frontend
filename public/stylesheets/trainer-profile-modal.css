@@ -1,0 +1,50 @@
+/* 모달 관련 추가 스타일 */
+.inquiry-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.inquiry-modal .modal-body {
+    padding-top: 0;
+}
+
+.inquiry-modal .modal-title {
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.inquiry-modal .average-response-time {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.inquiry-modal textarea {
+    resize: none;
+    border-radius: 8px;
+    height: 200px;
+}
+
+.inquiry-modal .char-count {
+    text-align: right;
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+.inquiry-modal .btn-warning {
+    font-weight: bold;
+}
+
+.file-attachment-btn {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.file-attachment-info {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 8px;
+}
