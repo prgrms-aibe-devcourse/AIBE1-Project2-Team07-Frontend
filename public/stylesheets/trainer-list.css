@@ -1,0 +1,111 @@
+/* Custom styles to complement Bootstrap */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f9f9f9;
+}
+
+/* Header styles */
+.navbar-brand {
+    font-size: 1.5rem;
+}
+
+.btn-warning {
+    background-color: #FFD600;
+    border-color: #FFD600;
+}
+
+.btn-warning:hover {
+    background-color: #FFC107;
+    border-color: #FFC107;
+}
+
+/* Main content styles */
+.trainer-card {
+    background-color: #FFF9E5;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.trainer-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.trainer-image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.trainer-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* 원하는 줄 수 */
+    -webkit-box-orient: vertical;
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+}
+
+.price-value {
+    min-width: 70px;
+    font-weight: 500;
+}
+
+.schedule-tag {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767.98px) {
+    .trainer-image img {
+        width: 100%;
+        height: auto;
+        max-height: 200px;
+    }
+
+    .trainer-contact {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .profile-img {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+/* 페이지네이션 스타일 추가 */
+.pagination {
+    justify-content: center;
+    margin-top: 2rem;
+}
+.pagination .page-item.active .page-link {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #000;
+}
+.pagination .page-link {
+    color: #000;
+}
+.pagination .page-link:hover {
+    background-color: #ffdb6d;
+    border-color: #ffc107;
+}
+
+/* Footer styles */
+footer {
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin-bottom: 0.5rem;
+}

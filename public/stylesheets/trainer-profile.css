@@ -1,0 +1,172 @@
+/* 훈련사 프로필 페이지 스타일 */
+
+/* 프로필 헤더 영역 */
+.profile-header {
+    position: relative;
+    margin-bottom: 3rem;
+}
+
+.cat-photos {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.cat-photo {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+
+.profile-image-container {
+    position: absolute;
+    bottom: -50px;
+    left: 2rem;
+    z-index: 2;
+}
+
+.profile-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 훈련사 제목 및 정보 */
+.trainer-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.trainer-name {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.star-icon {
+    color: #FFD700;
+    font-size: 1.2rem;
+}
+
+.rating-score {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* 훈련사 정보 테이블 */
+.info-label {
+    font-weight: 600;
+    color: #212529;
+}
+
+.info-content {
+    color: #495057;
+}
+
+/* 자격/경력 섹션 */
+.section-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+#trainer-description.collapsed {
+    overflow: hidden;
+    max-height: 100px;
+    text-overflow: ellipsis;
+}
+
+#toggle-description-btn {
+    font-size: 0.9rem;
+    color: #000000; /* Bootstrap warning 색상 */
+}
+
+.qualification-title {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.reviewer-photo-wrapper {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.reviewer-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 리뷰 섹션 */
+.reviewer-name {
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.star-rating {
+    color: #FFD700;
+    font-size: 0.9rem;
+}
+
+.review-content {
+    color: #495057;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* 오른쪽 사이드바 */
+.trainer-intro,
+.price-info,
+.trainer-description {
+    background-color: #FFF9E6;
+    border-radius: 8px;
+}
+
+.price-table {
+    margin-bottom: 0;
+}
+
+.price-table td {
+    border: none;
+    padding: 0.5rem 0;
+}
+
+/* 로그인 버튼 스타일 */
+.login-btn {
+    padding: 0.5rem 1.5rem;
+}
+
+/* 반응형 조정 */
+@media (max-width: 767.98px) {
+    .profile-image-container {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .cat-photos {
+        height: 300px;
+    }
+
+    .cat-photo {
+        height: 300px;
+    }
+
+    .trainer-title {
+        font-size: 1.5rem;
+        margin-top: 3rem;
+        text-align: center;
+    }
+
+    .rating {
+        justify-content: center;
+        margin-top: 0.5rem;
+    }
+}
