@@ -1,5 +1,3 @@
-/* Common CSS for PetTalk - Used across different pages */
-
 /* Font settings */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
@@ -9,8 +7,9 @@
     --dark-color: #333333;
     --light-color: #F8F9FA;
     --text-color: #212529;
-    --gray-color: #6C757D;
+    --gray-color: #000000;
     --white-color: #FFFFFF;
+    --hover-bg: #f8f8f8;
 }
 
 body {
@@ -22,13 +21,15 @@ body {
 
 /* Navigation styles */
 .navbar {
-    position: fixed;      /* 고정 위치 */
-    top: 0;               /* 상단에 고정 */
+    position: fixed !important;
+    top: 0 !important;
     left: 0;
-    width: 100%;          /* 전체 너비 */
-    height: 80px;
-    z-index: 1000;        /* 다른 요소보다 위에 */
-    background-color: white; /* 배경색 명시 (겹침 방지) */
+    width: 100%;
+    min-height: 80px;
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transform: none !important;
 }
 
 .navbar-brand img {
@@ -37,21 +38,32 @@ body {
 
 .navbar .nav-item {
     margin: 0 10px;
+    text-align: center;
 }
 
 .navbar .nav-link {
     color: var(--dark-color);
     font-weight: 500;
     font-size: 1rem;
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
-.navbar .nav-link:hover {
-    color: var(--primary-color);
+.nav-item-link:hover {
+    color: var(--primary-color) !important;
 }
 
 .login-btn {
     font-weight: 500;
     padding: 8px 20px;
+    transition: all 0.3s ease;
+}
+
+.navbar-items {
+    width: auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 }
 
 /* Button styles */
@@ -66,6 +78,7 @@ body {
     background-color: var(--secondary-color);
     border-color: var(--secondary-color);
     color: var(--dark-color);
+    transform: translateY(-2px);
 }
 
 .btn-outline-warning {
@@ -97,6 +110,44 @@ body {
     color: var(--dark-color);
 }
 
+/* Login modal */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    padding: 15px 20px 0;
+}
+
+.btn-close {
+    padding: 12px;
+    background-size: 14px;
+    opacity: 0.7;
+}
+
+.modal-logo {
+    width: 300px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.modal-body {
+    padding: 20px 30px;
+}
+
+.login-img {
+    width: 300px;
+    border-radius: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
 /* Container width for 1444px wireframe */
 @media (min-width: 1400px) {
     .container {
@@ -105,13 +156,55 @@ body {
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 991px) {
+    .container.position-relative {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+    }
+
+    .navbar-brand {
+        flex: 0 0 auto;
+    }
+
+    .navbar-toggler {
+        position: relative;
+        margin-left: auto;
+        border: 1px solid var(--primary-color);
+        z-index: 1050;
+    }
+
+    .navbar-menu {
+        position: absolute;
+        top: 100%;
+        right: 10px;
+        width: 150px;
+        background-color: white;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: right;
+    }
+
     .navbar .nav-item {
-        margin: 5px 0;
+        margin: 8px 0;
+        text-align: right;
+    }
+
+    .navbar-nav {
+        width: 100%;
     }
 
     .login-btn {
         display: inline-block;
-        margin-top: 10px;
+        width: auto;
+    }
+
+    .modal-logo {
+        width: 100%;
+    }
+
+    .login-img {
+        width: 100%;
     }
 }
