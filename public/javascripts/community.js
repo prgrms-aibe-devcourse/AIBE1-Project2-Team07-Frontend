@@ -118,15 +118,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Login button functionality
-    const loginBtn = document.getElementById('loginBtn');
-
-    loginBtn.addEventListener('click', function (e) {
-        e.preventDefault();
-        const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-        loginModal.show();
-    });
-
     // Initialize post interactions (likes, comments)
     initPostInteractions();
 

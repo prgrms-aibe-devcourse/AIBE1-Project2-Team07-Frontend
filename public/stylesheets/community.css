@@ -217,7 +217,7 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    background-image: url('../images/icons/thumb-up.svg');
+    background-image: url('../images/icons/hand-thumbs-up-fill.svg');
     background-size: contain;
     background-repeat: no-repeat;
     margin-right: 4px;
@@ -235,7 +235,7 @@
     display: inline-block;
     width: 16px;
     height: 16px;
-    background-image: url('../images/icons/chat.svg');
+    background-image: url('../images/icons/chat-dots-fill.svg');
     background-size: contain;
     background-repeat: no-repeat;
     margin-right: 4px;
