@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="./stylesheets/common.css">
+    <link rel="stylesheet" href="./stylesheets/community.css">
+    <title>PetTalk - 커뮤니티</title>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container position-relative">
+        <a class="navbar-brand" href="/">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-items">
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="#">훈련사</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="#">내 프로필</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Community Section -->
+<section class="community-section py-5">
+    <div class="container">
+        <h1 class="text-center mb-4">커뮤니티</h1>
+
+        <div class="text-center mb-4">
+            <p class="text-muted">자유롭게 의견을 나누고 반려동물에 대한 경험을 공유해보세요</p>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-lg-8">
+                <div class="search-container">
+                    <div class="input-group">
+                        <select class="form-select search-category" id="searchCategory" style="max-width: 150px;">
+                            <option value="title">전체</option>
+                            <option value="all">자유게시판</option>
+                            <option value="content">펫 도구 후기</option>
+                        </select>
+                        <input type="text" class="form-control" placeholder="검색어를 입력해주세요" id="searchInput">
+                        <button class="btn btn-warning btn-search" type="button" id="searchBtn">검색</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="row justify-content-center">
+            <!-- Left: Categories -->
+            <div class="col-lg-2">
+                <div class="board-categories">
+                    <h6 class="categories-title">게시판 목록</h6>
+                    <ul class="categories-list">
+                        <li class="category-item active">
+                            <a href="#" class="category-link">전체</a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">자유게시판</a>
+                        </li>
+                        <li class="category-item">
+                            <a href="#" class="category-link">펫 도구 후기</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Center: Posts List -->
+            <div class="col-lg-8">
+                <div class="board-header">
+                    <div class="sort-options">
+                        <ul class="sort-list">
+                            <li class="sort-item active"><a href="#" class="sort-link">최신순</a></li>
+                            <li class="sort-item"><a href="#" class="sort-link">정확도순</a></li>
+                            <li class="sort-item"><a href="#" class="sort-link">답변많은순</a></li>
+                            <li class="sort-item"><a href="#" class="sort-link">좋아요순</a></li>
+                        </ul>
+                    </div>
+                    <div class="write-button">
+                        <a href="/community/write" class="btn btn-warning btn-write rounded-pill" id="writeBtn">글쓰기</a>
+                    </div>
+                </div>
+
+                <div class="board-post-list">
+                    <!-- Post Item -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="./images/user-profile.png" alt="User" class="user-avatar">
+                                <div class="post-meta">
+                                    <div class="user-name">강형욱 <span class="board-tag">자유</span></div>
+                                    <div class="post-date">1일 전</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
+                                어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="reaction-count">
+                                <span class="like-count">14</span>
+                                <span class="comment-count">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Item -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="./images/user-profile.png" alt="User" class="user-avatar">
+                                <div class="post-meta">
+                                    <div class="user-name">강형욱 <span class="board-tag">자유</span></div>
+                                    <div class="post-date">2일 전</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
+                                어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="reaction-count">
+                                <span class="like-count">14</span>
+                                <span class="comment-count">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Item -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="./images/user-profile.png" alt="User" class="user-avatar">
+                                <div class="post-meta">
+                                    <div class="user-name">강형욱 <span class="board-tag">자유</span></div>
+                                    <div class="post-date">3일 전</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
+                                어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="reaction-count">
+                                <span class="like-count">14</span>
+                                <span class="comment-count">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Item -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="./images/user-profile.png" alt="User" class="user-avatar">
+                                <div class="post-meta">
+                                    <div class="user-name">강형욱 <span class="board-tag">자유</span></div>
+                                    <div class="post-date">4일 전</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
+                                어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="reaction-count">
+                                <span class="like-count">14</span>
+                                <span class="comment-count">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post Item -->
+                    <div class="post-item">
+                        <div class="post-header">
+                            <div class="user-info">
+                                <img src="./images/user-profile.png" alt="User" class="user-avatar">
+                                <div class="post-meta">
+                                    <div class="user-name">강형욱 <span class="board-tag">자유</span></div>
+                                    <div class="post-date">5일 전</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
+                                어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
+                        </div>
+                        <div class="post-footer">
+                            <div class="reaction-count">
+                                <span class="like-count">14</span>
+                                <span class="comment-count">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="pagination-container mt-4">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Ad Space -->
+            <div class="col-lg-2">
+                <div class="ad-container">
+                    <div class="ad-box mb-4">
+                        <img src="./images/ad.png" alt="dd"
+                             style="object-fit: fill; width: 100%; height: 100%;">
+                    </div>
+                    <div class="ad-box">
+                        <img src="./images/ad.png" alt="dd"
+                             style="object-fit: fill; width: 100%; height: 100%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Back to Top Button -->
+<button id="backToTopBtn" class="back-to-top-btn">
+    <img src="./images/icons/arrow-up-circle-fill.svg" alt="Back to Top" width="50">
+</button>
+
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <!-- 로고 이미지 -->
+                <div class="logo-container my-5">
+                    <img src="./images/logo_large.png" alt="PetTalk Logo" class="modal-logo">
+                </div>
+
+                <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
+
+                <!-- 카카오 로그인 버튼 -->
+                <div class="d-grid login-buttons">
+                    <button class="btn btn-kakao">
+                        <img src="./images/kakao_login.png" alt="Kakao" class="login-img">
+                    </button>
+
+                    <!-- 네이버 로그인 버튼 -->
+                    <button class="btn btn-naver">
+                        <img src="./images/naver_login.png" alt="Naver" class="login-img">
+                    </button>
+                </div>
+
+                <p class="text-muted mt-4 small">로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <!-- 회사 정보 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+                <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+                <p class="mb-1">사업자등록번호: 123-45-67890</p>
+                <p class="mb-1">대표: Lucky0111</p>
+                <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+            </div>
+
+            <!-- 고객센터 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">고객센터</h5>
+                <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+                <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+                <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+                <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+            </div>
+
+            <!-- 펫톡 소개 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">펫톡 소개</h5>
+                <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+                <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+                <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+            </div>
+        </div>
+
+        <hr class="my-4 border-light">
+
+        <div class="text-center small">
+            <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
+<script src="./javascripts/common.js"></script>
+<script src="./javascripts/community.js"></script>
+</body>
+</html>

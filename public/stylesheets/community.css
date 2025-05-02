@@ -1,0 +1,353 @@
+/* Community page styles */
+.community-section {
+    padding-top: 60px;
+}
+
+/* Search styles */
+.search-container {
+    margin-bottom: 30px;
+}
+
+.search-category {
+    border-radius: 5px 0 0 5px;
+    border-right: 0;
+    background-color: #f8f9fa;
+}
+
+.btn-search:hover {
+    transform: none;
+}
+
+/* Left sidebar styles */
+.board-categories {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.categories-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1rem;
+}
+
+.categories-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-item {
+    margin-bottom: 10px;
+}
+
+.category-link {
+    color: #555;
+    text-decoration: none;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.category-item.active .category-link {
+    background-color: var(--primary-color);
+    color: #333;
+    font-weight: 500;
+}
+
+.category-link:hover {
+    background-color: #eee;
+    color: #333;
+}
+
+/* Board header styles */
+.board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.sort-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sort-item {
+    margin-right: 15px;
+}
+
+.sort-link {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 3px 5px;
+    border-radius: 3px;
+    transition: all 0.2s ease;
+}
+
+.sort-item.active .sort-link {
+    color: #333;
+    font-weight: 500;
+    position: relative;
+}
+
+.sort-item.active .sort-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.sort-link:hover {
+    color: #333;
+}
+
+.write-button .btn-write {
+    width: 100px;
+    transition: all 0.3s ease;
+}
+
+/* Post list styles */
+.board-post-list {
+    margin-top: 20px;
+}
+
+.post-item {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.post-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 12px;
+}
+
+.post-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-name {
+    font-weight: 500;
+    color: #333;
+    display: flex;
+    align-items: center;
+}
+
+.board-tag {
+    background-color: #f1f3f5;
+    color: #495057;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-left: 8px;
+}
+
+.post-date {
+    font-size: 0.8rem;
+    color: #868e96;
+}
+
+.post-content {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid #f1f3f5;
+    padding-top: 12px;
+}
+
+.reaction-count {
+    display: flex;
+    gap: 15px;
+}
+
+.like-count {
+    display: flex;
+    align-items: center;
+    color: #868e96;
+    font-size: 0.9rem;
+}
+
+.like-count::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/icons/thumb-up.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 4px;
+}
+
+.comment-count {
+    display: flex;
+    align-items: center;
+    color: #868e96;
+    font-size: 0.9rem;
+}
+
+.comment-count::before {
+    content: '';
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('../images/icons/chat.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 4px;
+}
+
+/* Ad space styles */
+.ad-container {
+    position: sticky;
+    top: 100px;
+}
+
+.ad-box {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Pagination styles */
+.pagination-container {
+    margin-top: 30px;
+}
+
+.pagination .page-link {
+    color: #333;
+    border: 1px solid #dee2e6;
+    padding: 8px 12px;
+    margin: 0 3px;
+    border-radius: 5px;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #333;
+}
+
+.pagination .page-link:hover {
+    background-color: #f8f9fa;
+}
+
+/* Back to top button */
+.back-to-top-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0);
+    border: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.back-to-top-btn img {
+    object-fit: contain;
+    width: 100%;
+    height: 100%;
+}
+
+.back-to-top-btn:hover {
+    /*background-color: var(--secondary-color);*/
+    transform: translateY(-5px);
+}
+
+/* Responsive styles */
+@media (max-width: 991px) {
+    .board-categories {
+        margin-bottom: 30px;
+    }
+
+    .board-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sort-list {
+        margin-bottom: 15px;
+        overflow-x: auto;
+        white-space: nowrap;
+        width: 100%;
+        padding-bottom: 5px;
+    }
+
+    .write-button {
+        width: 100%;
+        text-align: right;
+    }
+
+    .ad-container {
+        margin-top: 30px;
+    }
+}
+
+@media (max-width: 767px) {
+    .post-item {
+        padding: 15px;
+    }
+
+    .back-to-top-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+}
