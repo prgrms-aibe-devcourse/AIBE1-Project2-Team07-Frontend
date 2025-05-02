@@ -1,0 +1,330 @@
+/* User Mypage CSS Styles */
+
+body {
+    background-color: #f8f9fa;
+    color: #333;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+/* Tab Menu Styling */
+.tab-menu {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+}
+
+.tab-menu .nav-link {
+    color: #6c757d;
+    padding: 10px 20px;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.tab-menu .nav-link.active {
+    color: #212529;
+    border-bottom: 2px solid #ffc107;
+    font-weight: bold;
+}
+
+.tab-menu .nav-link:hover {
+    color: #212529;
+}
+
+/* Search Bar */
+.search-bar {
+    margin-bottom: 20px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+}
+
+/* Post List */
+.post-list {
+    margin-bottom: 40px;
+}
+
+.review-list {
+    margin-bottom: 40px;
+}
+
+.post-item {
+    border-bottom: 2px solid #eee;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.review-item {
+    border-bottom: 2px solid #eee;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.post-item:hover {
+    background-color: #f9f9f9;
+}
+
+.review-item:hover {
+    background-color: #f9f9f9;
+}
+
+.post-info {
+    flex: 1;
+}
+.review-info {
+    flex: 1;
+}
+
+.post-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.reviewer-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.post-content {
+    color: #666;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+}
+
+.review-content {
+    color: #666;
+    margin-bottom: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+}
+
+.post-meta {
+    color: #999;
+    font-size: 13px;
+}
+.review-meta {
+    color: #999;
+    font-size: 13px;
+}
+
+.post-image {
+    width: 80px;
+    height: 80px;
+    margin-left: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.review-image {
+    width: 80px;
+    height: 80px;
+    margin-left: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.post-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Button Styling */
+.btn-primary {
+    background-color: #fbd01e;
+    border-color: #fbd01e;
+    color: #212529;
+}
+
+.btn-primary:hover {
+    background-color: #FF9800;
+    border-color: #FF9800;
+    color: #212529;
+}
+
+/* Pagination */
+.page-link {
+    color: #666;
+}
+
+.page-item.active .page-link {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.divider {
+    height: 1px;
+    background-color: #e9ecef;
+    margin: 15px 0;
+}
+
+/* Profile Section */
+.profile-section {
+    display: none;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.profile-image-container {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px;
+    position: relative;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.edit-profile-btn {
+    position: absolute;
+    bottom: 5px;
+    right: 50%;
+    transform: translateX(50%);
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.profile-input {
+    width: 100%;
+    background-color: transparent;  /* 부모 div 배경색과 같게 */
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+    font-size: inherit;
+    color: inherit;
+    font-family: inherit;
+}
+
+.edit-profile-btn:hover {
+    background-color: #e0a800;
+}
+
+.profile-info {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.profile-info-row {
+    display: flex;
+    border-bottom: 2px solid #eee;
+    padding: 15px 0;
+    align-items: center;
+}
+
+.profile-info-label {
+    flex: 0 0 100px;
+    text-align: left;
+    font-weight: 500;
+    color: #555;
+}
+
+.profile-info-value {
+    flex: 1;
+    text-align: left;
+    color: #333;
+}
+
+.profile-button-group {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.profile-button {
+    padding: 8px 30px;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.save-button {
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+}
+
+.save-button:hover {
+    background-color: #e0a800;
+}
+
+.edit-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+}
+
+.edit-button:hover {
+    background-color: #5a6268;
+}
+
+.login-btn {
+    padding: 8px 16px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .tab-menu {
+        flex-wrap: wrap;
+    }
+
+    .tab-menu .nav-link {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .profile-info-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .profile-info-label {
+        margin-bottom: 5px;
+    }
+}
