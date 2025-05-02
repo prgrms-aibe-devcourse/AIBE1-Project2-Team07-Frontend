@@ -214,6 +214,7 @@ function renderPosts(posts, page = 1) {
     // 페이지에 맞는 게시글만 추출
     const startIndex = (page - 1) * itemsPerPage;
     const paginatedPosts = posts.slice(startIndex, startIndex + itemsPerPage);
+    const searchBar = document.querySelector('.search-bar');
 
     if (paginatedPosts.length === 0) {
         postListElement.innerHTML = '<div class="alert alert-info">게시글이 없습니다.</div>';
@@ -240,6 +241,7 @@ function renderPosts(posts, page = 1) {
         postListElement.appendChild(postElement);
     });
 
+    searchBar.style.visibility = 'visible';
     // 페이지네이션 업데이트
     updatePagination(posts.length);
 }
@@ -253,6 +255,7 @@ function createReviewElement(reviews, page = 1) {
     // 페이지에 맞는 리뷰만 추출
     const startIndex = (page - 1) * itemsPerPage;
     const paginatedReviews = reviews.slice(startIndex, startIndex + itemsPerPage);
+    const searchBar = document.querySelector('.search-bar');
 
     if (paginatedReviews.length === 0) {
         reviewListElement.innerHTML = '<div class="alert alert-info">작성한 리뷰가 없습니다.</div>';
@@ -282,6 +285,7 @@ function createReviewElement(reviews, page = 1) {
 
     // 페이지네이션 업데이트
     updatePagination(reviews.length);
+    searchBar.style.visibility = 'visible';
 }
 
 // 페이지네이션 업데이트 함수
@@ -415,7 +419,8 @@ function hideAllContent() {
 
     // 검색바 숨기기 - 여기서 먼저 숨김 처리
     const searchBar = document.querySelector('.search-bar');
-    if (searchBar) searchBar.style.display = 'none';
+    // if (searchBar) searchBar.style.display = 'none';
+    if (searchBar) searchBar.style.visibility = 'hidden';
 
     // 페이지네이션 숨기기
     const pagination = document.querySelector('.pagination');
