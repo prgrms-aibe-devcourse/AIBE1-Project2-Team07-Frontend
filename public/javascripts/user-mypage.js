@@ -9,9 +9,6 @@ const allPosts = [
         commentCount: 3,
         image: './images/cat1.jpeg',
         isMyPost: true,
-        isMyReview: false,
-        isLiked: true,
-        hasMyComment: false
     },
     {
         id: 2,
@@ -21,10 +18,7 @@ const allPosts = [
         author: '강아지맘',
         commentCount: 15,
         image: 'https://placedog.net/80/80?random=2',
-        isMyPost: false,
-        isMyReview: true,
-        isLiked: true,
-        hasMyComment: true
+        isLiked: true
     },
     {
         id: 3,
@@ -35,9 +29,7 @@ const allPosts = [
         commentCount: 8,
         image: 'https://placedog.net/80/80?random=3',
         isMyPost: true,
-        isMyReview: false,
         isLiked: true,
-        hasMyComment: true
     },
     {
         id: 4,
@@ -47,9 +39,7 @@ const allPosts = [
         author: '뽀미맘',
         commentCount: 12,
         image: 'https://placedog.net/80/80?random=4',
-        isMyPost: false,
         isMyReview: true,
-        isLiked: false,
         hasMyComment: true
     },
     {
@@ -61,9 +51,7 @@ const allPosts = [
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
         isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        hasMyComment: true
     },
     {
         id: 6,
@@ -73,10 +61,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     },
     {
         id: 7,
@@ -86,10 +71,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     },
     {
         id: 8,
@@ -99,10 +81,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     },
     {
         id: 9,
@@ -112,10 +91,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     },
     {
         id: 10,
@@ -125,10 +101,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     },
     {
         id: 11,
@@ -138,10 +111,7 @@ const allPosts = [
         author: '경제적집사',
         commentCount: 23,
         image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        isMyReview: false,
-        isLiked: false,
-        hasMyComment: false
+        isMyPost: true
     }
 ];
 
@@ -152,10 +122,87 @@ const dummyProfile = {
     email: 'example.gmail.com'
 };
 
+// 더미 리뷰 데이터
+const dummyReviews = [
+    {
+        name: '강형욱',
+        rating: 5,
+        date: '2024-04-20',
+        content: '너무너무 좋아요! 정말 이게 될까 하면서 교육 훈련도견거처분네 강아지도 처음 많썹 다 스트레스 받지 않는 폭으로 교육할 수 있을까하는 의심틈 없었슴니다. 해반 하시고 이애가 쏙쏙 되게 설명도 잘해주시고 이렇 수도 있구나 함케되었어요. 앞으로는 제가 알맞던 테도로 교육해야겠지만 개선될 수 있는 가늠쩨이 년마다 기빵고 짐맡 든 하니도 안아케하죠. 다음에애 신경 교육으로 또 뵙겠습니다!',
+        reviewer: '홍길동',
+        image: './images/cat1.jpeg'
+    },
+    {
+        name: '김민지',
+        rating: 4,
+        date: '2024-04-15',
+        content: '우리 강아지가 처음으로 받은 교육이었어요. 선생님이 친절하게 설명해주시고 강아지도 즐겁게 참여했습니다. 몇 가지 문제 행동이 개선되었지만 아직 완벽하진 않아요. 꾸준히 연습해볼게요!',
+        reviewer: '홍길동',
+        image: 'https://placedog.net/80/80?random=5'
+    },
+    {
+        name: '박준호',
+        rating: 5,
+        date: '2024-04-10',
+        content: '정말 만족스러운 교육이었습니다. 우리 강아지가 문제 행동이 많았는데, 교육 후 많이 개선되었어요. 특히 산책할 때 끌고 가는 행동이 많이 좋아졌습니다. 강사님의 전문적인 조언과 따뜻한 격려에 감사드립니다.',
+        reviewer: '홍길동',
+        image: 'https://placedog.net/80/80?random=5'
+    }
+];
+
 // 전역 변수로 현재 페이지와 페이지당 아이템 개수 설정
 let currentPage = 1;
 const itemsPerPage = 5;
 let filteredPosts = [...allPosts]; // 초기에는 모든 게시글을 표시
+
+function setupSearchButton() {
+    const searchButton = document.getElementById('search-button');
+    const searchInput = document.getElementById('search-input');
+
+    if (searchButton && searchInput) {
+        searchButton.addEventListener('click', function() {
+            const query = searchInput.value.trim().toLowerCase();
+
+            if (query) {
+                const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
+                let searchResults = [];
+
+                if (activeTab === 'tab-review') {
+                    // 후기에서 검색
+                    searchResults = dummyReviews.filter(review =>
+                        review.name.toLowerCase().includes(query) ||
+                        review.content.toLowerCase().includes(query)
+                    );
+
+                    currentPage = 1;
+                    createReviewElement(searchResults, currentPage);
+                } else {
+                    // 게시글에서 검색
+                    searchResults = filteredPosts.filter(post =>
+                        post.title.toLowerCase().includes(query) ||
+                        post.content.toLowerCase().includes(query)
+                    );
+
+                    currentPage = 1;
+                    renderPosts(searchResults, currentPage);
+                }
+
+                if (searchResults.length === 0) {
+                    alert(`'${query}'에 해당하는 결과가 없습니다.`);
+                }
+            } else {
+                alert('검색어를 입력하세요.');
+            }
+        });
+
+        // 엔터키로도 검색 가능
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+    }
+}
 
 // 게시글 렌더링 함수 - 페이지네이션 적용
 function renderPosts(posts, page = 1) {
@@ -195,6 +242,46 @@ function renderPosts(posts, page = 1) {
 
     // 페이지네이션 업데이트
     updatePagination(posts.length);
+}
+
+function createReviewElement(reviews, page = 1) {
+    const reviewListElement = document.getElementById('review-container');
+    if (!reviewListElement) return;
+
+    reviewListElement.innerHTML = '';
+
+    // 페이지에 맞는 리뷰만 추출
+    const startIndex = (page - 1) * itemsPerPage;
+    const paginatedReviews = reviews.slice(startIndex, startIndex + itemsPerPage);
+
+    if (paginatedReviews.length === 0) {
+        reviewListElement.innerHTML = '<div class="alert alert-info">작성한 리뷰가 없습니다.</div>';
+        return;
+    }
+
+    paginatedReviews.forEach((review) => {
+        const reviewElement = document.createElement('div');
+        reviewElement.className = 'review-item';
+
+        // 별점 표시 생성
+        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+
+        reviewElement.innerHTML = `
+            <div class="reviewer-info">
+                <h3 class="reviewer-name">${review.name} 훈련사님 &nbsp;&nbsp;<span class="star-rating">${stars}</span></h3>
+                <p class="review-date">${review.date}</p>
+                <div class="review-content">${review.content ? review.content.replace(/\n/g, '<br>') : ''}</div>
+                <span class="review-meta">작성자 : ${review.reviewer}</span>
+            </div>
+            <div class="review-image">
+                <img src="${review.image}" alt="리뷰 이미지" class="img">
+            </div>
+        `;
+        reviewListElement.appendChild(reviewElement);
+    });
+
+    // 페이지네이션 업데이트
+    updatePagination(reviews.length);
 }
 
 // 페이지네이션 업데이트 함수
@@ -259,93 +346,115 @@ function addPaginationEvents() {
 
 // 프로필 정보 렌더링 함수
 function renderProfile() {
-    // 프로필 섹션이 없으면 생성
     let profileSection = document.querySelector('.profile-section');
+
+    // 모든 컨텐츠 영역 숨기기 (검색바도 여기서 숨겨짐)
+    hideAllContent();
+
     if (!profileSection) {
         profileSection = document.createElement('div');
         profileSection.className = 'profile-section';
 
-        // 프로필 섹션 HTML 구성
         profileSection.innerHTML = `
-    <div class="profile-image-container">
-        <img src="https://placehold.co/180x180" alt="프로필 이미지" class="profile-image">
-        <button class="edit-profile-btn">사진 추가</button>
-    </div>
-    
-    <div class="profile-info">
-        <div class="profile-info-row">
-            <div class="profile-info-label">닉네임</div>
-            <div class="profile-info-value">
-                <input type="text" class="profile-input" name="nickname" value="${dummyProfile.nickname}">
+            <div class="profile-image-container">
+                <img src="https://placehold.co/180x180" alt="프로필 이미지" class="profile-image">
+                <button class="edit-profile-btn">사진 추가</button>
             </div>
-        </div>
-        <div class="profile-info-row">
-            <div class="profile-info-label">이름</div>
-            <div class="profile-info-value">
-                <input type="text" class="profile-input" name="name" value="${dummyProfile.name}">
+            
+            <div class="profile-info">
+                <div class="profile-info-row">
+                    <div class="profile-info-label">닉네임</div>
+                    <div class="profile-info-value">
+                        <input type="text" class="profile-input" name="nickname" value="${dummyProfile.nickname}">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-label">이름</div>
+                    <div class="profile-info-value">
+                        <input type="text" class="profile-input" name="name" value="${dummyProfile.name}">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-label">이메일</div>
+                    <div class="profile-info-value">
+                        <input type="email" class="profile-input" name="email" value="${dummyProfile.email}">
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="profile-info-row">
-            <div class="profile-info-label">이메일</div>
-            <div class="profile-info-value">
-                <input type="email" class="profile-input" name="email" value="${dummyProfile.email}">
+            
+            <div class="profile-button-group">
+                <button class="profile-button save-button">저장하기</button>
+                <button class="profile-button edit-button">훈련사 신청</button>
             </div>
-        </div>
-    </div>
-    
-    <div class="profile-button-group">
-        <button class="profile-button save-button">저장하기</button>
-        <button class="profile-button edit-button">훈련사 신청</button>
-    </div>
-`;
+        `;
 
-
-        // 프로필 섹션을 검색바 위에 삽입
-        const searchBar = document.querySelector('.search-bar');
-        if (searchBar) {
-            searchBar.parentNode.insertBefore(profileSection, searchBar);
-        } else {
-            // 검색바가 없으면 post-container 앞에 삽입
-            const postContainer = document.getElementById('post-container');
-            if (postContainer) {
-                postContainer.parentNode.insertBefore(profileSection, postContainer);
-            }
+        const contentWrapper = document.querySelector('.content-wrapper');
+        if (contentWrapper) {
+            contentWrapper.appendChild(profileSection); // 위치에 상관없이 항상 추가
         }
     }
 
-    // 프로필 섹션 표시
+    // 프로필 섹션만 보이게 설정
     profileSection.style.display = 'block';
-
-    // 게시물 목록 숨기기
-    hidePostList();
 }
 
-// 게시물 목록 숨기기
-function hidePostList() {
+
+// 모든 컨텐츠 영역 숨기기
+function hideAllContent() {
+    // 게시글 컨테이너 숨기기
     const postContainer = document.getElementById('post-container');
     if (postContainer) postContainer.style.display = 'none';
 
-    const pagination = document.querySelector('.pagination');
-    if (pagination) pagination.parentElement.style.display = 'none';
-
-    const searchBar = document.querySelector('.search-bar');
-    if (searchBar) searchBar.style.display = 'none';
-}
-
-// 게시물 목록 표시하기
-function showPostList() {
-    const postContainer = document.getElementById('post-container');
-    if (postContainer) postContainer.style.display = 'block';
-
-    const pagination = document.querySelector('.pagination');
-    if (pagination) pagination.parentElement.style.display = 'block';
-
-    const searchBar = document.querySelector('.search-bar');
-    if (searchBar) searchBar.style.display = 'block';
+    // 리뷰 섹션 숨기기
+    const reviewSection = document.getElementById('review-section');
+    if (reviewSection) reviewSection.style.display = 'none';
 
     // 프로필 섹션 숨기기
     const profileSection = document.querySelector('.profile-section');
     if (profileSection) profileSection.style.display = 'none';
+
+    // 검색바 숨기기 - 여기서 먼저 숨김 처리
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) searchBar.style.display = 'none';
+
+    // 페이지네이션 숨기기
+    const pagination = document.querySelector('.pagination');
+    if (pagination && pagination.parentElement) pagination.parentElement.style.display = 'none';
+}
+
+// 게시물 관련 컨텐츠 표시 함수
+function showPostContent() {
+    // 1) 기존 콘텐츠 숨기기
+    hideAllContent();
+
+    // 2) 게시글 영역 표시
+    const postContainer = document.getElementById('post-container');
+    if (postContainer) postContainer.style.display = 'block';
+
+    // 3) 페이지네이션 표시
+    const pagination = document.querySelector('.pagination');
+    if (pagination) pagination.parentElement.style.display = 'block';
+
+    // 4) 검색바 표시 (flex로 복원)
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) searchBar.style.display = 'flex';
+}
+
+// 리뷰 관련 컨텐츠 표시 함수
+function showReviewContent() {
+    hideAllContent();
+
+    // 후기 영역 표시
+    const reviewSection = document.getElementById('review-section');
+    if (reviewSection) reviewSection.style.display = 'block';
+
+    // 페이지네이션 표시
+    const pagination = document.querySelector('.pagination');
+    if (pagination) pagination.parentElement.style.display = 'block';
+
+    // 검색바 표시 - flex로 통일
+    const searchBar = document.querySelector('.search-bar');
+    if (searchBar) searchBar.style.display = 'flex';
 }
 
 // 탭 메뉴 활성화 처리 및 필터링
@@ -371,45 +480,39 @@ function setupTabEvents() {
                 case 'tab-profile':
                     // 프로필 탭 - 프로필 정보 표시
                     renderProfile();
-                    return;
+                    break;
                 case 'tab-mypost':
                     // 내가 쓴 글 탭
                     filteredPosts = allPosts.filter(post => post.isMyPost);
+                    showPostContent();
+                    renderPosts(filteredPosts, currentPage);
                     break;
                 case 'tab-review':
                     // 내가 쓴 후기 탭
-                    filteredPosts = allPosts.filter(post => post.isMyReview);
+                    showReviewContent();
+                    createReviewElement(dummyReviews, currentPage);
                     break;
                 case 'tab-liked':
                     // 좋아요한 글 탭
                     filteredPosts = allPosts.filter(post => post.isLiked);
+                    showPostContent();
+                    renderPosts(filteredPosts, currentPage);
                     break;
                 case 'tab-comment':
                     // 내가 댓 달은 탭
                     filteredPosts = allPosts.filter(post => post.hasMyComment);
+                    showPostContent();
+                    renderPosts(filteredPosts, currentPage);
                     break;
                 default:
                     filteredPosts = [...allPosts];
+                    showPostContent();
+                    renderPosts(filteredPosts, currentPage);
             }
 
-            console.log(`탭 ${this.textContent} 클릭됨 - ${filteredPosts.length}개 게시글 필터링됨`);
-            // 게시물 목록 표시
-            showPostList();
-            // 필터링된 게시글 표시
-            renderPosts(filteredPosts, currentPage);
+            console.log(`탭 ${this.textContent} 클릭됨 - ${tabId === 'tab-review' ? dummyReviews.length : filteredPosts.length}개 ${tabId === 'tab-review' ? '리뷰' : '게시글'} 필터링됨`);
         });
     });
-}
-
-// 글쓰기 버튼 이벤트 설정
-function setupWriteButton() {
-    const writeButton = document.querySelector('.btn-primary');
-    if (writeButton) {
-        writeButton.addEventListener('click', function() {
-            // 백엔드 연동 전 임시 처리
-            alert('글쓰기 기능은 백엔드 연동 후 사용 가능합니다.');
-        });
-    }
 }
 
 // 프로필 버튼 이벤트 설정
@@ -430,60 +533,12 @@ function setupProfileButtons() {
     });
 }
 
-// 백엔드 API 호출 함수 (현재는 주석 처리됨)
-/*
-async function fetchUserProfile() {
-    try {
-        const response = await fetch('/api/user/profile');
-        if (!response.ok) {
-            throw new Error('프로필 정보를 가져오는데 실패했습니다.');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('에러 발생:', error);
-        // 에러 발생 시 더미 데이터 반환
-        return dummyProfile;
-    }
-}
-
-async function fetchUserPosts(type) {
-    try {
-        const response = await fetch(`/api/user/posts?type=${type}`);
-        if (!response.ok) {
-            throw new Error('게시글을 가져오는데 실패했습니다.');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('에러 발생:', error);
-        // 에러 발생 시 더미 데이터 반환
-        return filterPostsByType(type);
-    }
-}
-
-function filterPostsByType(type) {
-    switch (type) {
-        case 'mypost':
-            return allPosts.filter(post => post.isMyPost);
-        case 'review':
-            return allPosts.filter(post => post.isMyReview);
-        case 'liked':
-            return allPosts.filter(post => post.isLiked);
-        case 'comment':
-            return allPosts.filter(post => post.hasMyComment);
-        default:
-            return allPosts;
-    }
-}
-*/
-
 // 페이지 로드 시 초기화
 window.addEventListener('DOMContentLoaded', () => {
     // 이벤트 리스너 설정
     setupTabEvents();
-    setupWriteButton();
     setupProfileButtons();
+    setupSearchButton();
 
     // 기본적으로 프로필 탭을 활성화하고 프로필 정보 표시
     const profileTab = document.getElementById('tab-profile');

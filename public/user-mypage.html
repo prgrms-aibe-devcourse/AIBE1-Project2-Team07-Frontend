@@ -59,13 +59,21 @@
     </ul>
 
     <!-- 검색 바 -->
-    <div class="search-bar">
-        <button class="btn btn-primary btn-sm">글쓰기</button>
+    <div class="search-bar d-flex justify-content-end">
+        <input type="text" class="form-control form-control-sm me-2" placeholder="검색어를 입력하세요" id="search-input" style="max-width: 200px;">
+        <button class="btn btn-primary btn-sm" id="search-button">검색</button>
     </div>
 
     <!-- 게시글 목록 -->
     <div class="post-list" id="post-container">
         <!-- 게시글이 JavaScript에 의해 동적으로 이곳에 삽입됩니다 -->
+    </div>
+
+    <!-- 리뷰 리스트 영역 -->
+    <div id="review-section" style="display: none;">
+        <ul class="review-list" id="review-container">
+            <!-- JavaScript로 후기들이 여기 삽입됩니다 -->
+        </ul>
     </div>
 
     <!-- 페이지네이션 -->
