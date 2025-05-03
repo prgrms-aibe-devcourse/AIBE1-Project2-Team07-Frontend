@@ -79,17 +79,6 @@ const posts = [
         likeCount: 2,
         commentCount: 15,
         image: 'https://placedog.net/80/80?random=2'
-    },
-    {
-        id: 7,
-        category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
     }
 ];
 
@@ -113,6 +102,30 @@ const myReviews = [
     },
     {
         id: 3,
+        author: "김*희",
+        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
+        date: "2025-04-28",
+        rating: 5,
+        image: "./images/cat1.jpeg"
+    },
+    {
+        id: 4,
+        author: "김*희",
+        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
+        date: "2025-04-28",
+        rating: 5,
+        image: "./images/cat1.jpeg"
+    },
+    {
+        id: 5,
+        author: "김*희",
+        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
+        date: "2025-04-28",
+        rating: 5,
+        image: "./images/cat1.jpeg"
+    },
+    {
+        id: 6,
         author: "김*희",
         content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
         date: "2025-04-28",
@@ -196,10 +209,18 @@ const adviceRequests = [
     }
 ];
 
-// 현재 페이지 상태
-let currentTab = 'profile';
+// 탭별 현재 페이지 상태 관리
+const tabStates = {
+    profile: { currentPage: 1 },
+    mypost: { currentPage: 1 },
+    review: { currentPage: 1 },
+    liked: { currentPage: 1 },
+    advice: { currentPage: 1 }
+};
+
 let currentPage = 1;
 const itemsPerPage = 5;
+let currentTab = 'profile';
 
 // DOM이 완전히 로드된 후 실행
 document.addEventListener('DOMContentLoaded', function() {
@@ -211,21 +232,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('tab-mypost').addEventListener('click', function(e) {
         e.preventDefault();
+        currentPage = 1;
         switchTab('mypost');
     });
 
     document.getElementById('tab-review').addEventListener('click', function(e) {
         e.preventDefault();
+        currentPage = 1;
         switchTab('review');
     });
 
     document.getElementById('tab-liked').addEventListener('click', function(e) {
         e.preventDefault();
+        currentPage = 1;
         switchTab('liked');
     });
 
     document.getElementById('tab-advice').addEventListener('click', function(e) {
         e.preventDefault();
+        currentPage = 1;
         switchTab('advice');
     });
 
@@ -233,6 +258,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('search-button').addEventListener('click', function() {
         const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
         searchContent(searchTerm);
+    });
+
+    // 엔터 키 검색 지원
+    document.getElementById('search-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const searchTerm = this.value.trim().toLowerCase();
+            searchContent(searchTerm);
+        }
     });
 
     // 초기 탭 로딩
@@ -243,7 +276,21 @@ document.addEventListener('DOMContentLoaded', function() {
 function switchTab(tabName) {
     // 현재 탭 업데이트
     currentTab = tabName;
-    currentPage = 1;
+
+    // 검색창 관리 (프로필 탭에서는 숨김)
+    const searchContainer = document.querySelector('.search-bar');
+    const paginationcontainer = document.querySelector('.pagination-container');
+
+    if (tabName === 'profile') {
+        if (searchContainer) searchContainer.style.display = 'none';
+        if (paginationcontainer) paginationcontainer.style.display = 'none';
+    } else {
+        if (searchContainer) searchContainer.style.display = 'flex';
+        if (paginationcontainer) paginationcontainer.style.display = 'flex';
+        // 탭 변경 시 검색창 초기화
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
+    }
 
     // 모든 탭 링크에서 active 클래스 제거
     document.querySelectorAll('.tab-menu .nav-link').forEach(link => {
@@ -282,7 +329,7 @@ function showProfile() {
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
     // 페이지네이션 숨기기
-    document.querySelector('.pagination').innerHTML = '';
+    document.querySelector('.pagination-container').style.display = 'none';
 
     // 프로필 데이터 렌더링
     const profileHTML = `
@@ -359,6 +406,15 @@ function showMyPosts() {
     document.getElementById('post-container').style.display = 'block';
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
+    // 페이지네이션 보이게 설정
+    document.querySelector('.pagination-container').style.display = 'block';
+
+    // 데이터가 비어있는 경우
+    if (posts.length === 0) {
+        document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+        document.querySelector('.pagination').innerHTML = '';
+        return;
+    }
 
     // 페이징 처리
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -396,6 +452,13 @@ function showMyReviews() {
     document.getElementById('post-container').style.display = 'none';
     // 리뷰 섹션 보이게 설정
     document.getElementById('review-section').style.display = 'block';
+
+    // 데이터가 비어있는 경우
+    if (myReviews.length === 0) {
+        document.getElementById('review-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+        document.querySelector('.pagination').innerHTML = '';
+        return;
+    }
 
     // 페이징 처리
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -440,6 +503,13 @@ function showLikedPosts() {
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
 
+    // 데이터가 비어있는 경우
+    if (posts.length === 0) {
+        document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+        document.querySelector('.pagination').innerHTML = '';
+        return;
+    }
+
     // 좋아요한 글 렌더링
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, posts.length);
@@ -476,6 +546,13 @@ function showMyAdvices() {
     document.getElementById('post-container').style.display = 'block';
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
+
+    // 데이터가 비어있는 경우
+    if (adviceRequests.length === 0) {
+        document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+        document.querySelector('.pagination').innerHTML = '';
+        return;
+    }
 
     // 상태에 따라 정렬 (대기중 > 진행중 > 완료 순)
     const sortedAdviceRequests = [...adviceRequests].sort((a, b) => {
@@ -543,7 +620,7 @@ function generatePagination(totalItems) {
 
     let paginationHTML = `
         <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage - 1}">이전</a>
+            <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
         </li>
     `;
 
@@ -558,7 +635,7 @@ function generatePagination(totalItems) {
 
     paginationHTML += `
         <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage + 1}">다음</a>
+            <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
         </li>
     `;
 
@@ -578,7 +655,7 @@ function generatePagination(totalItems) {
     });
 }
 
-// 검색 함수
+// 검색 함수 개선
 function searchContent(searchTerm) {
     if (!searchTerm) {
         // 검색어가 없으면 현재 탭 다시 로드
@@ -586,90 +663,55 @@ function searchContent(searchTerm) {
         return;
     }
 
-    let filteredData = [];
-
-    // 현재 탭에 따라 검색 결과 필터링
+    // 탭별 검색 로직 분리
     switch(currentTab) {
         case 'mypost':
-            filteredData = myPosts.filter(post =>
-                post.title.toLowerCase().includes(searchTerm) ||
-                post.content.toLowerCase().includes(searchTerm)
-            );
-            break;
-        case 'review':
-            filteredData = myReviews.filter(review =>
-                review.title.toLowerCase().includes(searchTerm) ||
-                review.content.toLowerCase().includes(searchTerm)
-            );
-            break;
-        case 'liked':
-            filteredData = likedPosts.filter(post =>
+            const filteredPosts = posts.filter(post =>
                 post.title.toLowerCase().includes(searchTerm) ||
                 post.content.toLowerCase().includes(searchTerm) ||
                 post.author.toLowerCase().includes(searchTerm)
             );
+            // 페이지 초기화
+            tabStates.mypost.currentPage = 1;
+            showMyPosts(filteredPosts);
             break;
-        case 'comment':
-            filteredData = myComments.filter(comment =>
-                comment.postTitle.toLowerCase().includes(searchTerm) ||
-                comment.comment.toLowerCase().includes(searchTerm)
-            );
-            break;
-        case 'profile':
-            // 프로필은 검색 기능 없음
-            return;
-    }
 
-    // 검색 결과가 없는 경우
-    if (filteredData.length === 0) {
-        if (currentTab === 'review') {
-            document.getElementById('review-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
-            document.getElementById('review-section').style.display = 'block';
-        } else {
-            document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
-            document.getElementById('post-container').style.display = 'block';
-        }
-        document.querySelector('.pagination').innerHTML = '';
-        return;
-    }
-
-    // 임시로 데이터 교체 후 표시 함수 호출
-    const originalData = {
-        mypost: [...myPosts],
-        review: [...myReviews],
-        liked: [...likedPosts],
-        comment: [...myComments]
-    };
-
-    // 데이터 임시 교체
-    switch(currentTab) {
-        case 'mypost':
-            myPosts.length = 0;
-            myPosts.push(...filteredData);
-            showMyPosts();
-            myPosts.length = 0;
-            myPosts.push(...originalData.mypost);
-            break;
         case 'review':
-            myReviews.length = 0;
-            myReviews.push(...filteredData);
-            showMyReviews();
-            myReviews.length = 0;
-            myReviews.push(...originalData.review);
+            const filteredReviews = myReviews.filter(review =>
+                review.content.toLowerCase().includes(searchTerm) ||
+                review.author.toLowerCase().includes(searchTerm)
+            );
+            // 페이지 초기화
+            tabStates.review.currentPage = 1;
+            showMyReviews(filteredReviews);
             break;
+
         case 'liked':
-            likedPosts.length = 0;
-            likedPosts.push(...filteredData);
-            showLikedPosts();
-            likedPosts.length = 0;
-            likedPosts.push(...originalData.liked);
+            const filteredLikes = posts.filter(post =>
+                post.title.toLowerCase().includes(searchTerm) ||
+                post.content.toLowerCase().includes(searchTerm) ||
+                post.author.toLowerCase().includes(searchTerm)
+            );
+            // 페이지 초기화
+            tabStates.liked.currentPage = 1;
+            showLikedPosts(filteredLikes);
             break;
-        case 'comment':
-            myComments.length = 0;
-            myComments.push(...filteredData);
-            showMyComments();
-            myComments.length = 0;
-            myComments.push(...originalData.comment);
+
+        case 'advice':
+            const filteredAdvices = adviceRequests.filter(advice =>
+                advice.postTitle.toLowerCase().includes(searchTerm) ||
+                advice.comment.toLowerCase().includes(searchTerm) ||
+                advice.author.toLowerCase().includes(searchTerm) ||
+                advice.petType.toLowerCase().includes(searchTerm) ||
+                advice.petBreed.toLowerCase().includes(searchTerm)
+            );
+            // 페이지 초기화
+            tabStates.advice.currentPage = 1;
+            showMyAdvices(filteredAdvices);
+            break;
+
+        case 'profile':
+            // 프로필 탭에서는 검색 기능 미사용
             break;
     }
 }
