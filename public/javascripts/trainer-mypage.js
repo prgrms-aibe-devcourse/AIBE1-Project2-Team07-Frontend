@@ -17,68 +17,68 @@ const posts = [
     {
         id: 1,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
+        title: '고양이 털 빠짐 방지 팁',
+        content: '요즘 우리 집 고양이 털이 너무 많이 빠져서 고민이에요. 빗질 외에 추가로 도움이 되는 방법 있으신가요?',
+        author: '냥이집사',
+        date: "2025-04-25",
+        likeCount: 5,
+        commentCount: 3,
+        image: 'https://placedog.net/80/80?random=1'
     },
     {
         id: 2,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
+        title: '강아지 사회화 어떻게 하나요?',
+        content: '새로 입양한 강아지가 낯을 많이 가려서요. 산책 외에 사회화에 도움이 될 만한 활동이 있을까요?',
         author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
+        date: "2025-04-24",
+        likeCount: 8,
+        commentCount: 6,
         image: 'https://placedog.net/80/80?random=2'
     },
     {
         id: 3,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
+        title: '토끼 바닥재 추천해주세요',
+        content: '시리안 토끼에게 좋은 바닥재가 궁금해요. 먼지 적고 발에 안전한 제품 있나요?',
+        author: '토끼사랑',
+        date: "2025-04-23",
+        likeCount: 3,
+        commentCount: 2,
+        image: 'https://placedog.net/80/80?random=3'
     },
     {
         id: 4,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
+        title: '햄스터 모래 목욕',
+        content: '햄스터가 목욕 모래를 너무 좋아하는데, 어떤 모래가 안전할까요?',
+        author: '햄스터러버',
+        date: "2025-04-22",
+        likeCount: 4,
+        commentCount: 1,
+        image: 'https://placedog.net/80/80?random=4'
     },
     {
         id: 5,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
+        title: '고양이 장난감 DIY 아이디어',
+        content: '집에 있는 재료로 간단하게 만들 수 있는 캣닢 장난감 레시피 공유 부탁드려요.',
+        author: '집사초보',
+        date: "2025-04-21",
+        likeCount: 6,
+        commentCount: 5,
+        image: 'https://placedog.net/80/80?random=5'
     },
     {
         id: 6,
         category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        date: "2025-04-28",
-        likeCount: 2,
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2'
+        title: '강아지 목줄 브랜드 비교',
+        content: '여러 브랜드 목줄 써보신 분 계신가요? 내구성 좋은 제품이 궁금합니다.',
+        author: '멍멍이아빠',
+        date: "2025-04-20",
+        likeCount: 7,
+        commentCount: 4,
+        image: 'https://placedog.net/80/80?random=6'
     }
 ];
 
@@ -86,126 +86,127 @@ const posts = [
 const myReviews = [
     {
         id: 1,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
-        date: "2025-04-28",
+        author: "박*지",
+        content: "펫시터 서비스 너무 만족스러웠어요. 다음에도 꼭 부탁드릴게요!",
+        date: "2025-04-29",
         rating: 5,
-        image: "./images/cat1.jpeg"
+        image: 'https://placedog.net/80/80?random=6'
     },
     {
         id: 2,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
+        author: "이*린",
+        content: "정확한 훈련법 알려주셔서 감사합니다. 우리 강아지가 차분해졌어요.",
         date: "2025-04-28",
-        rating: 5,
-        image: "./images/cat1.jpeg"
+        rating: 4,
+        image: 'https://placedog.net/80/80?random=6'
     },
     {
         id: 3,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
-        date: "2025-04-28",
+        author: "박*준",
+        content: "친절한 답변 감사드립니다. 토끼 관리가 한결 수월해졌어요.",
+        date: "2025-04-27",
         rating: 5,
-        image: "./images/cat1.jpeg"
+        image: 'https://placedog.net/80/80?random=6'
     },
     {
         id: 4,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
-        date: "2025-04-28",
-        rating: 5,
-        image: "./images/cat1.jpeg"
+        author: "최*연",
+        content: "햄스터 목욕 방법 알려주셔서 도움이 많이 됐습니다!",
+        date: "2025-04-26",
+        rating: 4,
+        image: 'https://placedog.net/80/80?random=6'
     },
     {
         id: 5,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
-        date: "2025-04-28",
+        author: "정*호",
+        content: "고양이 모래 추천 덕분에 모래 날림이 줄었어요. 감사합니다.",
+        date: "2025-04-25",
         rating: 5,
-        image: "./images/cat1.jpeg"
+        image: 'https://placedog.net/80/80?random=6'
     },
     {
         id: 6,
-        author: "김*희",
-        content: "우리 강아지가 많이 개선되었어요. 정말 감사합니다!",
-        date: "2025-04-28",
+        author: "한*진",
+        content: "새 깃털 관리 꿀팁 최고! 덕분에 예쁘게 회복했어요.",
+        date: "2025-04-24",
         rating: 5,
-        image: "./images/cat1.jpeg"
+        image: 'https://placedog.net/80/80?random=6'
     }
 ];
 
+// 더미 데이터 - 내가 받은 상담 요청
 const adviceRequests = [
     {
         id: 1,
-        author: "김민희",
-        postTitle: "강아지 짖음 문제",
-        comment: "3개월 된 말티즈를 키우고 있습니다. 최근에 집을 비우면 계속 짖어서 이웃 민원이 들어오고 있어요. 분리불안이 있는 것 같은데 어떻게 훈련시켜야 할지 모르겠습니다. 도움 부탁드립니다.",
-        link: "/posts/dog-barking",
-        date: "2025-04-25",
+        author: "김민수",
+        postTitle: "강아지 분리불안 해결법",
+        comment: "3살 푸들이 집에 혼자 있으면 계속 울어서요. 훈련 방법이 있을까요?",
+        link: "/posts/dog-anxiety",
+        date: "2025-04-23",
         status: "답변 대기중",
         petType: "강아지",
-        petBreed: "말티즈",
-        petAge: "3개월"
+        petBreed: "푸들",
+        petAge: "3살"
     },
     {
         id: 2,
         author: "이준호",
-        postTitle: "고양이 식욕 감소",
-        comment: "5살 된 브리티시 숏헤어 고양이가 3일 전부터 밥을 잘 안 먹고 있어요. 평소 좋아하던 간식도 거부하고 기운이 없는 것 같습니다. 병원에 가봐야 할까요? 어떤 증상을 살펴봐야 할지 조언 부탁드립니다.",
+        postTitle: "고양이 식욕부진",
+        comment: "평소 잘 먹던 고양이가 일주일째 밥을 거부해요. 병원 방문 전 체크할 증상 알려주세요.",
         link: "/posts/cat-appetite",
-        date: "2025-04-23",
+        date: "2025-04-22",
         status: "답변 완료",
         petType: "고양이",
-        petBreed: "브리티시 숏헤어",
-        petAge: "5살"
+        petBreed: "러시안 블루",
+        petAge: "4살"
     },
     {
         id: 3,
         author: "박서연",
-        postTitle: "햄스터 케이지 추천",
-        comment: "새로 햄스터를 입양하려고 합니다. 시리안 햄스터에게 적합한 케이지 사이즈와 추천 모델이 있을까요? 또한 필수적으로 구비해야 할 용품들도 알려주시면 감사하겠습니다. 처음 키워보는 거라 모르는 것이 많아요.",
-        link: "/posts/hamster-cage",
-        date: "2025-04-22",
+        postTitle: "토끼 이갈이 방법",
+        comment: "네덜란드 드워프 토끼가 가구를 갉아요. 안전하게 이갈이할 방법이 있을까요?",
+        link: "/posts/rabbit-teeth",
+        date: "2025-04-21",
         status: "답변 대기중",
-        petType: "햄스터",
-        petBreed: "시리안 햄스터",
-        petAge: "입양 예정"
+        petType: "토끼",
+        petBreed: "네덜란드 드워프",
+        petAge: "1살"
     },
     {
         id: 4,
-        author: "최지영",
-        postTitle: "강아지 알레르기 증상",
-        comment: "프렌치불독 (2살)이 최근에 피부를 자주 긁고 발을 핥는 증상을 보입니다. 또한 눈 주변이 붉어지고 있어요. 알레르기 검사를 받아야 할까요? 집에서 관리할 수 있는 방법이 있을까요? 사료는 최근에 바꾼 적이 없습니다.",
-        link: "/posts/dog-allergy",
-        date: "2025-04-21",
-        status: "답변 대기중",
-        petType: "강아지",
-        petBreed: "프렌치불독",
-        petAge: "2살"
+        author: "최하늘",
+        postTitle: "햄스터 야행성 조절",
+        comment: "햄스터가 밤새 울어서 잠을 못 자요. 낮 시간에 깨우는 팁이 있을까요?",
+        link: "/posts/hamster-nocturnal",
+        date: "2025-04-20",
+        status: "답변 완료",
+        petType: "햄스터",
+        petBreed: "드워프 햄스터",
+        petAge: "6개월"
     },
     {
         id: 5,
         author: "정민수",
-        postTitle: "토끼 이갈이 문제",
-        comment: "6개월 된 네덜란드 드워프 토끼가 집안 가구와 전선을 계속 갉아먹는 문제가 있습니다. 장난감과 이갈이용 나무를 제공해도 효과가 없어요. 토끼가 안전하게 이갈이할 수 있는 방법과 가구 보호 방법을 알고 싶습니다.",
-        link: "/posts/rabbit-chewing",
-        date: "2025-04-20",
-        status: "답변 완료",
-        petType: "토끼",
-        petBreed: "네덜란드 드워프",
-        petAge: "6개월"
+        postTitle: "새 깃털 꺾음 증상",
+        comment: "코카투가 스트레스 받으면 깃털을 뽑는데, 예방 방법이 궁금해요.",
+        link: "/posts/bird-feather",
+        date: "2025-04-19",
+        status: "답변 대기중",
+        petType: "새",
+        petBreed: "코카투",
+        petAge: "2살"
     },
     {
         id: 6,
         author: "송하은",
-        postTitle: "새 고양이 적응 문제",
-        comment: "기존에 키우던 고양이(3살)에게 새 고양이(1살)를 데려왔는데 적응이 잘 안되고 있어요. 기존 고양이가 계속 으르렁거리고 공격적인 모습을 보입니다. 두 고양이가 잘 지낼 수 있도록 도와주세요.",
-        link: "/posts/cat-introduction",
-        date: "2025-04-19",
-        status: "답변 대기중",
-        petType: "고양이",
-        petBreed: "러시안 블루, 아메리칸 숏헤어",
-        petAge: "3살, 1살"
+        postTitle: "거북이 목욕 빈도",
+        comment: "반려 거북이는 얼마나 자주 목욕시켜야 하나요? 물 온도도 알려주세요.",
+        link: "/posts/turtle-bath",
+        date: "2025-04-18",
+        status: "답변 완료",
+        petType: "거북이",
+        petBreed: "아프리카 사육거북",
+        petAge: "5살"
     }
 ];
 
@@ -232,40 +233,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('tab-mypost').addEventListener('click', function(e) {
         e.preventDefault();
-        currentPage = 1;
         switchTab('mypost');
     });
 
     document.getElementById('tab-review').addEventListener('click', function(e) {
         e.preventDefault();
-        currentPage = 1;
         switchTab('review');
     });
 
     document.getElementById('tab-liked').addEventListener('click', function(e) {
         e.preventDefault();
-        currentPage = 1;
         switchTab('liked');
     });
 
     document.getElementById('tab-advice').addEventListener('click', function(e) {
         e.preventDefault();
-        currentPage = 1;
         switchTab('advice');
-    });
-
-    // 검색 버튼 이벤트 설정
-    document.getElementById('search-button').addEventListener('click', function() {
-        const searchTerm = document.getElementById('search-input').value.trim().toLowerCase();
-        searchContent(searchTerm);
-    });
-
-    // 엔터 키 검색 지원
-    document.getElementById('search-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            const searchTerm = this.value.trim().toLowerCase();
-            searchContent(searchTerm);
-        }
     });
 
     // 초기 탭 로딩
@@ -274,19 +257,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 탭 전환 함수
 function switchTab(tabName) {
+    if (tabName !== currentTab) {
+        tabStates[tabName].currentPage = 1;
+        // 검색어도 초기화하고 싶으면 여기서:
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) searchInput.value = '';
+    }
+
     // 현재 탭 업데이트
     currentTab = tabName;
 
     // 검색창 관리 (프로필 탭에서는 숨김)
     const searchContainer = document.querySelector('.search-bar');
-    const paginationcontainer = document.querySelector('.pagination-container');
+    const paginationContainer = document.querySelector('.pagination-container');
 
     if (tabName === 'profile') {
         if (searchContainer) searchContainer.style.display = 'none';
-        if (paginationcontainer) paginationcontainer.style.display = 'none';
+        if (paginationContainer) paginationContainer.style.display = 'none';
     } else {
         if (searchContainer) searchContainer.style.display = 'flex';
-        if (paginationcontainer) paginationcontainer.style.display = 'flex';
+        if (paginationContainer) paginationContainer.style.display = 'flex';
         // 탭 변경 시 검색창 초기화
         const searchInput = document.getElementById('search-input');
         if (searchInput) searchInput.value = '';
@@ -349,15 +339,6 @@ function showProfile() {
                 >
               </div>
               <div class="info-row d-flex align-items-center mb-3">
-                <label class="label col-form-label me-3">이름</label>
-                <input
-                  type="text"
-                  name="name"
-                  class="form-control form-control-sm"
-                  value="${profileData.name}"
-                >
-              </div>
-              <div class="info-row d-flex align-items-center mb-3">
                 <label class="label col-form-label me-3">이메일</label>
                 <input
                   type="email"
@@ -376,7 +357,6 @@ function showProfile() {
                 >
               </div>
             </div>
-
         </div>
         <div class="cert-images">
             <h5>자격증</h5>
@@ -388,7 +368,7 @@ function showProfile() {
                     </div>
                 `).join('')}
                 <div class="cert-add">
-                    <button class="btn btn-outline-secondary rounded-circle">+</button>
+                    <button class="btn">+</button>
                 </div>
             </div>
             <button class="btn btn-warning mt-3 mx-auto d-block">수정하기</button>
@@ -399,7 +379,7 @@ function showProfile() {
 }
 
 // 내가 쓴 글 표시 함수
-function showMyPosts() {
+function showMyPosts(filteredPosts = null) {
     // 프로필 영역 숨기기
     document.getElementById('profile-section').style.display = 'none';
     // 게시글 목록 보이게 설정
@@ -407,19 +387,22 @@ function showMyPosts() {
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
     // 페이지네이션 보이게 설정
-    document.querySelector('.pagination-container').style.display = 'block';
+    document.querySelector('.pagination-container').style.display = 'flex';
+
+    // 필터링된 데이터 또는 원본 데이터 사용
+    const dataToShow = filteredPosts || posts;
 
     // 데이터가 비어있는 경우
-    if (posts.length === 0) {
+    if (dataToShow.length === 0) {
         document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
         document.querySelector('.pagination').innerHTML = '';
         return;
     }
 
     // 페이징 처리
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, posts.length);
-    const currentPagePosts = posts.slice(startIndex, endIndex);
+    const startIndex = (tabStates.mypost.currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, dataToShow.length);
+    const currentPagePosts = dataToShow.slice(startIndex, endIndex);
 
     // 게시글 렌더링
     const postsHTML = currentPagePosts.map(post => `
@@ -440,80 +423,94 @@ function showMyPosts() {
 
     document.getElementById('post-container').innerHTML = postsHTML;
 
-    // 페이지네이션 생성
-    generatePagination(posts.length);
+    // 페이지네이션 생성 (탭 상태 및 필터링된 데이터 길이 사용)
+    generatePagination(dataToShow.length, 'mypost');
 }
 
 // 내가 받은 후기 표시 함수
-function showMyReviews() {
+function showMyReviews(filteredReviews = null) {
     // 프로필 영역 숨기기
     document.getElementById('profile-section').style.display = 'none';
     // 게시글 목록 숨기기
     document.getElementById('post-container').style.display = 'none';
     // 리뷰 섹션 보이게 설정
     document.getElementById('review-section').style.display = 'block';
+    // 페이지네이션 보이게 설정
+    document.querySelector('.pagination-container').style.display = 'flex';
+
+    // 필터링된 데이터 또는 원본 데이터 사용
+    const dataToShow = filteredReviews || myReviews;
 
     // 데이터가 비어있는 경우
-    if (myReviews.length === 0) {
-        document.getElementById('review-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
+    if (dataToShow.length === 0) {
+        document.getElementById('review-section').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
         document.querySelector('.pagination').innerHTML = '';
         return;
     }
 
     // 페이징 처리
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, myReviews.length);
-    const currentPageReviews = myReviews.slice(startIndex, endIndex);
+    const startIndex = (tabStates.review.currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, dataToShow.length);
+    const currentPageReviews = dataToShow.slice(startIndex, endIndex);
 
     // 후기 렌더링 - 레이아웃 개선
-    const reviewsHTML = currentPageReviews.map(review => `
-        <li class="review-item">
-            <div class="review-top">
-                <div class="review-author-info">
-                    <div class="review-image">
-                        <img src="${review.image}" alt="게시글 이미지">
+    const reviewsHTML = `
+        <ul id="review-container" class="review-list">
+            ${currentPageReviews.map(review => `
+                <li class="review-item">
+                    <div class="review-top">
+                        <div class="review-author-info">
+                            <div class="review-image">
+                                <img src="${review.image}" alt="게시글 이미지">
+                            </div>
+                            <div class="author-details">
+                                <h5 class="author-name">작성자 : ${review.author}</h5>
+                                <div class="review-date">${review.date}</div>
+                            </div>
+                        </div>
+                        <div class="review-rating">
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}
+                        </div>
                     </div>
-                    <div class="author-details">
-                        <h5 class="author-name">작성자 : ${review.author}</h5>
-                        <div class="review-date">${review.date}</div>
+                    <div class="review-body">
+                        <p class="review-content">${review.content}</p>
                     </div>
-                </div>
-                <div class="review-rating">
-                    ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}
-                </div>
-            </div>
-            <div class="review-body">
-                <p class="review-content">${review.content}</p>
-            </div>
-        </li>
-    `).join('');
+                </li>
+            `).join('')}
+        </ul>
+    `;
 
-    document.getElementById('review-container').innerHTML = reviewsHTML;
+    document.getElementById('review-section').innerHTML = reviewsHTML;
 
     // 페이지네이션 생성
-    generatePagination(myReviews.length);
+    generatePagination(dataToShow.length, 'review');
 }
 
 // 좋아요한 글 표시 함수
-function showLikedPosts() {
+function showLikedPosts(filteredLikes = null) {
     // 프로필 영역 숨기기
     document.getElementById('profile-section').style.display = 'none';
     // 게시글 목록 보이게 설정
     document.getElementById('post-container').style.display = 'block';
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
+    // 페이지네이션 보이게 설정
+    document.querySelector('.pagination-container').style.display = 'flex';
+
+    // 필터링된 데이터 또는 원본 데이터 사용 (여기서는 원본 posts 데이터 사용)
+    const dataToShow = filteredLikes || posts;
 
     // 데이터가 비어있는 경우
-    if (posts.length === 0) {
+    if (dataToShow.length === 0) {
         document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
         document.querySelector('.pagination').innerHTML = '';
         return;
     }
 
-    // 좋아요한 글 렌더링
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, posts.length);
-    const currentPageLiked = posts.slice(startIndex, endIndex);
+    // 페이징 처리
+    const startIndex = (tabStates.liked.currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, dataToShow.length);
+    const currentPageLiked = dataToShow.slice(startIndex, endIndex);
 
     const likedHTML = currentPageLiked.map(post => `
         <div class="post-item">
@@ -521,9 +518,8 @@ function showLikedPosts() {
                 <h3 class="post-category">${post.category}</h3>
                 <h4>${post.title}</h4>
                 <p class="post-content">${post.content}</p>
-                <div class="post-author">작성자: ${post.author}</div>
                 <div class="post-meta">
-                        ${post.date} &nbsp;&nbsp; 좋아요 수: ${post.likeCount} &nbsp;&nbsp; 댓글 수: ${post.commentCount}
+                        <strong>${post.author}</strong> &nbsp;&nbsp; ${post.date} &nbsp;&nbsp; 좋아요 수: ${post.likeCount} &nbsp;&nbsp; 댓글 수: ${post.commentCount}
                 </div>
             </div>
             <div class="post-image">
@@ -535,40 +531,46 @@ function showLikedPosts() {
     document.getElementById('post-container').innerHTML = likedHTML;
 
     // 페이지네이션 생성
-    generatePagination(posts.length);
+    generatePagination(dataToShow.length, 'liked');
 }
 
-// 내가 쓴 상담신청내역 표시 함수
-function showMyAdvices() {
+// 상담신청내역 표시 함수
+function showMyAdvices(filteredAdvices = null) {
     // 프로필 영역 숨기기
     document.getElementById('profile-section').style.display = 'none';
     // 게시글 목록 보이게 설정
     document.getElementById('post-container').style.display = 'block';
     // 리뷰 섹션 숨기기
     document.getElementById('review-section').style.display = 'none';
+    // 페이지네이션 보이게 설정
+    document.querySelector('.pagination-container').style.display = 'flex';
+
+    // 필터링된 데이터 또는 원본 데이터 사용
+    let dataToShow = filteredAdvices || [...adviceRequests];
 
     // 데이터가 비어있는 경우
-    if (adviceRequests.length === 0) {
+    if (dataToShow.length === 0) {
         document.getElementById('post-container').innerHTML = '<p class="no-results">검색 결과가 없습니다.</p>';
         document.querySelector('.pagination').innerHTML = '';
         return;
     }
 
     // 상태에 따라 정렬 (대기중 > 진행중 > 완료 순)
-    const sortedAdviceRequests = [...adviceRequests].sort((a, b) => {
-        // 우선순위 점수 부여
-        const getPriorityScore = (status) => {
-            if (status.includes('대기')) return 2;
-            return 1; // 완료
-        };
-
-        return getPriorityScore(b.status) - getPriorityScore(a.status);
-    });
+    if (!filteredAdvices) {
+        dataToShow = dataToShow.sort((a, b) => {
+            // 우선순위 점수 부여
+            const getPriorityScore = (status) => {
+                if (status.includes('대기')) return 2;
+                return 1; // 완료
+            };
+            return getPriorityScore(b.status) - getPriorityScore(a.status);
+        });
+    }
 
     // 페이징 처리
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, sortedAdviceRequests.length);
-    const currentPageAdvices = sortedAdviceRequests.slice(startIndex, endIndex);
+    const startIndex = (tabStates.advice.currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, dataToShow.length);
+    const currentPageAdvices = dataToShow.slice(startIndex, endIndex);
 
     // 상담신청내역 렌더링
     const advicesHTML = currentPageAdvices.map(advice => `
@@ -605,13 +607,14 @@ function showMyAdvices() {
 
     document.getElementById('post-container').innerHTML = advicesHTML;
 
-    // 페이지네이션 생성 (정렬된 배열 길이 사용)
-    generatePagination(sortedAdviceRequests.length);
+    // 페이지네이션 생성
+    generatePagination(dataToShow.length, 'advice');
 }
 
 // 페이지네이션 생성 함수
-function generatePagination(totalItems) {
+function generatePagination(totalItems, tabName) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const currentTabState = tabStates[tabName];
 
     if (totalPages <= 1) {
         document.querySelector('.pagination').innerHTML = '';
@@ -619,23 +622,23 @@ function generatePagination(totalItems) {
     }
 
     let paginationHTML = `
-        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage - 1}">&laquo;</a>
+        <li class="page-item ${currentTabState.currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentTabState.currentPage - 1}">&laquo;</a>
         </li>
     `;
 
     // 페이지 번호
     for (let i = 1; i <= totalPages; i++) {
         paginationHTML += `
-            <li class="page-item ${currentPage === i ? 'active' : ''}">
+            <li class="page-item ${currentTabState.currentPage === i ? 'active' : ''}">
                 <a class="page-link" href="#" data-page="${i}">${i}</a>
             </li>
         `;
     }
 
     paginationHTML += `
-        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-            <a class="page-link" href="#" data-page="${currentPage + 1}">&raquo;</a>
+        <li class="page-item ${currentTabState.currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentTabState.currentPage + 1}">&raquo;</a>
         </li>
     `;
 
@@ -647,15 +650,15 @@ function generatePagination(totalItems) {
             e.preventDefault();
             const targetPage = parseInt(this.getAttribute('data-page'));
 
-            if (targetPage >= 1 && targetPage <= totalPages && targetPage !== currentPage) {
-                currentPage = targetPage;
-                switchTab(currentTab);
+            if (targetPage >= 1 && targetPage <= totalPages && targetPage !== currentTabState.currentPage) {
+                currentTabState.currentPage = targetPage;
+                switchTab(tabName);
             }
         });
     });
 }
 
-// 검색 함수 개선
+// 검색 함수
 function searchContent(searchTerm) {
     if (!searchTerm) {
         // 검색어가 없으면 현재 탭 다시 로드

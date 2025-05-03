@@ -155,9 +155,9 @@ body {
 }
 
 .cert-add button {
-    width: 100px;
     height: 100px;
     font-size: 24px;
+    color: #666;
 }
 
 /* 게시글 목록 스타일 */
