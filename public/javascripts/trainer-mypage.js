@@ -5,10 +5,10 @@ const profileData = {
     email: "example.gmail.com",
     center: "중앙 센터",
     certifications: [
-        { label: "1차 자격증", image: "./images/cat1.jpeg" },
-        { label: "2차 자격증", image: "./images/cat1.jpeg" },
-        { label: "3차 자격증", image: "./images/cat1.jpeg" },
-        { label: "4차 자격증", image: "./images/cat1.jpeg" }
+        {label: "1차 자격증", image: "./images/cat1.jpeg"},
+        {label: "2차 자격증", image: "./images/cat1.jpeg"},
+        {label: "3차 자격증", image: "./images/cat1.jpeg"},
+        {label: "4차 자격증", image: "./images/cat1.jpeg"}
     ]
 };
 
@@ -212,11 +212,11 @@ const adviceRequests = [
 
 // 탭별 현재 페이지 상태 관리
 const tabStates = {
-    profile: { currentPage: 1 },
-    mypost: { currentPage: 1 },
-    review: { currentPage: 1 },
-    liked: { currentPage: 1 },
-    advice: { currentPage: 1 }
+    profile: {currentPage: 1},
+    mypost: {currentPage: 1},
+    review: {currentPage: 1},
+    liked: {currentPage: 1},
+    advice: {currentPage: 1}
 };
 
 let currentPage = 1;
@@ -224,35 +224,37 @@ const itemsPerPage = 5;
 let currentTab = 'profile';
 
 // DOM이 완전히 로드된 후 실행
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 탭 이벤트 리스너 설정
-    document.getElementById('tab-profile').addEventListener('click', function(e) {
+    document.getElementById('tab-profile').addEventListener('click', function (e) {
         e.preventDefault();
         switchTab('profile');
     });
 
-    document.getElementById('tab-mypost').addEventListener('click', function(e) {
+    document.getElementById('tab-mypost').addEventListener('click', function (e) {
         e.preventDefault();
         switchTab('mypost');
     });
 
-    document.getElementById('tab-review').addEventListener('click', function(e) {
+    document.getElementById('tab-review').addEventListener('click', function (e) {
         e.preventDefault();
         switchTab('review');
     });
 
-    document.getElementById('tab-liked').addEventListener('click', function(e) {
+    document.getElementById('tab-liked').addEventListener('click', function (e) {
         e.preventDefault();
         switchTab('liked');
     });
 
-    document.getElementById('tab-advice').addEventListener('click', function(e) {
+    document.getElementById('tab-advice').addEventListener('click', function (e) {
         e.preventDefault();
         switchTab('advice');
     });
 
     // 초기 탭 로딩
     switchTab('profile');
+
+    document.querySelector('.profile-image').addEventListener('click', updateProfileImage);
 });
 
 // 탭 전환 함수
@@ -291,7 +293,7 @@ function switchTab(tabName) {
     document.getElementById(`tab-${tabName}`).classList.add('active');
 
     // 탭에 따라 컨텐츠 표시
-    switch(tabName) {
+    switch (tabName) {
         case 'profile':
             showProfile();
             break;
@@ -324,9 +326,11 @@ function showProfile() {
     // 프로필 데이터 렌더링
     const profileHTML = `
         <div class="profile-info">
-            <div class="profile-image d-flex flex-column align-items-center">
-              <img src="${profileData.profileImage}" alt="프로필 이미지" class="rounded-circle">
-              <button class="btn btn-warning btn-sm mt-2">사진 추가</button>
+            <div class="d-flex flex-column align-items-center">
+              <img src="${profileData.profileImage}" alt="프로필 이미지" class="rounded-circle profile-image">
+              <div class="profile-image-overlay">
+                <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
+              </div>
             </div>
             <div class="profile-details">
               <div class="info-row d-flex align-items-center mb-3">
@@ -469,7 +473,7 @@ function showMyReviews(filteredReviews = null) {
                             </div>
                         </div>
                         <div class="review-rating">
-                            ${'★'.repeat(review.rating)}${'☆'.repeat(5-review.rating)}
+                            ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
                         </div>
                     </div>
                     <div class="review-body">
@@ -646,7 +650,7 @@ function generatePagination(totalItems, tabName) {
 
     // 페이지 번호 클릭 이벤트 설정
     document.querySelectorAll('.pagination .page-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
             const targetPage = parseInt(this.getAttribute('data-page'));
 
@@ -667,7 +671,7 @@ function searchContent(searchTerm) {
     }
 
     // 탭별 검색 로직 분리
-    switch(currentTab) {
+    switch (currentTab) {
         case 'mypost':
             const filteredPosts = posts.filter(post =>
                 post.title.toLowerCase().includes(searchTerm) ||
@@ -717,4 +721,27 @@ function searchContent(searchTerm) {
             // 프로필 탭에서는 검색 기능 미사용
             break;
     }
+}
+
+// 프로필 이미지 변경 이벤트 설정
+function updateProfileImage() {
+    const profileImage = document.querySelector('.profile-image');
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.style.display = 'none';
+
+    document.body.appendChild(fileInput);
+    fileInput.click();
+
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                profileImage.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 }

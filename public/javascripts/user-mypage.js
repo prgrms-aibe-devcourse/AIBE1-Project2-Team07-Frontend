@@ -160,7 +160,7 @@ function setupSearchButton() {
     const searchInput = document.getElementById('search-input');
 
     if (searchButton && searchInput) {
-        searchButton.addEventListener('click', function() {
+        searchButton.addEventListener('click', function () {
             const query = searchInput.value.trim().toLowerCase();
 
             if (query) {
@@ -196,7 +196,7 @@ function setupSearchButton() {
         });
 
         // 엔터키로도 검색 가능
-        searchInput.addEventListener('keyup', function(e) {
+        searchInput.addEventListener('keyup', function (e) {
             if (e.key === 'Enter') {
                 searchButton.click();
             }
@@ -324,7 +324,7 @@ function updatePagination(totalItems) {
 function addPaginationEvents() {
     // 페이지 번호 클릭 이벤트
     document.querySelectorAll('.pagination .page-link').forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             e.preventDefault();
 
             const text = this.textContent;
@@ -362,7 +362,9 @@ function renderProfile() {
         profileSection.innerHTML = `
             <div class="profile-image-container">
                 <img src="https://placehold.co/180x180" alt="프로필 이미지" class="profile-image">
-                <button class="edit-profile-btn">사진 추가</button>
+                <div class="profile-image-overlay">
+                    <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
+                </div>
             </div>
             
             <div class="profile-info">
@@ -465,7 +467,7 @@ function showReviewContent() {
 // 탭 메뉴 활성화 처리 및 필터링
 function setupTabEvents() {
     document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
-        tab.addEventListener('click', function(e) {
+        tab.addEventListener('click', function (e) {
             e.preventDefault();
             // 모든 탭에서 active 클래스 제거
             document.querySelectorAll('.tab-menu .nav-link').forEach(t => {
@@ -481,7 +483,7 @@ function setupTabEvents() {
             currentPage = 1;
 
             // 필터링 적용
-            switch(tabId) {
+            switch (tabId) {
                 case 'tab-profile':
                     // 프로필 탭 - 프로필 정보 표시
                     renderProfile();
@@ -522,7 +524,7 @@ function setupTabEvents() {
 
 // 프로필 버튼 이벤트 설정
 function setupProfileButtons() {
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         // 수정하기 버튼
         if (e.target.classList.contains('save-button')) {
             alert('프로필 수정 기능은 백엔드 연동 후 사용 가능합니다.');
@@ -531,10 +533,31 @@ function setupProfileButtons() {
         else if (e.target.classList.contains('edit-button')) {
             alert('훈련사 신청 기능은 백엔드 연동 후 사용 가능합니다.');
         }
-        // 사진 추가 버튼
-        else if (e.target.classList.contains('edit-profile-btn')) {
-            alert('프로필 사진 변경 기능은 백엔드 연동 후 사용 가능합니다.');
-        }
+    });
+}
+
+// 프로필 이미지 변경 이벤트 설정
+function setupProfileImage() {
+    const profileImage = document.querySelector('.profile-image');
+    profileImage.addEventListener("click", () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none';
+
+        document.body.appendChild(fileInput);
+        fileInput.click();
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profileImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     });
 }
 
@@ -560,4 +583,6 @@ window.addEventListener('DOMContentLoaded', () => {
         // 프로필 탭이 없으면 기본 게시글 표시
         renderPosts(allPosts, currentPage);
     }
+
+    setupProfileImage();
 });
