@@ -5,12 +5,17 @@
     margin-bottom: 6px;
 }
 
-/* 폼 그룹 스타일 */
+.trainer-modal-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 30px;
+}
+
 .form-group {
     margin-bottom: 1rem;
 }
 
-/* 입력 필드 스타일 */
 .form-control {
     border-radius: 8px;
     border: 1px solid #ced4da;

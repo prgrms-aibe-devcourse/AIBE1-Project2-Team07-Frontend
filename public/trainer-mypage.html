@@ -7,6 +7,7 @@
     <!-- 부트스트랩 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/trainer-mypage.css">
+    <link rel="stylesheet" href="stylesheets/trainer-mypage-modal.css">
     <link rel="stylesheet" href="stylesheets/common.css">
 </head>
 <body>
@@ -76,6 +77,152 @@
     <div class="pagination-container justify-content-center" style="display: none;">
         <ul class="pagination justify-content-center"></ul>
     </div>
+
+    <!-- 모달 영역 -->
+    <div class="container">
+        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="trainer-modal-header d-flex justify-content-between align-items-center">
+                        <h5 class="modal-title" id="detailModalLabel">상담 신청 상세 내용</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="advice-meta">
+                            <div class="d-flex justify-content-between">
+                                <span class="advice-author"><strong>작성자:</strong> </span>
+                                <span class="advice-date"><strong>신청일:</strong> </span>
+                            </div>
+                        </div>
+
+                        <h5 class="advice-title"></h5>
+
+                        <div class="pet-info mt-3">
+                            <span class="pet-type"></span>
+                            <span class="pet-breed"></span>
+                            <span class="pet-age"></span>
+                        </div>
+
+                        <div class="advice-content mt-3"></div>
+
+                        <div class="advice-history mt-4">
+                            <h6 class="mb-3">상담 내역</h6>
+                            <div class="chat-messages"></div>
+                        </div>
+
+                        <form class="mt-4 reply-form">
+                            <div class="mb-3">
+                                <label for="replyMessage" class="form-label">답변 작성</label>
+                                <textarea class="form-control" id="replyMessage" rows="4" placeholder="답변을 작성해주세요"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">닫기</button>
+                        <button type="button" class="btn btn-primary reply-btn">답변 등록</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 수락하기 모달 -->
+        <div class="modal fade" id="acceptModal" tabindex="-1" aria-labelledby="acceptModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="d-flex trainer-modal-header justify-content-between align-items-center">
+                        <h5 class="modal-title" id="acceptModalLabel">상담 수락하기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="advice-meta">
+                            <span class="advice-author"><strong>작성자:</strong> </span>
+                            <span class="ms-3 advice-date"><strong>신청일:</strong> </span>
+                        </div>
+
+                        <h5 class="advice-title mt-3"></h5>
+
+                        <div class="pet-info mt-3">
+                            <span class="pet-type"></span>
+                            <span class="pet-breed"></span>
+                            <span class="pet-age"></span>
+                        </div>
+
+                        <div class="advice-content mt-3"></div>
+
+                        <div class="advice-form mt-4">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="acceptMessage" class="form-label">수락 메시지</label>
+                                    <textarea class="form-control" id="acceptMessage" rows="4"
+                                              placeholder="상담을 수락하는 메시지를 작성해주세요 (예: 안녕하세요! 분리불안 상담 요청을 수락합니다. 어떤 점이 가장 걱정되시나요?)"></textarea>
+                                    <div class="form-text mt-2">수락 시 상담이 시작되며, 신청자에게 알림이 전송됩니다.</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-primary accept-confirm-btn">수락하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 거절하기 모달 -->
+        <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="rejectModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="d-flex trainer-modal-header justify-content-between align-items-center">
+                        <h5 class="modal-title" id="rejectModalLabel">상담 거절하기</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="advice-meta">
+                            <span class="advice-author"><strong>작성자:</strong> </span>
+                            <span class="ms-3 advice-date"><strong>신청일:</strong> </span>
+                        </div>
+
+                        <h5 class="advice-title mt-3"></h5>
+
+                        <div class="pet-info mt-3">
+                            <span class="pet-type"></span>
+                            <span class="pet-breed"></span>
+                            <span class="pet-age"></span>
+                        </div>
+
+                        <div class="advice-content mt-3"></div>
+
+                        <div class="advice-form mt-4">
+                            <form>
+                                <div class="mb-3">
+                                    <label for="rejectReason" class="form-label">거절 사유</label>
+                                    <select class="form-select" id="rejectReason">
+                                        <option value="">거절 사유 선택</option>
+                                        <option value="specialization">전문 분야가 아닙니다</option>
+                                        <option value="schedule">현재 일정상 상담이 어렵습니다</option>
+                                        <option value="information">상담에 필요한 정보가 부족합니다</option>
+                                        <option value="policy">상담 규정에 적합하지 않습니다</option>
+                                        <option value="other">기타 사유</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="rejectMessage" class="form-label">거절 메시지</label>
+                                    <textarea class="form-control" id="rejectMessage" rows="4"
+                                              placeholder="상담을 거절하는 사유와 대안을 제시해주세요"></textarea>
+                                    <div class="form-text mt-2">거절 사유와 함께 다른 상담 방법이나 전문가를 추천해 주시면 좋습니다.</div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="button" class="btn btn-danger reject-confirm-btn">거절하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer class="bg-dark text-white py-5 mt-5">
@@ -113,5 +260,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script src="javascripts/trainer-mypage.js"></script>
+<script src="javascripts/trainer-mypage-modal.js"></script>
 </body>
 </html>
