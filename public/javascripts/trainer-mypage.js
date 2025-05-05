@@ -158,7 +158,14 @@ const adviceRequests = [
         status: "답변 완료",
         petType: "고양이",
         petBreed: "러시안 블루",
-        petAge: "4살"
+        petAge: "4살",
+        chats: [
+            {
+                type: "trainer",
+                message: "안녕하세요, 이준호님. 고양이 식욕부진은 다양한 원인이 있을 수 있어요. 혹시 최근에 사료를 바꾸셨나요? 또는, 고양이가 평소와 다른 행동을 보이나요?",
+                time: "2025-04-22 10:15"
+            }
+        ]
     },
     {
         id: 3,
@@ -182,7 +189,14 @@ const adviceRequests = [
         status: "답변 완료",
         petType: "햄스터",
         petBreed: "드워프 햄스터",
-        petAge: "6개월"
+        petAge: "6개월",
+        chats: [
+            {
+                type: "trainer",
+                message: "안녕하세요, 최하늘님. 햄스터는 본래 야행성 동물이라 활동 패턴을 완전히 바꾸기는 어렵습니다. 하지만 몇 가지 방법으로 야간 소음을 줄일 수 있어요.",
+                time: "2025-04-20 15:30"
+            }
+        ]
     },
     {
         id: 5,
@@ -206,7 +220,14 @@ const adviceRequests = [
         status: "답변 완료",
         petType: "거북이",
         petBreed: "아프리카 사육거북",
-        petAge: "5살"
+        petAge: "5살",
+        chats: [
+            {
+                type: "trainer",
+                message: "안녕하세요, 송하은님. 아프리카 사육거북(육지거북)은 물속에서 생활하는 종이 아니라 목욕 횟수를 조절해야 합니다. 일반적으로 1~2주에 한 번 정도가 적당하며, 너무 자주 목욕시키면 오히려 해로울 수 있어요.",
+                time: "2025-04-18 12:30"
+            }
+        ]
     }
 ];
 
@@ -602,9 +623,11 @@ function showMyAdvices(filteredAdvices = null) {
                 <p class="advice-content">${advice.comment}</p>
             </div>
             <div class="advice-actions">
-                <a href="${advice.link}" class="btn btn-primary btn-sm">상세보기</a>
-                <button class="btn btn-warning btn-sm">수락하기</button>
-                <button class="btn btn-outline-danger btn-sm">거절하기</button>
+                <button data-id="${advice.id}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                ${advice.status !== "답변 완료" ? `
+                <button data-id="${advice.id}" class="btn btn-warning btn-sm accept-btn">수락하기</button>
+                <button data-id="${advice.id}" class="btn btn-outline-danger btn-sm reject-btn">거절하기</button>
+                ` : ''}
             </div>
         </div>
     `).join('');
@@ -613,6 +636,8 @@ function showMyAdvices(filteredAdvices = null) {
 
     // 페이지네이션 생성
     generatePagination(dataToShow.length, 'advice');
+
+    attachAdviceEventListeners(dataToShow);
 }
 
 // 페이지네이션 생성 함수

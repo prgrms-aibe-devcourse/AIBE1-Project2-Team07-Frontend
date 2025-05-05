@@ -1,50 +1,70 @@
-/* 모달 관련 추가 스타일 */
-.inquiry-modal .modal-header {
-    border-bottom: none;
-    padding-bottom: 0;
+/* 폼 레이블 스타일 */
+.form-label {
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 6px;
 }
 
-.inquiry-modal .modal-body {
-    padding-top: 0;
+.trainer-modal-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 20px 30px;
 }
 
-.inquiry-modal .modal-title {
-    font-weight: bold;
-    font-size: 1.5rem;
+.form-group {
+    margin-bottom: 1rem;
 }
 
-.inquiry-modal .average-response-time {
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.inquiry-modal textarea {
-    resize: none;
+.form-control {
     border-radius: 8px;
-    height: 200px;
-}
-
-.inquiry-modal .char-count {
-    text-align: right;
-    color: #666;
+    border: 1px solid #ced4da;
+    padding: 10px 15px;
     font-size: 0.9rem;
-    margin-top: 5px;
 }
 
-.inquiry-modal .btn-warning {
-    font-weight: bold;
+.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 7, 0.25);
 }
 
+/* 나이 입력 필드 스타일 */
+.form-control[id^="petAge"] {
+    text-align: center;
+    font-weight: 500;
+}
+
+/* 비활성화된 버튼 스타일 */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 파일 첨부 버튼과 정보 스타일 */
 .file-attachment-btn {
-    border: 1px solid #ddd;
+    background: none;
+    border: 1px solid #ced4da;
     border-radius: 8px;
-    background-color: #f8f9fa;
     padding: 8px 16px;
+    font-size: 0.9rem;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-attachment-btn:hover {
+    background-color: #f8f9fa;
 }
 
 .file-attachment-info {
     font-size: 0.8rem;
-    color: #666;
+    color: #6c757d;
     margin-top: 8px;
+}
+
+/* 문자 수 카운터 스타일 */
+.char-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 5px;
 }
