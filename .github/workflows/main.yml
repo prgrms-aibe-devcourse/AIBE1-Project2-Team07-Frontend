@@ -1,0 +1,18 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'public/**'  # public 디렉토리 내 파일이 변경될 때만 실행
+
+permissions:
+  contents: read
+  packages: write
+  checks: write
+
+jobs:
+  build:
+    name: Build Docker Image
+    uses: ./.github/workflows/build_image.yml
+    secrets: inherit
