@@ -64,16 +64,74 @@ document.addEventListener('DOMContentLoaded', function() {
                 charCount.textContent = 1000;
             }
 
-            // 20자 이상일 때 문의하기 버튼 활성화
-            const submitButton = document.getElementById('submitInquiry');
-            if (submitButton) {
-                if (count >= 20) {
-                    submitButton.disabled = false;
-                } else {
-                    submitButton.disabled = true;
-                }
-            }
+            // 필드 유효성 검사 호출
+            validateInquiryForm();
         });
+    }
+
+    // 펫 나이 입력 필드 제한 (숫자만 입력)
+    const petAgeYears = document.getElementById('petAgeYears');
+    const petAgeMonths = document.getElementById('petAgeMonths');
+
+    if (petAgeYears) {
+        petAgeYears.addEventListener('input', function() {
+            // 숫자만 허용
+            this.value = this.value.replace(/[^0-9]/g, '');
+            // 두 자리까지만 허용
+            if (this.value.length > 2) {
+                this.value = this.value.slice(0, 2);
+            }
+            validateInquiryForm();
+        });
+    }
+
+    if (petAgeMonths) {
+        petAgeMonths.addEventListener('input', function() {
+            // 숫자만 허용
+            this.value = this.value.replace(/[^0-9]/g, '');
+            // 두 자리까지만 허용
+            if (this.value.length > 2) {
+                this.value = this.value.slice(0, 2);
+            }
+            // 11개월까지만 허용
+            if (parseInt(this.value) > 11) {
+                this.value = '11';
+            }
+            validateInquiryForm();
+        });
+    }
+
+    // 펫 타입과 품종 입력 필드 이벤트
+    const petType = document.getElementById('petType');
+    const petBreed = document.getElementById('petBreed');
+
+    if (petType) {
+        petType.addEventListener('input', validateInquiryForm);
+    }
+
+    if (petBreed) {
+        petBreed.addEventListener('input', validateInquiryForm);
+    }
+
+    // 모든 필수 필드 검증 함수
+    function validateInquiryForm() {
+        const submitButton = document.getElementById('submitInquiry');
+        if (!submitButton) return;
+
+        const messageText = textarea ? textarea.value : '';
+        const petTypeValue = petType ? petType.value.trim() : '';
+        const petBreedValue = petBreed ? petBreed.value.trim() : '';
+        const petYearsValue = petAgeYears ? petAgeYears.value.trim() : '';
+        const petMonthsValue = petAgeMonths ? petAgeMonths.value.trim() : '';
+
+        // 모든 필드 유효성 검사
+        const isMessageValid = messageText.length >= 20;
+        const isPetTypeValid = petTypeValue.length > 0;
+        const isPetBreedValid = petBreedValue.length > 0;
+        const isPetAgeValid = (petYearsValue.length > 0 || petMonthsValue.length > 0);
+
+        // 모든 필수 조건이 충족되면 버튼 활성화
+        submitButton.disabled = !(isMessageValid && isPetTypeValid && isPetBreedValid && isPetAgeValid);
     }
 
     // 파일 첨부 버튼 기능
@@ -91,17 +149,53 @@ document.addEventListener('DOMContentLoaded', function() {
     if (submitInquiry) {
         submitInquiry.addEventListener('click', function() {
             const messageText = textarea.value;
+            const petTypeValue = petType.value.trim();
+            const petBreedValue = petBreed.value.trim();
+            const petYearsValue = petAgeYears.value.trim() || '0';
+            const petMonthsValue = petAgeMonths.value.trim() || '0';
+
             if (messageText.length < 20) {
-                alert('최소 20자 이상 입력해주세요.');
+                alert('내용은 최소 20자 이상 입력해주세요.');
                 return;
             }
+
+            if (!petTypeValue) {
+                alert('반려동물 종류를 입력해주세요.');
+                return;
+            }
+
+            if (!petBreedValue) {
+                alert('반려동물 품종을 입력해주세요.');
+                return;
+            }
+
+            if (petYearsValue === '0' && petMonthsValue === '0') {
+                alert('반려동물 나이를 입력해주세요.');
+                return;
+            }
+
+            // 문의 데이터 수집
+            const inquiryData = {
+                message: messageText,
+                petType: petTypeValue,
+                petBreed: petBreedValue,
+                petAge: `${petYearsValue}년 ${petMonthsValue}개월`
+            };
+
+            console.log('제출된 문의 데이터:', inquiryData);
 
             // 문의 제출 처리 로직
             alert('문의가 성공적으로 제출되었습니다.');
             const inquiryModal = bootstrap.Modal.getInstance(document.getElementById('inquiryModal'));
             inquiryModal.hide();
+
+            // 폼 초기화
             textarea.value = '';
             charCount.textContent = '0';
+            petType.value = '';
+            petBreed.value = '';
+            petAgeYears.value = '';
+            petAgeMonths.value = '';
         });
     }
 

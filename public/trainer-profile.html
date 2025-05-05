@@ -68,7 +68,32 @@
                 <h5 class="modal-title mb-1" id="inquiryModalLabel">포토샵의모든것해피디자인</h5>
                 <p class="average-response-time mb-4">평균 응답 시간: 10분 이내</p>
 
+                <!-- 반려동물 종류 -->
                 <div class="form-group mb-3">
+                    <label for="petType" class="form-label">반려동물 종류</label>
+                    <input type="text" class="form-control" id="petType" placeholder="예: 강아지, 고양이">
+                </div>
+
+                <!-- 반려동물 품종 -->
+                <div class="form-group mb-3">
+                    <label for="petBreed" class="form-label">반려동물 품종</label>
+                    <input type="text" class="form-control" id="petBreed" placeholder="예: 말티즈, 페르시안">
+                </div>
+
+                <!-- 반려동물 나이 -->
+                <div class="form-group mb-3">
+                    <label class="form-label">반려동물 나이</label>
+                    <div class="d-flex align-items-center">
+                        <input type="text" class="form-control me-2" id="petAgeYears" placeholder="00" style="width: 70px;">
+                        <span class="me-3">년</span>
+                        <input type="text" class="form-control me-2" id="petAgeMonths" placeholder="00" style="width: 70px;">
+                        <span>개월</span>
+                    </div>
+                </div>
+
+                <!-- 문의 내용 -->
+                <div class="form-group mb-3">
+                    <label for="inquiryMessage" class="form-label">문의 내용</label>
                     <textarea class="form-control" id="inquiryMessage" placeholder="정확하고 빠른 답변을 위해 요구사항을 상세하게 알려주세요 - 업종, 준비상황, 기한, 예산 등 (최소 20자이상)"></textarea>
                     <div class="char-count"><span id="charCount">0</span>/1000</div>
                 </div>
@@ -80,7 +105,7 @@
                     <p class="file-attachment-info">하나당 최대 500MB의 파일을 3개까지 첨부할 수 있습니다.</p>
                 </div>
 
-                <button class="btn btn-warning w-100" id="submitInquiry">문의하기</button>
+                <button class="btn btn-warning w-100" id="submitInquiry" disabled>문의하기</button>
             </div>
         </div>
     </div>
