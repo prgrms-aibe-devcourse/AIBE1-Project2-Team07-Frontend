@@ -189,12 +189,27 @@
     margin-bottom: 15px;
 }
 
+.post-content p {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .post-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     border-top: 1px solid #f1f3f5;
     padding-top: 12px;
+}
+
+.post-tag-item {
+    background-color: #FFE082;
+    color: #1e1e1e;
+    font-size: 13px;
+    font-weight: 500;
 }
 
 .reaction-count {

@@ -6,6 +6,15 @@
     padding: 20px 15px;
 }
 
+.btn-category {
+    padding: 8px 15px;
+    border-radius: 25px;
+}
+
+.btn-category:hover {
+    transform: none !important;
+}
+
 /* Form Elements */
 .form-label {
     font-weight: 600;

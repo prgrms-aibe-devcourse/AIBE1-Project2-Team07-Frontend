@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const postTitleInput = document.getElementById('postTitle');
     const postContentTextarea = document.getElementById('postContent');
     const postTagsInput = document.getElementById('postTags');
+    const dropdownItems = document.querySelectorAll('.dropdown-item');
+    const dropdownButton = document.getElementById('communityCategoryDropdown');
 
     const MAX_PHOTOS = 10;
     const MAX_PHOTO_SIZE = 20 * 1024 * 1024; // 20MB in bytes
@@ -16,6 +18,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let uploadedPhotos = []; // Array to store photo files
     let uploadedVideo = null; // Variable to store the video file
+
+    // dropdown
+    dropdownItems.forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            dropdownButton.textContent = this.textContent;
+        });
+    });
 
     // Trigger file input click when button is clicked for photos
     photoUploadBtn.addEventListener('click', function () {
