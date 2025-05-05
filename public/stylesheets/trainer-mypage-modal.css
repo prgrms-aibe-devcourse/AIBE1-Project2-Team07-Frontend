@@ -1,7 +1,6 @@
 body {
     background-color: #f8f9fa;
     font-family: 'Noto Sans KR', sans-serif;
-    padding: 20px;
 }
 
 .container {
@@ -239,7 +238,6 @@ body {
     padding: 15px 20px;
 }
 
-/* 추가: 스크롤바 스타일 개선 */
 .advice-history::-webkit-scrollbar {
     width: 8px;
 }

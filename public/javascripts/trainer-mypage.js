@@ -620,8 +620,10 @@ function showMyAdvices(filteredAdvices = null) {
             </div>
             <div class="advice-actions">
                 <button data-id="${advice.id}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                ${advice.status !== "답변 완료" ? `
                 <button data-id="${advice.id}" class="btn btn-warning btn-sm accept-btn">수락하기</button>
                 <button data-id="${advice.id}" class="btn btn-outline-danger btn-sm reject-btn">거절하기</button>
+                ` : ''}
             </div>
         </div>
     `).join('');
