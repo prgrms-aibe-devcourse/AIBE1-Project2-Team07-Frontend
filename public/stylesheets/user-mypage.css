@@ -84,6 +84,7 @@ body {
 .post-info {
     flex: 1;
 }
+
 .review-info {
     flex: 1;
 }
@@ -205,6 +206,9 @@ body {
     height: 200px;
     margin: 0 auto 20px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .profile-image {
@@ -212,6 +216,31 @@ body {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
+    cursor: pointer;
+}
+
+.profile-image-overlay {
+    position: absolute;
+    z-index: 1000;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.profile-image:hover + .profile-image-overlay {
+    opacity: 1;
+}
+
+.camera-icon {
+    width: 32px;
+    height: 32px;
 }
 
 .edit-profile-btn {
@@ -231,7 +260,7 @@ body {
 
 .profile-input {
     width: 100%;
-    background-color: transparent;  /* 부모 div 배경색과 같게 */
+    background-color: transparent; /* 부모 div 배경색과 같게 */
     border: none;
     box-shadow: none;
     padding: 0;

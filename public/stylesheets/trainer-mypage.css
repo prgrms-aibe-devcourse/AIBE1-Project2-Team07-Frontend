@@ -72,14 +72,30 @@ body {
 }
 
 .profile-image {
-    text-align: center;
-}
-
-.profile-image img {
     width: 150px;
     height: 150px;
     object-fit: cover;
     margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.profile-image-overlay {
+    position: absolute;
+    z-index: 1000;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+}
+
+.profile-image:hover + .profile-image-overlay {
+    opacity: 1;
 }
 
 .profile-details {
