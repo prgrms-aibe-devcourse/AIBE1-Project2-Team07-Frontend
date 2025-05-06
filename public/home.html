@@ -25,13 +25,13 @@
         <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
             <ul class="navbar-nav ms-auto navbar-items">
                 <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="#">훈련사</a>
+                    <a class="nav-link nav-item-link" href="/trainer">훈련사</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="#">내 프로필</a>
+                    <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
                 </li>
                 <li class="nav-item">
                     <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
@@ -85,7 +85,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-lg-9 chat-boxes" id="chatBoxes">
-                    <!-- 여기에 프롬프트 메시지가 추가됨 -->
+                    <!-- 여기에 프롬프트 메시지가 동적으로 추가됨 -->
                 </div>
             </div>
         </div>
@@ -108,79 +108,8 @@
     <div class="container" data-aos="fade-up" data-aos-duration="1000">
         <h2 class="text-center mb-5">어떤 훈련사들이 있나요?</h2>
         <div class="cl"></div>
-        <div class="row g-5 justify-content-center">
-            <!-- Trainer Card 1 -->
-            <div class="col-md-3">
-                <div class="trainer-card">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="trainer-img-container">
-                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
-                    </div>
-                    <h4>김형욱 훈련사</h4>
-                    <div class="trainer-specialty">
-                        <span>16년 경력</span>
-                        <span>반려동물 전문</span>
-                        <span>동물행동 전문</span>
-                    </div>
-                    <p class="trainer-location">의왕, 안양, 과천 주변 지역 상담가능</p>
-                    <ul class="trainer-features">
-                        <li>애견 교육 자격 코칭과정</li>
-                        <li>초보자도 배울 수 있는 훈련법</li>
-                        <li>디액션 애니멀 케어센터 대표</li>
-                        <li>반려동물 행동 교정 전문가</li>
-                        <li>국제 반려동물 관리사 1급 보유</li>
-                    </ul>
-                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
-                </div>
-            </div>
-            <!-- Trainer Card 2 -->
-            <div class="col-md-3">
-                <div class="trainer-card">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="trainer-img-container">
-                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
-                    </div>
-                    <h4>김형욱 훈련사</h4>
-                    <div class="trainer-specialty">
-                        <span>16년 경력</span>
-                        <span>반려동물 전문</span>
-                        <span>동물행동 전문</span>
-                    </div>
-                    <p class="trainer-location">강남, 서초 주변 지역 상담가능</p>
-                    <ul class="trainer-features">
-                        <li>애견 교육 자격 코칭과정</li>
-                        <li>초보자도 배울 수 있는 훈련법</li>
-                        <li>디액션 애니멀 케어센터 대표</li>
-                        <li>반려동물 행동 교정 전문가</li>
-                        <li>국제 반려동물 관리사 1급 보유</li>
-                    </ul>
-                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
-                </div>
-            </div>
-            <!-- Trainer Card 3 -->
-            <div class="col-md-3">
-                <div class="trainer-card">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="trainer-img-container">
-                        <img src="./images/temp.jpg" alt="김형욱 훈련사" class="trainer-img">
-                    </div>
-                    <h4>김형욱 훈련사</h4>
-                    <div class="trainer-specialty">
-                        <span>16년 경력</span>
-                        <span>반려동물 전문</span>
-                        <span>동물행동 전문</span>
-                    </div>
-                    <p class="trainer-location">일산, 김포 주변 지역 상담가능</p>
-                    <ul class="trainer-features">
-                        <li>애견 교육 자격 코칭과정</li>
-                        <li>초보자도 배울 수 있는 훈련법</li>
-                        <li>디액션 애니멀 케어센터 대표</li>
-                        <li>반려동물 행동 교정 전문가</li>
-                        <li>국제 반려동물 관리사 1급 보유</li>
-                    </ul>
-                    <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
-                </div>
-            </div>
+        <div class="trainer-container row g-5 justify-content-center">
+            <!-- 여기에 동적으로 훈련사 아이템 추가됨 -->
         </div>
         <div class="text-center mt-4">
             <a href="/trainer" class="btn btn-warning rounded-pill px-4 py-2">+ 훈련사 더 보기</a>
@@ -196,72 +125,8 @@
         <div class="carousel-container position-relative">
             <div id="reviewCarousel" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner">
-                    <!-- 첫 슬라이드 -->
-                    <div class="carousel-item active">
-                        <div class="review-cards-wrapper">
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp-2.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>강형욱 훈련사</h5>
-                                    <p>정말 이게 될까 하면서 교육 요청드린거였는데... 다음번에 산책 교육으로 또 뵙겠습니다!!</p>
-                                </div>
-                            </div>
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>김형 훈련사</h5>
-                                    <p>... 다음번에 산책 교육으로 또 뵙겠습니다!!</p>
-                                </div>
-                            </div>
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp-2.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>누구요 훈련사</h5>
-                                    <p>다시는 만나지 말아요. 정말 이게 될까 하면서 교육 요청드린거였는데..!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- 여기에 동적으로 후기 아이템 추가됨 -->
 
-                    <!-- 두 번째 슬라이드 (추가 예시) -->
-                    <div class="carousel-item">
-                        <div class="review-cards-wrapper">
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>홍길동 훈련사</h5>
-                                    <p>정말 이게 될까 하면서 교육 요청드린거였는데, 강아지도 저도 양쪽 다 스트레스 받지 않는 쪽으로 교육할 수 있을거라는 희망을 얻었습니다.
-                                        해박하시고 이해가 쏙쏙 되게 설명도 잘해주시고, 이럴 수도 있구나 알게되었어요.</p>
-                                </div>
-                            </div>
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>이순신 훈련사</h5>
-                                    <p>정확한 진단과 꼼꼼한 설명으로 많은 도움이 되었습니다!</p>
-                                </div>
-                            </div>
-                            <div class="review-card">
-                                <div class="review-img-container">
-                                    <img src="./images/temp.jpg" alt="Review" class="review-img">
-                                </div>
-                                <div class="review-content">
-                                    <h5>김유신 훈련사</h5>
-                                    <p>처음엔 걱정했는데 정말 만족스러운 결과였습니다. 감사합니다!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- 이전/다음 버튼 -->
@@ -281,60 +146,11 @@
 </section>
 
 
-<!-- Expert Trainers Section -->
-<section class="expert-section py-5">
-    <div class="container">
+<!-- Certificate Section -->
+<section class="certificate-section py-5">
+    <div class="certificate-container container">
         <h2 class="text-center mb-5">훈련사들이 소지하고 있는 주요 자격증을 소개합니다.</h2>
-        <!-- Trainer Type 1 -->
-        <div class="expert-row" data-aos="fade-up" data-aos-duration="1000">
-            <div class="row align-items-center">
-                <div class="col-md-4">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="expert-img-container">
-                        <img src="./images/temp.jpg" alt="반려동물행동교정사" class="expert-img">
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <h3 class="expert-title">반려동물행동교정사</h3>
-                    <p class="expert-desc">반려견 행동 교정전문가로, 문제행동 교정과 해결을 위한 전문 지식과 경험을 갖춘 자격증입니다. 반려견의 행동과 심리를 정확히 이해하고 문제
-                        행동을 교정하고, 행동의 원인을 파악해 해결책을 제시합니다.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Trainer Type 2 -->
-        <div class="expert-row mt-5" data-aos="fade-up" data-aos-duration="1000">
-            <div class="row align-items-center">
-                <div class="col-md-8">
-                    <h3 class="expert-title">수의 행동학 전문가</h3>
-                    <p class="expert-desc">수의학 지식과 동물 행동학을 접목한 전문가입니다. 반려 동물의 행동적 특성과 심리적인 문제를 이해하고, 의학적인 접근과 함께 행동 치료를
-                        할 수 있습니다. 반려견 학대와 같은 이상 행동에 수의적 관점에서 문제를 해결하는 전문가 입니다.</p>
-                </div>
-                <div class="col-md-4">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="expert-img-container">
-                        <img src="./images/temp.jpg" alt="수의 행동학 전문가" class="expert-img">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Trainer Type 3 -->
-        <div class="expert-row mt-5" data-aos="fade-up" data-aos-duration="1000">
-            <div class="row align-items-center">
-                <div class="col-md-4">
-                    <!-- 훈련사 이미지 위치 -->
-                    <div class="expert-img-container">
-                        <img src="./images/temp.jpg" alt="반려동물훈련사" class="expert-img">
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <h3 class="expert-title">반려동물훈련사</h3>
-                    <p class="expert-desc">강아지 훈련 전문가라는 기본적인 특성 외에도 가정에서 효과적으로 훈련할 수 있도록 지도하는 역할도 수행합니다. 견종별 특성과 개별 성향에
-                        맞는 맞춤형 훈련 프로그램을 설계하고, 일관성 있게 훈련을 진행하는 방법을 알려드립니다.</p>
-                </div>
-            </div>
-        </div>
+        <!-- 여기에 동적으로 자격증이 추가됨 -->
     </div>
 </section>
 
