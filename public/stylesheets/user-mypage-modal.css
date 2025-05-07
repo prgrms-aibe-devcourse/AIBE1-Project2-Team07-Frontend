@@ -1,0 +1,158 @@
+/**
+ * 훈련사 신청 모달 스타일
+ * 기존 사이트 스타일과 일관성을 유지하도록 구성되었습니다.
+ */
+
+/* 모달 기본 스타일 */
+.modal-content {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    border-bottom: 2px solid #f8f9fa;
+    padding: 1.5rem 1.5rem 1rem;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: #333;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    border-top: 2px solid #f8f9fa;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+/* 폼 요소 */
+.form-label {
+    font-weight: 500;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+/* 자격증 이미지 업로드 스타일 */
+.certificate-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.certificate-preview {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px dashed #e0e0e0;
+}
+
+.certificate-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.certificate-preview img.has-image {
+    object-fit: cover;
+}
+
+.certificate-upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.upload-btn {
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    color: #555;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    background-color: #f1f1f1;
+    border-color: #ccc;
+}
+
+.certificate-upload-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* 버튼 스타일 */
+.btn-primary {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+    border-radius: 20px;
+    padding: 8px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #e0a800;
+    border-color: #e0a800;
+}
+
+.btn-secondary {
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    color: #666;
+    border-radius: 20px;
+    padding: 8px 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #e2e6ea;
+    border-color: #e2e6ea;
+    color: #555;
+}
+
+/* 모바일 반응형 스타일 */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .certificate-upload-container {
+        flex-direction: column;
+    }
+
+    .certificate-preview {
+        height: 150px;
+    }
+}

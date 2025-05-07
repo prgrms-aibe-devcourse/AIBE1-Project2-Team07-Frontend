@@ -529,10 +529,6 @@ function setupProfileButtons() {
         if (e.target.classList.contains('save-button')) {
             alert('프로필 수정 기능은 백엔드 연동 후 사용 가능합니다.');
         }
-        // 훈련사 신청 버튼
-        else if (e.target.classList.contains('edit-button')) {
-            alert('훈련사 신청 기능은 백엔드 연동 후 사용 가능합니다.');
-        }
     });
 }
 
