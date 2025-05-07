@@ -401,6 +401,14 @@ function showProfile() {
     `;
 
     document.getElementById('profile-section').innerHTML = profileHTML;
+
+    // 프로필 이미지와 오버레이에 클릭 핸들러 연결
+    const imgEl = document.querySelector('#profile-section .profile-image');
+    const overlayEl = document.querySelector('#profile-section .profile-image-overlay');
+    [imgEl, overlayEl].forEach(el => {
+        el.style.cursor = 'pointer';     // 마우스 포인터 표시
+        el.addEventListener('click', updateProfileImage);
+    });
 }
 
 // 내가 쓴 글 표시 함수
