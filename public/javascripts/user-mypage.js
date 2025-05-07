@@ -119,7 +119,8 @@ const allPosts = [
 const dummyProfile = {
     nickname: '홍길동',
     name: '홍길동',
-    email: 'example.gmail.com'
+    email: 'example.gmail.com',
+    img: "https://placehold.co/180x180"
 };
 
 // 더미 리뷰 데이터
@@ -528,10 +529,6 @@ function setupProfileButtons() {
         // 수정하기 버튼
         if (e.target.classList.contains('save-button')) {
             alert('프로필 수정 기능은 백엔드 연동 후 사용 가능합니다.');
-        }
-        // 훈련사 신청 버튼
-        else if (e.target.classList.contains('edit-button')) {
-            alert('훈련사 신청 기능은 백엔드 연동 후 사용 가능합니다.');
         }
     });
 }
