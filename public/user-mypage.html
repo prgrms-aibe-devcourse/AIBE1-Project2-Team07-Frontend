@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/user-mypage.css">
     <link rel="stylesheet" href="stylesheets/certification-modal.css">
+    <link rel="stylesheet" href="stylesheets/user-advice.css">
     <link rel="stylesheet" href="stylesheets/common.css">
 </head>
 <body>
@@ -50,13 +51,13 @@
             <a class="nav-link" href="#" id="tab-mypost">내가 쓴 글</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#" id="tab-review">내가 쓴 후기</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" href="#" id="tab-liked">좋아요한 글</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#" id="tab-comment">내가 쓴 댓글</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="tab-advice">상담 내역</a>
         </li>
     </ul>
 
@@ -70,13 +71,6 @@
     <!-- 게시글 목록 -->
     <div class="post-list" id="post-container">
         <!-- 게시글이 JavaScript에 의해 동적으로 이곳에 삽입됩니다 -->
-    </div>
-
-    <!-- 리뷰 리스트 영역 -->
-    <div id="review-section" style="display: none;">
-        <ul class="review-list" id="review-container">
-            <!-- JavaScript로 후기들이 여기 삽입됩니다 -->
-        </ul>
     </div>
 
     <!-- 페이지네이션 -->
@@ -176,5 +170,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script rel="" src="javascripts/user-mypage.js"></script>
 <script rel="" src="javascripts/certification-modal.js"></script>
+<script rel="" src="javascripts/user-advice.js"></script>
 </body>
 </html>
