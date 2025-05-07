@@ -138,12 +138,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const consultBtn = cardClone.querySelector('.consultation-btn');
             const visitBtn = cardClone.querySelector('.visit-btn');
 
-            consultBtn.addEventListener('click', function() {
-                handleServiceSelection(trainer, 'consultation');
+            // 상담 버튼
+            consultBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=consultation`;
             });
 
-            visitBtn.addEventListener('click', function() {
-                handleServiceSelection(trainer, 'visit');
+            // 방문 버튼
+            visitBtn.addEventListener('click', e => {
+                e.stopPropagation();
+                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=visit`;
             });
 
             // 컨테이너에 카드 추가
@@ -224,16 +228,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const serviceTypeText = serviceType === 'consultation' ? '상담' : '방문';
         const price = serviceType === 'consultation' ? trainer.consultationPrice : trainer.visitPrice;
 
+        // // 로그인 상태 확인
+        // if (!isLoggedIn()) {
+        //     alert('서비스 예약을 위해 로그인이 필요합니다.');
+        //     // 로그인 페이지로 리디렉션하거나 로그인 모달 표시
+        //     // window.location.href = '/login';
+        //     return;
+        // }
+
         // 알림 표시
         alert(`${trainer.name} 선생님의 ${serviceTypeText} 서비스가 선택되었습니다. 가격: ${price}원`);
-
-        // 로그인 상태 확인
-        if (!isLoggedIn()) {
-            alert('서비스 예약을 위해 로그인이 필요합니다.');
-            // 로그인 페이지로 리디렉션하거나 로그인 모달 표시
-            // window.location.href = '/login';
-            return;
-        }
 
         // 실제 서비스 예약 요청 처리 (백엔드 연동 시 주석 해제)
         // bookTrainerService(trainer.id, serviceType, {
@@ -247,6 +251,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // .catch(error => {
         //     alert(`예약 실패: ${error.message}`);
         // });
+
+        window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=${serviceType}`;
     }
 
     // 트레이너 데이터 로드 함수
