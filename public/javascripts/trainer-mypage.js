@@ -271,6 +271,25 @@ document.addEventListener('DOMContentLoaded', function () {
         switchTab('advice');
     });
 
+    // 검색 기능 리스너 추가
+    const searchInput = document.getElementById('search-input');
+    const searchBtn   = document.getElementById('search-button');
+
+    if (searchBtn && searchInput) {
+        // 버튼 클릭 시
+        searchBtn.addEventListener('click', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            searchContent(term);
+        });
+        // Enter 키 입력 시
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const term = searchInput.value.trim().toLowerCase();
+                searchContent(term);
+            }
+        });
+    }
+
     // 초기 탭 로딩
     switchTab('profile');
 
@@ -383,7 +402,7 @@ function showProfile() {
                     </div>
                 `).join('')}
                 <div class="cert-add">
-                    <button class="btn">+</button>
+                    <button type="button" class="btn edit-button">+</button>
                 </div>
             </div>
             <button class="btn btn-warning mt-3 mx-auto d-block">수정하기</button>

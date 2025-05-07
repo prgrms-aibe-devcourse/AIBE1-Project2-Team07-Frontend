@@ -114,7 +114,7 @@
 }
 
 /* 버튼 스타일 */
-.btn-primary {
+.certificate-btn-primary {
     background-color: #ffc107;
     border-color: #ffc107;
     color: #212529;
@@ -124,12 +124,12 @@
     transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
+.certificate-btn-primary:hover {
     background-color: #e0a800;
     border-color: #e0a800;
 }
 
-.btn-secondary {
+.certificate-btn-secondary {
     background-color: #f8f9fa;
     border-color: #f8f9fa;
     color: #666;
@@ -139,7 +139,7 @@
     transition: all 0.3s ease;
 }
 
-.btn-secondary:hover {
+.certificate-btn-secondary:hover {
     background-color: #e2e6ea;
     border-color: #e2e6ea;
     color: #555;

@@ -101,6 +101,17 @@
                         <i class="me-2">📎</i> 파일 첨부
                     </button>
                     <p class="file-attachment-info">하나당 최대 500MB의 파일을 3개까지 첨부할 수 있습니다.</p>
+                    <!-- 선택된 파일명을 표시할 영역 -->
+                    <div id="fileList" class="mt-2 text-truncate"></div>
+
+                    <!-- 실제 파일 입력은 숨겨두고, 버튼 클릭으로 트리거 -->
+                    <input
+                            type="file"
+                            id="inquiryFileInput"
+                            accept="image/*,application/pdf"
+                            multiple
+                            style="display: none;"
+                    >
                 </div>
 
                 <button class="btn btn-warning w-100" id="submitInquiry" disabled>문의하기</button>

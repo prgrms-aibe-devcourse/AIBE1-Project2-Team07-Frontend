@@ -71,7 +71,7 @@ function setupTrainerModal() {
 
             // 실제 서버에 데이터를 전송하는 코드가 들어갈 자리입니다.
             // 현재는 백엔드가 연결되지 않았으므로 성공 메시지만 표시합니다.
-            alert('훈련사 신청이 완료되었습니다. 관리자 승인 후 훈련사로 활동하실 수 있습니다.');
+            // alert('훈련사 신청이 완료되었습니다. 관리자 승인 후 훈련사로 활동하실 수 있습니다.');
 
             // 모달 닫기
             const modal = bootstrap.Modal.getInstance(document.getElementById('trainerApplicationModal'));
