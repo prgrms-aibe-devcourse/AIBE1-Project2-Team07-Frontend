@@ -3,7 +3,6 @@ const profileData = {
     profileImage: "./images/cat1.jpeg",
     nickname: "홍길동",
     email: "example.gmail.com",
-    center: "중앙 센터",
     certifications: [
         {label: "1차 자격증", image: "./images/cat1.jpeg"},
         {label: "2차 자격증", image: "./images/cat1.jpeg"},
@@ -272,6 +271,25 @@ document.addEventListener('DOMContentLoaded', function () {
         switchTab('advice');
     });
 
+    // 검색 기능 리스너 추가
+    const searchInput = document.getElementById('search-input');
+    const searchBtn   = document.getElementById('search-button');
+
+    if (searchBtn && searchInput) {
+        // 버튼 클릭 시
+        searchBtn.addEventListener('click', () => {
+            const term = searchInput.value.trim().toLowerCase();
+            searchContent(term);
+        });
+        // Enter 키 입력 시
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                const term = searchInput.value.trim().toLowerCase();
+                searchContent(term);
+            }
+        });
+    }
+
     // 초기 탭 로딩
     switchTab('profile');
 
@@ -353,7 +371,7 @@ function showProfile() {
                 <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
               </div>
             </div>
-            <div class="profile-details">
+            <div class="profile-details align-self-center ms-4">
               <div class="info-row d-flex align-items-center mb-3">
                 <label class="label col-form-label me-3">닉네임</label>
                 <input
@@ -372,15 +390,6 @@ function showProfile() {
                   value="${profileData.email}"
                 >
               </div>
-              <div class="info-row d-flex align-items-center mb-3">
-                <label class="label col-form-label me-3">중앙 센터</label>
-                <input
-                  type="text"
-                  name="center"
-                  class="form-control form-control-sm"
-                  value="${profileData.center}"
-                >
-              </div>
             </div>
         </div>
         <div class="cert-images">
@@ -393,7 +402,7 @@ function showProfile() {
                     </div>
                 `).join('')}
                 <div class="cert-add">
-                    <button class="btn">+</button>
+                    <button type="button" class="btn edit-button">+</button>
                 </div>
             </div>
             <button class="btn btn-warning mt-3 mx-auto d-block">수정하기</button>
@@ -401,6 +410,14 @@ function showProfile() {
     `;
 
     document.getElementById('profile-section').innerHTML = profileHTML;
+
+    // 프로필 이미지와 오버레이에 클릭 핸들러 연결
+    const imgEl = document.querySelector('#profile-section .profile-image');
+    const overlayEl = document.querySelector('#profile-section .profile-image-overlay');
+    [imgEl, overlayEl].forEach(el => {
+        el.style.cursor = 'pointer';     // 마우스 포인터 표시
+        el.addEventListener('click', updateProfileImage);
+    });
 }
 
 // 내가 쓴 글 표시 함수

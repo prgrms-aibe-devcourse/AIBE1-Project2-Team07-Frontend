@@ -7,12 +7,14 @@
     <!-- 부트스트랩 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/user-mypage.css">
+    <link rel="stylesheet" href="stylesheets/certification-modal.css">
+    <link rel="stylesheet" href="stylesheets/user-advice.css">
     <link rel="stylesheet" href="stylesheets/common.css">
 </head>
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg bg-white">
-    <div class="container">
+    <div class="container position-relative">
         <a class="navbar-brand" href="/">
             <img src="./images/logo.png" alt="PetTalk Logo" height="50">
         </a>
@@ -20,19 +22,19 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
+        <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-items">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">훈련사</a>
+                    <a class="nav-link nav-item-link" href="/trainers">훈련사</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">커뮤니티</a>
+                    <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">내 프로필</a>
+                    <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning rounded-pill login-btn" href="#">로그인</a>
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
                 </li>
             </ul>
         </div>
@@ -49,18 +51,18 @@
             <a class="nav-link" href="#" id="tab-mypost">내가 쓴 글</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#" id="tab-review">내가 쓴 후기</a>
-        </li>
-        <li class="nav-item">
             <a class="nav-link" href="#" id="tab-liked">좋아요한 글</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="#" id="tab-comment">내가 쓴 댓글</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#" id="tab-advice">상담 내역</a>
+        </li>
     </ul>
 
     <!-- 검색 바 -->
-    <div class="search-bar d-flex justify-content-end">
+    <div class="search-bar justify-content-end" style="display: none">
         <input type="text" class="form-control form-control-sm me-2" placeholder="검색어를 입력하세요" id="search-input"
                style="max-width: 200px;">
         <button class="btn btn-primary btn-sm" id="search-button">검색</button>
@@ -71,19 +73,58 @@
         <!-- 게시글이 JavaScript에 의해 동적으로 이곳에 삽입됩니다 -->
     </div>
 
-    <!-- 리뷰 리스트 영역 -->
-    <div id="review-section" style="display: none;">
-        <ul class="review-list" id="review-container">
-            <!-- JavaScript로 후기들이 여기 삽입됩니다 -->
-        </ul>
-    </div>
-
     <!-- 페이지네이션 -->
     <nav aria-label="페이지 네비게이션">
         <ul class="pagination justify-content-center">
             <!-- 페이지네이션은 JavaScript에 의해 동적으로 이곳에 삽입됩니다 -->
         </ul>
     </nav>
+</div>
+
+<!-- 훈련사 신청 모달 -->
+<div class="modal fade" id="trainerApplicationModal" tabindex="-1" aria-labelledby="trainerApplicationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="user-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="trainerApplicationModalLabel">훈련사 신청</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="trainerApplicationForm">
+                    <div class="mb-3">
+                        <label for="certificateName" class="form-label">자격증 이름</label>
+                        <input type="text" class="form-control" id="certificateName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateOrg" class="form-label">자격증 발급기관</label>
+                        <input type="text" class="form-control" id="certificateOrg" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateDate" class="form-label">자격증 발급일자</label>
+                        <input type="date" class="form-control" id="certificateDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateImage" class="form-label">자격증 사진</label>
+                        <div class="certificate-upload-container">
+                            <div class="certificate-preview">
+                                <img id="certificatePreview" src="https://placehold.co/210x297" alt="자격증 이미지 미리보기">
+                            </div>
+                            <div class="certificate-upload-btn-wrapper">
+                                <button type="button" class="btn btn-outline-secondary upload-btn">
+                                    사진 업로드
+                                </button>
+                                <input type="file" id="certificateImage" accept="image/*" class="certificate-upload-input" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn certificate-btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn certificate-btn-primary" id="submitTrainerApplication">제출하기</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 <footer class="bg-dark text-white py-5 mt-5">
@@ -128,5 +169,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script rel="" src="javascripts/user-mypage.js"></script>
+<script rel="" src="javascripts/certification-modal.js"></script>
+<script rel="" src="javascripts/user-advice.js"></script>
 </body>
 </html>

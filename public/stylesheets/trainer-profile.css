@@ -34,12 +34,25 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 훈련사 제목 및 정보 */
+.trainer-title-container {
+    display: flex;
+    justify-content: space-between; /* 양쪽 끝에 요소 배치 */
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
 .trainer-title {
     font-size: 1.8rem;
     font-weight: 700;
-    margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin: 0; /* 마진 제거하여 컨테이너의 정렬에 의존 */
+}
+
+.btn-edit {
+    padding: 0.25rem 0.75rem;
+    font-size: 0.9rem;
+    line-height: 1.2;
 }
 
 .trainer-name {

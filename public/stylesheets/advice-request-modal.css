@@ -12,6 +12,11 @@
     padding: 20px 30px;
 }
 
+.modal-title {
+    font-weight: 600;
+    color: #333;
+}
+
 .form-group {
     margin-bottom: 1rem;
 }
