@@ -123,34 +123,6 @@ const dummyProfile = {
     img: "https://placehold.co/180x180"
 };
 
-// 더미 리뷰 데이터
-const dummyReviews = [
-    {
-        name: '강형욱',
-        rating: 5,
-        date: '2024-04-20',
-        content: '너무너무 좋아요! 정말 이게 될까 하면서 교육 훈련도견거처분네 강아지도 처음 많썹 다 스트레스 받지 않는 폭으로 교육할 수 있을까하는 의심틈 없었슴니다. 해반 하시고 이애가 쏙쏙 되게 설명도 잘해주시고 이렇 수도 있구나 함케되었어요. 앞으로는 제가 알맞던 테도로 교육해야겠지만 개선될 수 있는 가늠쩨이 년마다 기빵고 짐맡 든 하니도 안아케하죠. 다음에애 신경 교육으로 또 뵙겠습니다!',
-        reviewer: '홍길동',
-        image: './images/cat1.jpeg'
-    },
-    {
-        name: '김민지',
-        rating: 4,
-        date: '2024-04-15',
-        content: '우리 강아지가 처음으로 받은 교육이었어요. 선생님이 친절하게 설명해주시고 강아지도 즐겁게 참여했습니다. 몇 가지 문제 행동이 개선되었지만 아직 완벽하진 않아요. 꾸준히 연습해볼게요!',
-        reviewer: '홍길동',
-        image: 'https://placedog.net/80/80?random=5'
-    },
-    {
-        name: '박준호',
-        rating: 5,
-        date: '2024-04-10',
-        content: '정말 만족스러운 교육이었습니다. 우리 강아지가 문제 행동이 많았는데, 교육 후 많이 개선되었어요. 특히 산책할 때 끌고 가는 행동이 많이 좋아졌습니다. 강사님의 전문적인 조언과 따뜻한 격려에 감사드립니다.',
-        reviewer: '홍길동',
-        image: 'https://placedog.net/80/80?random=5'
-    }
-];
-
 // 전역 변수로 현재 페이지와 페이지당 아이템 개수 설정
 let currentPage = 1;
 const itemsPerPage = 5;
@@ -242,51 +214,8 @@ function renderPosts(posts, page = 1) {
         postListElement.appendChild(postElement);
     });
 
-    searchBar.style.visibility = 'visible';
     // 페이지네이션 업데이트
     updatePagination(posts.length);
-}
-
-function createReviewElement(reviews, page = 1) {
-    const reviewListElement = document.getElementById('review-container');
-    if (!reviewListElement) return;
-
-    reviewListElement.innerHTML = '';
-
-    // 페이지에 맞는 리뷰만 추출
-    const startIndex = (page - 1) * itemsPerPage;
-    const paginatedReviews = reviews.slice(startIndex, startIndex + itemsPerPage);
-    const searchBar = document.querySelector('.search-bar');
-
-    if (paginatedReviews.length === 0) {
-        reviewListElement.innerHTML = '<div class="alert alert-info">작성한 리뷰가 없습니다.</div>';
-        return;
-    }
-
-    paginatedReviews.forEach((review) => {
-        const reviewElement = document.createElement('div');
-        reviewElement.className = 'review-item';
-
-        // 별점 표시 생성
-        const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
-
-        reviewElement.innerHTML = `
-            <div class="reviewer-info">
-                <h3 class="reviewer-name">${review.name} 훈련사님 &nbsp;&nbsp;<span class="star-rating">${stars}</span></h3>
-                <p class="review-date">${review.date}</p>
-                <div class="review-content">${review.content ? review.content.replace(/\n/g, '<br>') : ''}</div>
-                <span class="review-meta">작성자 : ${review.reviewer}</span>
-            </div>
-            <div class="review-image">
-                <img src="${review.image}" alt="리뷰 이미지" class="img">
-            </div>
-        `;
-        reviewListElement.appendChild(reviewElement);
-    });
-
-    // 페이지네이션 업데이트
-    updatePagination(reviews.length);
-    searchBar.style.visibility = 'visible';
 }
 
 // 페이지네이션 업데이트 함수
@@ -420,10 +349,9 @@ function hideAllContent() {
     const profileSection = document.querySelector('.profile-section');
     if (profileSection) profileSection.style.display = 'none';
 
-    // 검색바 숨기기 - 여기서 먼저 숨김 처리
+    // 검색바 숨기기
     const searchBar = document.querySelector('.search-bar');
-    // if (searchBar) searchBar.style.display = 'none';
-    if (searchBar) searchBar.style.visibility = 'hidden';
+    if (searchBar) searchBar.style.display = 'none';
 
     // 페이지네이션 숨기기
     const pagination = document.querySelector('.pagination');
@@ -467,6 +395,7 @@ function showReviewContent() {
 
 // 탭 메뉴 활성화 처리 및 필터링
 function setupTabEvents() {
+    const searchBar = document.querySelector('.search-bar');
     document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
         tab.addEventListener('click', function (e) {
             e.preventDefault();
@@ -495,11 +424,6 @@ function setupTabEvents() {
                     showPostContent();
                     renderPosts(filteredPosts, currentPage);
                     break;
-                case 'tab-review':
-                    // 내가 쓴 후기 탭
-                    showReviewContent();
-                    createReviewElement(dummyReviews, currentPage);
-                    break;
                 case 'tab-liked':
                     // 좋아요한 글 탭
                     filteredPosts = allPosts.filter(post => post.isLiked);
@@ -511,6 +435,11 @@ function setupTabEvents() {
                     filteredPosts = allPosts.filter(post => post.hasMyComment);
                     showPostContent();
                     renderPosts(filteredPosts, currentPage);
+                    break;
+                case 'tab-advice':
+                    // 상담 내역 탭
+                    showUserAdvices();
+                    if (searchBar) searchBar.style.display = 'flex';
                     break;
                 default:
                     filteredPosts = [...allPosts];
