@@ -10,9 +10,12 @@
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.modal-header {
-    border-bottom: 2px solid #f8f9fa;
-    padding: 1.5rem 1.5rem 1rem;
+.user-modal-header {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 10px 20px 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
 
 .modal-title {

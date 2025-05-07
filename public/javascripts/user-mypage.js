@@ -119,7 +119,8 @@ const allPosts = [
 const dummyProfile = {
     nickname: '홍길동',
     name: '홍길동',
-    email: 'example.gmail.com'
+    email: 'example.gmail.com',
+    img: "https://placehold.co/180x180"
 };
 
 // 더미 리뷰 데이터
