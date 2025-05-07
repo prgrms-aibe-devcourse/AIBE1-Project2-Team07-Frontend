@@ -5,6 +5,8 @@ const reviewsPerPage = 3; // 한 페이지당 리뷰 수 (5에서 3으로 변경
 let trainerData = null; // 트레이너 데이터 저장
 let allReviews = []; // 모든 리뷰 데이터 저장
 
+window.currentUserName = "김*규 훈련사";
+
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
     // URL에서 트레이너 ID 추출
@@ -62,9 +64,29 @@ async function loadTrainerData() {
 
 // 트레이너 프로필 렌더링 함수
 function renderTrainerProfile(data) {
-    // 컨테이너에서 템플릿 복제
-    const template = document.getElementById('trainer-profile-template').content.cloneNode(true);
+    // 템플릿 복제
+    const template = document
+        .getElementById('trainer-profile-template')
+        .content.cloneNode(true);
     const container = document.getElementById('trainer-profile-container');
+
+    // 1. 제목 및 “수정” 버튼
+    const titleContainer = template.querySelector('#trainer-title-container');
+    const titleEl = template.querySelector('#trainer-title');
+    titleEl.textContent = data.title;
+
+    // 로그인 사용자와 트레이너 이름이 같으면 “수정” 버튼 추가
+    if (window.currentUserName === data.name) {
+        const editBtn = document.createElement('button');
+        editBtn.type      = 'button';
+        editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
+        editBtn.textContent = '수정';
+        editBtn.addEventListener('click', () => {
+            //window.location.href = `/trainer/edit-profile?id=${data.id}`;
+            openEditTrainerModal(data);
+        });
+        titleContainer.appendChild(editBtn);
+    }
 
     // 기본 정보 설정
     template.querySelector('#trainer-title').textContent = data.title;
@@ -128,7 +150,12 @@ function renderTrainerProfile(data) {
     });
 
     // 자기소개
-    template.querySelector('#trainer-description').textContent = data.description;
+    const descEl = template.querySelector('#trainer-description');
+    // \n 을 <br> 로 바꿔서 innerHTML 로 삽입
+    descEl.innerHTML = data.description
+        .split('\n')
+        .map(line => line.trim() ? line : '')  // 빈 줄은 빈 문자열로
+        .join('<br>');
 
     // 컨테이너에 렌더링된 템플릿 추가
     container.innerHTML = '';
@@ -299,14 +326,17 @@ function getDummyData() {
                 type: "영상교육",
                 duration: "60분",
                 amount: 10000
-            },
-            {
-                type: "영상교육",
-                duration: "60분",
-                amount: 10000
             }
         ],
-        description: "지금 우리의 행복 함께 있는 귀중한 반려견 우리 아이들에 대해 얼마나 많고 계시지요? 지금을 위해 우리 아이들을 무의식적 행복 인생 기쁨이 있습니다. 기계적 일관성이 분명한 훈련기 이러다 보다 단순한 일입니다. 기계적 소어 온오프 다르지 않고 다루기도 쉽습니다. 저는 우리 아이들에게 그런자 보호자에게지 저런자 마음으로 꼭는 소통의 창을 열어드리고자 합니다. 너무많은 훈련법들이 지시와 수동으로 방문훈련의 일월요로 보호자분과 단독연습의 소통의 창을 만들어 드리겠습니다"
+        description: "안녕하세요, 반려견과 보호자님의 행복한 일상을 위해 늘 고민하는 전문 훈련사 김*규입니다.\n" +
+            "\n" +
+            "저는 단순히 명령어를 가르치는 것을 넘어, 반려견의 본능과 습성을 이해하고 보호자님과의 원활한 소통을 돕는 것을 목표로 합니다. 반려견의 언어는 행동으로 표현되기 때문에, 그 밑바탕에 깔린 감정과 동기를 파악하는 것이 무엇보다 중요하다고 생각합니다. 저는 이를 위해 방문훈련과 맞춤형 영상 코칭을 통해 보호자님 가정의 환경, 반려견의 성격, 그리고 보호자님의 라이프스타일에 최적화된 훈련 프로그램을 설계합니다.\n" +
+            "\n" +
+            "훈련은 일관성이 생명입니다. 저는 기계적 반복이 아닌, 보호자님과 반려견이 함께 즐기며 배우는 방식을 지향합니다. 단순히 “앉아, 기다려”를 익히는 것이 아니라, 그 과정에서 반려견이 스스로 안정감을 느끼고 보호자님과 신뢰를 쌓을 수 있도록 이끌어 드립니다. 또한, 다양한 생활 상황에서 스스로 판단하고 행동할 수 있도록 실전 연습을 충분히 포함시켜, 훈련이 끝난 뒤에도 자연스럽게 이어지는 습관을 만드는 데 중점을 둡니다.\n" +
+            "\n" +
+            "수백 마리 반려견과 함께하며 쌓은 임상 경험을 바탕으로 공격성 교정, 분리 불안, 사회성 향상 등 행동 문제 해결에도 자신이 있습니다. 언제 어디서나 편하게 질문할 수 있도록 사후 관리와 커뮤니케이션도 꼼꼼히 챙겨 드립니다.\n" +
+            "\n" +
+            "“우리 아이들의 마음을 이해하는 소통의 창”이 되어, 반려견과 보호자님 모두가 진정으로 행복한 반려 생활을 누릴 수 있도록 최선을 다하겠습니다. 언제든지 편안하게 문의해 주세요!"
     };
 }
 
