@@ -371,44 +371,48 @@
 }
 
 
-/* Expert Trainers Section */
-.expert-section {
+/* Certificate Section */
+.certificate-section {
     padding: 60px 0;
     background-color: var(--white-color);
 }
 
-.expert-section h2 {
+.certificate-section h2 {
     font-size: 2rem;
     font-weight: 700;
     color: var(--dark-color);
     margin-bottom: 40px;
 }
 
-.expert-row {
-    margin-bottom: 40px;
+.certificate-row {
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.expert-img-container {
+.certificate-img-container {
+    margin-bottom: 15px;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.expert-img {
+.certificate-img {
     width: 100%;
-    height: auto;
+    height: 100%;
+    max-height: 300px;
     display: block;
     border-radius: 10px;
+    object-fit: cover;
 }
 
-.expert-title {
+.certificate-title {
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 15px;
     color: var(--dark-color);
 }
 
-.expert-desc {
+.certificate-desc {
     font-size: 1rem;
     color: var(--gray-color);
     line-height: 1.7;
@@ -418,6 +422,11 @@
 @media (min-width: 992px) {
     .carousel-container {
         padding: 0 60px;
+    }
+
+    .trainers-section .col-md-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
     }
 
     .review-card {
@@ -431,18 +440,39 @@
         padding: 0 40px;
     }
 
+    .trainers-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .trainers-section .col-md-3 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    .trainer-card {
+        padding: 15px;
+    }
+
+    .trainer-card h4 {
+        font-size: 1.3rem;
+    }
+
+    .trainer-specialty span {
+        font-size: 1.05rem;
+    }
+
+    .trainer-location,
+    .trainer-features li {
+        font-size: 1.15rem;
+    }
+
     .review-card {
         flex: 0 0 calc(50% - 15px);
         max-width: calc(50% - 15px);
     }
-
-    /* 태블릿에서는 2개씩 표시 */
-    .carousel-item .review-cards-wrapper .review-card:nth-child(3) {
-        display: none;
-    }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
     .carousel-container {
         padding: 0 15px;
     }
@@ -452,16 +482,25 @@
         margin-bottom: 25px;
     }
 
+    .trainer-card h4 {
+        font-size: 1.1rem;
+    }
+
+    .trainer-specialty span {
+        font-size: 0.75rem;
+        padding: 4px 8px;
+    }
+
+    .trainer-location,
+    .trainer-features li {
+        font-size: 0.85rem;
+    }
+
     .review-card {
         flex: 0 0 100%;
         max-width: 100%;
         margin-bottom: 20px;
         min-height: 400px;
-    }
-
-    /* 모바일에서는 캐러셀 1개씩 표시 */
-    .carousel-item .review-cards-wrapper .review-card:not(:first-child) {
-        display: none;
     }
 
     .carousel-control-prev {
