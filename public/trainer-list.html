@@ -13,28 +13,27 @@
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg bg-white">
-  <div class="container">
+  <div class="container position-relative">
     <a class="navbar-brand" href="/">
-      <!-- Logo Image -->
-      <!-- 로고 이미지 위치 -->
       <img src="./images/logo.png" alt="PetTalk Logo" height="50">
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto">
+    <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+      <ul class="navbar-nav ms-auto navbar-items">
         <li class="nav-item">
-          <a class="nav-link" href="#">훈련사</a>
+          <a class="nav-link nav-item-link" href="/trainers">훈련사</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">커뮤니티</a>
+          <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">내 프로필</a>
+          <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
         </li>
         <li class="nav-item">
-          <a class="btn btn-warning rounded-pill login-btn" href="#">로그인</a>
+          <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
         </li>
       </ul>
     </div>

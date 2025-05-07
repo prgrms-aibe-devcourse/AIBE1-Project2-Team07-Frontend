@@ -14,135 +14,88 @@ document.addEventListener('DOMContentLoaded', function() {
             id: 1,
             name: '김구 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요 으ㅏ으랑라얼아러아ㅓ아ㅓ라얼아ㅓ아ㅓ라어라어라어ㅏㄹ어아ㅓㅏㅓㄹ넒댜ㅗㄹ멀ㅇ뮈ㅓㅇㅁ려도ㅕㅁㄹㄷ루ㅚ며ㅗ림뎌러욺우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요 ',
+            description: '반려견의 마음을 깊이 이해하고, 보호자님과의 신뢰를 바탕으로 즐겁고 효과적인 훈련을 제공합니다.',
             rating: '4.0/5.0점',
-            tags: ['#훈련전문견', '#무서워하는개훈련', '#우랄랄랄'],
+            tags: ['#훈련전문견', '#분리불안해결', '#사회성향상'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '50,000',
-            visitPrice: '70,000'
+            visitPrice: '70,000',
         },
         {
             id: 2,
             name: '박훈 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요',
+            description: '일대일 맞춤형 훈련으로 반려견이 스스로 성장할 수 있도록 돕습니다.',
             rating: '4.0/5.0점',
-            tags: ['#훈련전문견', '#무서워하는개훈련'],
+            tags: ['#기초명령어', '#가정방문훈련'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '50,000',
-            visitPrice: '70,000'
+            visitPrice: '70,000',
         },
         {
             id: 3,
             name: '이민 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요 으ㅏ으랑라얼아러아ㅓ아ㅓ라얼아ㅓ아ㅓ라어라어라어ㅏㄹ어아ㅓㅏㅓㄹ넒댜ㅗㄹ멀ㅇ뮈ㅓㅇㅁ려도ㅕㅁㄹㄷ루ㅚ며ㅗ림뎌러욺',
+            description: '분리불안, 공격성 교정 등 행동 문제 해결에 풍부한 경험을 보유하고 있습니다.',
             rating: '4.0/5.0점',
-            tags: ['#훈련전문견', '#무서워하는개훈련'],
+            tags: ['#행동교정', '#분리불안전문'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '50,000',
-            visitPrice: '70,000'
+            visitPrice: '70,000',
         },
         {
             id: 4,
             name: '최훈 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요',
+            description: '산책 매너부터 사회성 훈련까지, 일상에 바로 적용 가능한 실용적인 노하우를 전합니다.',
             rating: '4.0/5.0점',
-            tags: ['#훈련전문견', '#무서워하는개훈련'],
+            tags: ['#산책매너', '#사회성향상'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '50,000',
-            visitPrice: '70,000'
+            visitPrice: '70,000',
         },
         {
             id: 5,
             name: '정경 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요',
+            description: '반려견과 보호자님의 라이프스타일에 맞춘 훈련 계획을 세워드립니다.',
             rating: '4.0/5.0점',
-            tags: ['#훈련전문견', '#무서워하는개훈련'],
+            tags: ['#맞춤훈련', '#가족친화적'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '50,000',
-            visitPrice: '70,000'
+            visitPrice: '70,000',
         },
         {
             id: 6,
             name: '문재 훈련사',
             certification: 'KKC 훈련사',
-            description: '우리 아이들의 마음을 이해하는 소통의 장이 되어드릴게요',
+            description: '소형견 전문으로, 세심하고 부드러운 접근으로 신뢰를 쌓아갑니다.',
             rating: '4.5/5.0점',
-            tags: ['#소형견전문', '#공격성교정'],
+            tags: ['#소형견전문', '#긍정강화'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '55,000',
-            visitPrice: '75,000'
+            visitPrice: '75,000',
         },
         {
             id: 7,
             name: '윤석 훈련사',
             certification: 'KKC 전문 훈련사',
-            description: '반려동물과 보호자의 행복한 동행을 위한 전문 훈련을 제공합니다',
+            description: '대형견 훈련과 행동 문제 교정에 대한 깊은 이해와 풍부한 현장 경험을 자랑합니다.',
             rating: '4.7/5.0점',
             tags: ['#대형견전문', '#공격성교정'],
             mainImage: 'images/cat.png',
             profileImage: 'images/cat.png',
             consultationPrice: '60,000',
-            visitPrice: '80,000'
-        },
-        {
-            id: 8,
-            name: '윤석 훈련사',
-            certification: 'KKC 전문 훈련사',
-            description: '반려동물과 보호자의 행복한 동행을 위한 전문 훈련을 제공합니다',
-            rating: '4.7/5.0점',
-            tags: ['#대형견전문', '#공격성교정'],
-            mainImage: 'images/cat.png',
-            profileImage: 'images/cat.png',
-            consultationPrice: '60,000',
-            visitPrice: '80,000'
-        },
-        {
-            id: 9,
-            name: '윤석 훈련사',
-            certification: 'KKC 전문 훈련사',
-            description: '반려동물과 보호자의 행복한 동행을 위한 전문 훈련을 제공합니다',
-            rating: '4.7/5.0점',
-            tags: ['#대형견전문', '#공격성교정'],
-            mainImage: 'images/cat.png',
-            profileImage: 'images/cat.png',
-            consultationPrice: '60,000',
-            visitPrice: '80,000'
-        },
-        {
-            id: 10,
-            name: '윤석 훈련사',
-            certification: 'KKC 전문 훈련사',
-            description: '반려동물과 보호자의 행복한 동행을 위한 전문 훈련을 제공합니다',
-            rating: '4.7/5.0점',
-            tags: ['#대형견전문', '#공격성교정'],
-            mainImage: 'images/cat.png',
-            profileImage: 'images/cat.png',
-            consultationPrice: '60,000',
-            visitPrice: '80,000'
-        },
-        {
-            id: 11,
-            name: '윤석 훈련사',
-            certification: 'KKC 전문 훈련사',
-            description: '반려동물과 보호자의 행복한 동행을 위한 전문 훈련을 제공합니다',
-            rating: '4.7/5.0점',
-            tags: ['#대형견전문', '#공격성교정'],
-            mainImage: 'images/cat.png',
-            profileImage: 'images/cat.png',
-            consultationPrice: '60,000',
-            visitPrice: '80,000'
+            visitPrice: '80,000',
         },
     ];
+
 
     // 트레이너 카드 렌더링 함수
     function renderTrainerCards(trainers) {
@@ -156,6 +109,15 @@ document.addEventListener('DOMContentLoaded', function() {
         trainers.forEach(trainer => {
             // 템플릿 복제
             const cardClone = document.importNode(template.content, true);
+
+            // 카드 최상위 요소 (예: .trainer-card)
+            const cardEl = cardClone.querySelector('.trainer-card');
+            // 클릭 가능한 커서
+            cardEl.style.cursor = 'pointer';
+            // 클릭 시 상세 페이지로 이동
+            cardEl.addEventListener('click', () => {
+                window.location.href = `/trainer-profile.html?id=${trainer.id}`;
+            });
 
             // 이미지 설정
             cardClone.querySelector('.trainer-image img').src = trainer.mainImage;
