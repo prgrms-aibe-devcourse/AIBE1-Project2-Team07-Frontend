@@ -179,13 +179,16 @@ function renderTrainerProfile(data) {
     // 컨테이너 표시
     container.classList.remove('d-none');
 
-    const serviceType = new URLSearchParams(window.location.search).get('serviceType');
+    const serviceType = new URLSearchParams(window.location.search).get('serviceType'); // 'video' or 'visit'
     if (serviceType) {
-        // 모달 제목 세팅
         const trainerName = data.name;
-
+        // 타이틀
         const modalTitle = document.getElementById('inquiryModalLabel');
-        modalTitle.textContent = `${trainerName}님에게 ${serviceType === 'consultation' ? '상담' : '방문'} 문의`;
+        modalTitle.textContent = `${trainerName}님에게 ${serviceType === 'video' ? '영상' : '방문'} 문의`;
+
+        // 라디오 체크
+        const radio = document.querySelector(`input[name="serviceType"][value="${serviceType}"]`);
+        if (radio) radio.checked = true;
 
         new bootstrap.Modal(document.getElementById('inquiryModal')).show();
     }

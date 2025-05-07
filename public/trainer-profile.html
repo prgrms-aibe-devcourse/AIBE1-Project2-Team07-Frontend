@@ -68,6 +68,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">서비스 종류<span class="text-danger">*</span></label>
+                    <div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="serviceType" id="serviceVisit" value="visit" required>
+                            <label class="form-check-label" for="serviceVisit">방문교육</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="serviceType" id="serviceVideo" value="video">
+                            <label class="form-check-label" for="serviceVideo">영상교육</label>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- 반려동물 종류 -->
                 <div class="form-group mb-3">
                     <label for="petType" class="form-label">반려동물 종류</label>
@@ -93,7 +107,7 @@
 
                 <!-- 문의 내용 -->
                 <div class="form-group mb-3">
-                    <label for="inquiryMessage" class="form-label">문의 내용</label>
+                    <label for="inquiryMessage" class="form-label">문의 내용<span class="text-danger">*</span></label>
                     <textarea class="form-control" id="inquiryMessage" placeholder="정확하고 빠른 답변을 위해 요구사항을 상세하게 알려주세요 - 업종, 준비상황, 기한, 예산 등 (최소 20자이상)"></textarea>
                     <div class="char-count"><span id="charCount">0</span>/1000</div>
                 </div>

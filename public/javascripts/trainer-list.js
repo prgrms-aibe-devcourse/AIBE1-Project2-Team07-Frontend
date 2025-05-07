@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // 상담 버튼
             consultBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=consultation`;
+                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=video`;
             });
 
             // 방문 버튼
