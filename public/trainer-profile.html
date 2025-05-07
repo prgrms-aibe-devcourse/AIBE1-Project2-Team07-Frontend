@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="stylesheets/common.css">
     <link rel="stylesheet" href="stylesheets/trainer-profile.css">
     <link rel="stylesheet" href="stylesheets/trainer-profile-modal.css">
+    <link rel="stylesheet" href="stylesheets/trainer-edit-modal.css">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg bg-white">
@@ -62,7 +63,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="d-flex trainer-modal-header justify-content-between align-items-center">
-                <h5 class="modal-title mb-1" id="inquiryModalLabel">포토샵의모든것해피디자인</h5>
+                <h5 class="modal-title mb-1" id="inquiryModalLabel"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -115,6 +116,123 @@
                 </div>
 
                 <button class="btn btn-warning w-100" id="submitInquiry" disabled>문의하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 트레이너 프로필 수정 모달 -->
+<div class="modal fade" id="editTrainerModal" tabindex="-1" aria-labelledby="editTrainerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="trainer-edit-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="editTrainerModalLabel">트레이너 프로필 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editTrainerForm">
+                    <input type="hidden" id="trainer-id">
+
+                    <!-- 제목 -->
+                    <div class="mb-3">
+                        <label for="edit-title" class="form-label">제목</label>
+                        <input type="text" class="form-control" id="edit-title" required>
+                    </div>
+
+                    <!-- 경력 -->
+                    <div class="mb-3">
+                        <label for="edit-career" class="form-label">경력</label>
+                        <input type="text" class="form-control" id="edit-career" required>
+                    </div>
+
+                    <!-- 전문 분야 -->
+                    <div class="mb-3">
+                        <label for="edit-specialties" class="form-label">전문 분야</label>
+                        <input type="text" class="form-control" id="edit-specialties" required>
+                    </div>
+
+                    <!-- 방문 지역 -->
+                    <div class="mb-3">
+                        <label for="edit-locations" class="form-label">방문 지역</label>
+                        <textarea class="form-control" id="edit-locations" rows="3" required></textarea>
+                    </div>
+
+                    <!-- 가격 정보 -->
+                    <div class="mb-3">
+                        <label class="form-label">가격 정보</label>
+
+                        <!-- 방문교육 가격 -->
+                        <div class="card mb-3">
+                            <div class="card-header">방문교육</div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="visit-duration" class="form-label">시간</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="visit-duration" required>
+                                            <span class="input-group-text">분</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="visit-price" class="form-label">가격</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₩</span>
+                                            <input type="number" class="form-control" id="visit-price" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 영상교육 가격 -->
+                        <div class="card">
+                            <div class="card-header">영상교육</div>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="video-duration" class="form-label">시간</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="video-duration" required>
+                                            <span class="input-group-text">분</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="video-price" class="form-label">가격</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₩</span>
+                                            <input type="number" class="form-control" id="video-price" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 자기소개 -->
+                    <div class="mb-3">
+                        <label for="edit-description" class="form-label">자기소개</label>
+                        <textarea class="form-control" id="edit-description" rows="5" required></textarea>
+                    </div>
+
+                    <!-- 사진 -->
+                    <div class="mb-3">
+                        <label class="form-label">사진</label>
+                        <div id="photos-container" class="row mb-2">
+                            <!-- 사진들이 여기에 동적으로 추가됩니다 -->
+                        </div>
+                        <p class="form-text text-muted small mb-2">
+                            사진은 최대 2장까지만 등록할 수 있습니다.
+                        </p>
+                        <button type="button" class="btn btn-outline-primary btn-sm" id="add-photo-btn">
+                            <i class="bi bi-plus-lg"></i> 사진 추가
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn btn-primary" id="save-trainer-btn">저장</button>
             </div>
         </div>
     </div>
@@ -184,8 +302,11 @@
         <!-- 훈련사 소개 및 정보 -->
         <div class="row">
             <div class="col-md-8">
-                <!-- 훈련사 제목 및 평점 -->
-                <h1 class="trainer-title" id="trainer-title"></h1>
+                <!-- 제목 + 수정 버튼을 담을 컨테이너 -->
+                <div id="trainer-title-container" class="trainer-title-container">
+                    <h2 id="trainer-title" class="trainer-title">트레이너 제목</h2>
+                    <!-- 수정 버튼은 JavaScript에서 조건부로 추가됩니다 -->
+                </div>
 
                 <div class="d-flex align-items-center mb-4">
                     <h4 class="trainer-name me-3 mb-0" id="trainer-name"></h4>
@@ -277,5 +398,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="javascripts/trainer-profile.js"></script>
 <script src="javascripts/trainer-profile-modal.js"></script>
+<script src="javascripts/trainer-edit-modal.js"></script>
 </body>
 </html>

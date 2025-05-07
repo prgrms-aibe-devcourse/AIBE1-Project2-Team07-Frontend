@@ -1,0 +1,167 @@
+/* 트레이너 프로필 모달 스타일 */
+
+/* 모달 헤더 스타일 */
+.trainer-edit-modal-header {
+    background-color: #ffc107;
+    color: #212529;
+    padding: 10px 20px 10px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+/* 모달 내 폼 스타일 */
+#editTrainerForm .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* 사진 미리보기 컨테이너 스타일 */
+.photo-preview-container {
+    position: relative;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 사진 미리보기 이미지 스타일 */
+.photo-preview {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* 사진 삭제 버튼 스타일 */
+.delete-photo {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.delete-photo:hover {
+    opacity: 1;
+}
+
+/* 사진 추가 버튼 스타일 */
+#add-photo-btn {
+    transition: all 0.2s;
+}
+
+#add-photo-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* 교육 문의 모달 스타일 */
+.inquiry-modal .modal-content {
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 입력 폼 스타일 */
+.inquiry-modal .form-control {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px 12px;
+}
+
+.inquiry-modal .form-control:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+/* 문의 내용 텍스트 영역 스타일 */
+.inquiry-modal textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* 글자 수 카운터 스타일 */
+.char-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* 파일 첨부 버튼 스타일 */
+.file-attachment-btn {
+    display: flex;
+    align-items: center;
+    background: none;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 14px;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.file-attachment-btn:hover {
+    background-color: #f8f9fa;
+}
+
+/* 파일 첨부 설명 텍스트 스타일 */
+.file-attachment-info {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+/* 첨부된 파일 목록 스타일 */
+#fileList {
+    font-size: 13px;
+}
+
+.file-item {
+    padding: 5px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.file-name {
+    font-weight: 500;
+}
+
+.file-size {
+    color: #6c757d;
+    margin-left: 5px;
+}
+
+#save-trainer-btn {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529; /* 버튼 글자색은 검정계열이 가독성에 좋아요 */
+}
+
+/* 문의하기 버튼 스타일 */
+#submitInquiry {
+    border-radius: 8px;
+    font-weight: 500;
+    padding: 10px;
+}
+
+#submitInquiry:disabled {
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+    color: #adb5bd;
+}
+
+/* 성공 메시지 알림 스타일 */
+.alert-success {
+    border-left: 4px solid #28a745;
+}
+
+/* 카드 헤더 스타일 */
+.card-header {
+    background-color: #f8f9fa;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+}
+
+/* 입력 그룹 스타일 */
+.input-group-text {
+    background-color: #f8f9fa;
+}
