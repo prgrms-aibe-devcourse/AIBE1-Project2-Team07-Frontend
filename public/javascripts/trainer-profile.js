@@ -1,11 +1,11 @@
 // 전역 변수
 let trainerId; // URL에서 추출한 트레이너 ID
 let currentPage = 1; // 현재 리뷰 페이지
-const reviewsPerPage = 3; // 한 페이지당 리뷰 수 (5에서 3으로 변경)
+const reviewsPerPage = 3; // 한 페이지당 리뷰 수
 let trainerData = null; // 트레이너 데이터 저장
 let allReviews = []; // 모든 리뷰 데이터 저장
 
-window.currentUserName = "김*규 훈련사";
+window.currentUserId = 1;   // 나중에 로그인 한 사람으로 바꿔야 함
 
 function getDummyDataById(id) {
     switch (id) {
@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // URL에서 트레이너 ID 추출
     const params = new URLSearchParams(window.location.search);
     const idParam = params.get('id');
+    const serviceType = params.get('serviceType');
     trainerId = idParam ? parseInt(idParam, 10) : NaN; // trainerId 전역변수 설정
 
     if (isNaN(trainerId)) {
@@ -90,14 +91,13 @@ function renderTrainerProfile(data) {
     const titleEl = template.querySelector('#trainer-title');
     titleEl.textContent = data.title;
 
-    // 로그인 사용자와 트레이너 이름이 같으면 “수정” 버튼 추가
-    if (window.currentUserName === data.name) {
+    // 로그인 사용자 ID와 트레이너 ID가 같으면 “수정” 버튼 추가
+    if (window.currentUserId === data.id) {
         const editBtn = document.createElement('button');
         editBtn.type      = 'button';
         editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
         editBtn.textContent = '수정';
         editBtn.addEventListener('click', () => {
-            //window.location.href = `/trainer/edit-profile?id=${data.id}`;
             openEditTrainerModal(data);
         });
         titleContainer.appendChild(editBtn);
@@ -178,6 +178,17 @@ function renderTrainerProfile(data) {
 
     // 컨테이너 표시
     container.classList.remove('d-none');
+
+    const serviceType = new URLSearchParams(window.location.search).get('serviceType');
+    if (serviceType) {
+        // 모달 제목 세팅
+        const trainerName = data.name;
+
+        const modalTitle = document.getElementById('inquiryModalLabel');
+        modalTitle.textContent = `${trainerName}님에게 ${serviceType === 'consultation' ? '상담' : '방문'} 문의`;
+
+        new bootstrap.Modal(document.getElementById('inquiryModal')).show();
+    }
 }
 
 function toggleDescription() {
