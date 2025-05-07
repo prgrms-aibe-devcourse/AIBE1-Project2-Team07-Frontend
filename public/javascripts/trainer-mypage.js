@@ -3,7 +3,6 @@ const profileData = {
     profileImage: "./images/cat1.jpeg",
     nickname: "홍길동",
     email: "example.gmail.com",
-    center: "중앙 센터",
     certifications: [
         {label: "1차 자격증", image: "./images/cat1.jpeg"},
         {label: "2차 자격증", image: "./images/cat1.jpeg"},
@@ -353,7 +352,7 @@ function showProfile() {
                 <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
               </div>
             </div>
-            <div class="profile-details">
+            <div class="profile-details align-self-center ms-4">
               <div class="info-row d-flex align-items-center mb-3">
                 <label class="label col-form-label me-3">닉네임</label>
                 <input
@@ -370,15 +369,6 @@ function showProfile() {
                   name="email"
                   class="form-control form-control-sm"
                   value="${profileData.email}"
-                >
-              </div>
-              <div class="info-row d-flex align-items-center mb-3">
-                <label class="label col-form-label me-3">중앙 센터</label>
-                <input
-                  type="text"
-                  name="center"
-                  class="form-control form-control-sm"
-                  value="${profileData.center}"
                 >
               </div>
             </div>
