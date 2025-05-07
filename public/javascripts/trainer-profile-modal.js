@@ -136,13 +136,61 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 파일 첨부 버튼 기능
     const fileAttachmentBtn = document.getElementById('fileAttachmentBtn');
-    if (fileAttachmentBtn) {
-        fileAttachmentBtn.addEventListener('click', function() {
-            // 파일 선택 기능 구현
-            // 실제로는 <input type="file"> 엘리먼트를 생성하고 클릭하는 로직 필요
-            alert('파일 첨부 기능은 아직 구현되지 않았습니다.');
+    const fileInput          = document.getElementById('inquiryFileInput');
+    const fileList           = document.getElementById('fileList');
+    if (fileAttachmentBtn && fileInput && fileList) {
+        // 버튼 클릭 → 숨은 input 클릭
+        fileAttachmentBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // 파일 선택 시
+        fileInput.addEventListener('change', () => {
+            let files = Array.from(fileInput.files);
+
+            // 용량 검사 (≤500MB)
+            files = files.filter(file => {
+                if (file.size > 500 * 1024 * 1024) {
+                    alert(`${file.name} 파일이 500MB를 초과합니다.`);
+                    return false;
+                }
+                return true;
+            });
+
+            // 개수 검사 (≤3개)
+            if (files.length > 3) {
+                alert('최대 3개 파일만 첨부 가능합니다. 가장 앞의 3개만 남깁니다.');
+                files = files.slice(0, 3);
+            }
+
+            // 화면에 파일명 표시
+            fileList.innerHTML = '';
+            files.forEach(f => {
+                const div = document.createElement('div');
+                div.textContent = f.name;
+                fileList.appendChild(div);
+            });
+
+            // (Optional) 이후 서버 전송을 위해 fileInput.files 재설정 불가 →
+            // 별도로 files 배열을 저장하거나, FormData에 직접 append하세요.
         });
     }
+
+    // … 문의하기(submitInquiry) 핸들러 내부에 첨부파일 데이터 포함 예시 …
+    // submitInquiry.addEventListener('click', function() {
+    //     // 기존 유효성 통과 후…
+    //     const inquiryData = {
+    //         message: textarea.value,
+    //         petType: petType.value.trim(),
+    //         petBreed: petBreed.value.trim(),
+    //         petAge: `${petAgeYears.value || 0}년 ${petAgeMonths.value || 0}개월`,
+    //         // 첨부파일
+    //         files: Array.from(fileInput.files)
+    //     };
+    //
+    //     console.log('제출된 문의 데이터:', inquiryData);
+    //     // 여기에 FormData 로 서버 전송 로직을 추가하세요.
+    // });
 
     // 문의하기 버튼 기능
     const submitInquiry = document.getElementById('submitInquiry');

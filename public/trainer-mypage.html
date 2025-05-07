@@ -8,6 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="stylesheets/trainer-mypage.css">
     <link rel="stylesheet" href="stylesheets/trainer-mypage-modal.css">
+    <link rel="stylesheet" href="stylesheets/certification-modal.css">
     <link rel="stylesheet" href="stylesheets/common.css">
 </head>
 <body>
@@ -225,6 +226,52 @@
     </div>
 </div>
 
+<!-- 자격증 추가 모달 -->
+<div class="modal fade" id="trainerApplicationModal" tabindex="-1" aria-labelledby="trainerApplicationModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="user-modal-header d-flex justify-content-between align-items-center">
+                <h5 class="modal-title" id="trainerApplicationModalLabel">자격증 추가</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="trainerApplicationForm">
+                    <div class="mb-3">
+                        <label for="certificateName" class="form-label">자격증 이름</label>
+                        <input type="text" class="form-control" id="certificateName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateOrg" class="form-label">자격증 발급기관</label>
+                        <input type="text" class="form-control" id="certificateOrg" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateDate" class="form-label">자격증 발급일자</label>
+                        <input type="date" class="form-control" id="certificateDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="certificateImage" class="form-label">자격증 사진</label>
+                        <div class="certificate-upload-container">
+                            <div class="certificate-preview">
+                                <img id="certificatePreview" src="https://placehold.co/210x297" alt="자격증 이미지 미리보기">
+                            </div>
+                            <div class="certificate-upload-btn-wrapper">
+                                <button type="button" class="btn btn-outline-secondary upload-btn">
+                                    사진 업로드
+                                </button>
+                                <input type="file" id="certificateImage" accept="image/*" class="certificate-upload-input" required>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn certificate-btn-secondary" data-bs-dismiss="modal">취소</button>
+                <button type="button" class="btn certificate-btn-primary" id="submitTrainerApplication">제출하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer class="bg-dark text-white py-5 mt-5">
     <div class="container">
         <div class="row justify-content-center text-center">
@@ -261,5 +308,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 <script src="javascripts/trainer-mypage.js"></script>
 <script src="javascripts/trainer-mypage-modal.js"></script>
+<script src="javascripts/certification-modal.js"></script>
 </body>
 </html>
