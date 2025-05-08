@@ -12,4 +12,3 @@ router.get('/profile', function (req, res, next) {
 });
 
 module.exports = router;
-
