@@ -4,27 +4,28 @@ const express = require("express");
 const router = express.Router();
 const path = require("path");
 
-function handleLogin(req, res) {
+function requestUser(req, res) {
   const BACKEND_URL = process.env.BACKEND_URL;
-  const requestUrl = BACKEND_URL + `/api/v1/auth/login`;
-  const { accessToken, refreshToken } = req.body;
+  const requestUrl = BACKEND_URL + `/api/v1/users/me`;
+  const accessToken = req.headers.authorization;
+
+  if (!accessToken || !accessToken.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Authorization 헤더 없음" });
+  }
 
   fetch(requestUrl, {
-    method: "POST",
+    method: "GET",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `${accessToken}`,
     },
-    body: JSON.stringify({
-      accessToken,
-      refreshToken,
-    }),
   })
     .then((response) => response.json())
     .then((data) => res.json(data))
     .catch((error) => {
       console.error(error);
       res.status(500).json({
-        message: "로그인 요청 중 문제가 발생했습니다.",
+        message: "API 요청 중 문제가 발생했습니다.",
       });
     });
 }
@@ -50,7 +51,7 @@ function handleOAuthCallBack() {
   };
 }
 
-router.post("/", handleLogin);
+router.post("/my", requestUser);
 router.get("/kakao", handleKakaoLogin);
 router.get("/naver", handleNaverLogin);
 router.get("/oauth2/callback", handleOAuthCallBack());
