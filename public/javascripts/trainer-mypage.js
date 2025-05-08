@@ -243,6 +243,8 @@ let currentPage = 1;
 const itemsPerPage = 5;
 let currentTab = 'profile';
 
+const token = localStorage.getItem('access token');
+
 // DOM이 완전히 로드된 후 실행
 document.addEventListener('DOMContentLoaded', function () {
     // 탭 이벤트 리스너 설정
@@ -421,7 +423,18 @@ function showProfile() {
 }
 
 // 내가 쓴 글 표시 함수
-function showMyPosts(filteredPosts = null) {
+async function showMyPosts(filteredPosts = null) {
+    const response = await fetch('https://dev.tuituiworld.store/api/v1/posts/users/me', {
+        method: 'GET',
+        headers: {
+            'accept': '*/*',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    const posts = await response.json();
+    console.log(posts);
+
     // 프로필 영역 숨기기
     document.getElementById('profile-section').style.display = 'none';
     // 게시글 목록 보이게 설정
