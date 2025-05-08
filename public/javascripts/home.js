@@ -233,12 +233,13 @@ function removeTypingIndicator() {
  */
 async function fetchBotResponse(userMessage) {
     try {
-        const response = await fetch(`https://dev.tuituiworld.store/api/v1/mcp/chat?prompt=${encodeURIComponent(userMessage)}`, {
-            method: 'GET',
+        const accessToken = getAccessToken();
+        const response = await fetch(`/chat?prompt=${encodeURIComponent(userMessage)}`, {
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getAccessToken()
-            }
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+            },
         });
 
         if (!response.ok) {
@@ -276,9 +277,7 @@ function scrollToBottom() {
 }
 
 function getAccessToken() {
-    const accessToken = localStorage.getItem(`accessToken`);
-
-    return accessToken;
+    return localStorage.getItem(`accessToken`);
 }
 
 /**
