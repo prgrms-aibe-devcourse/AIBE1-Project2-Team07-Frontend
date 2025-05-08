@@ -8,11 +8,32 @@
   <body>
     <script>
       document.addEventListener("DOMContentLoaded", async () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get("accessToken");
+        const refreshToken = urlParams.get("refreshToken");
+
+        if (accessToken || refreshToken) {
+          const url = new URL(window.location.href);
+          url.searchParams.delete("accessToken");
+          url.searchParams.delete("refreshToken");
+          window.history.replaceState(
+            {},
+            document.title,
+            url.pathname + url.search
+          );
+        }
+
         async function fetchAndStoreTokens() {
           try {
             const response = await fetch("/auth", {
               method: "POST",
-              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                accessToken,
+                refreshToken,
+              }),
             });
 
             if (!response.ok) {
