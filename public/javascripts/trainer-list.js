@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cardEl.style.cursor = 'pointer';
             // 클릭 시 상세 페이지로 이동
             cardEl.addEventListener('click', () => {
-                window.location.href = `/trainer-profile.html?id=${trainer.id}`;
+                window.location.href = `/profile?id=${trainer.id}`;
             });
 
             // 이미지 설정
@@ -141,13 +141,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // 상담 버튼
             consultBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=video`;
+                window.location.href = `/profile?id=${trainer.id}&serviceType=video`;
             });
 
             // 방문 버튼
             visitBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=visit`;
+                window.location.href = `/profile?id=${trainer.id}&serviceType=visit`;
             });
 
             // 컨테이너에 카드 추가
