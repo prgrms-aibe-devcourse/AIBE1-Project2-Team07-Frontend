@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+  </head>
+  <body>
+    <script>
+      document.addEventListener("DOMContentLoaded", async () => {
+        async function fetchAndStoreTokens() {
+          try {
+            const response = await fetch("/auth", {
+              method: "POST",
+              credentials: "include",
+            });
+
+            if (!response.ok) {
+              console.log(response.status);
+              throw new Error("토큰 요청 실패");
+            }
+
+            const data = await response.json();
+
+            if (
+              !data.userInfo ||
+              !data.tokenInfo?.accessToken ||
+              !data.tokenInfo?.refreshToken
+            ) {
+              throw new Error("불완전한 응답 데이터");
+            }
+
+            localStorage.setItem("user", JSON.stringify(data.userInfo));
+            localStorage.setItem("accessToken", data.tokenInfo.accessToken);
+            localStorage.setItem("refreshToken", data.tokenInfo.refreshToken);
+
+            window.location.href = "/";
+          } catch (error) {
+            console.error("토큰 처리 실패:", error);
+
+            localStorage.removeItem("user");
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+
+            window.location.href = "/?error";
+          }
+        }
+
+        await fetchAndStoreTokens();
+      });
+    </script>
+  </body>
+</html>

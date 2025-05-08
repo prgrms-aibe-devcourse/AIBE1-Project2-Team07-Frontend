@@ -16,25 +16,33 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container position-relative">
         <a class="navbar-brand" href="/">
-            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
             <ul class="navbar-nav ms-auto navbar-items">
                 <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="#">훈련사</a>
+                    <a class="nav-link nav-item-link" href="/trainer">훈련사</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="#">내 프로필</a>
+                    <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
                 </li>
             </ul>
         </div>
@@ -55,11 +63,13 @@
             <div class="col-lg-8">
                 <div class="search-container">
                     <div class="input-group">
-                        <select class="form-select search-category" id="searchCategory" style="max-width: 150px;">
-                            <option value="title">전체</option>
-                            <option value="all">자유게시판</option>
-                            <option value="content">펫 도구 후기</option>
-                        </select>
+                        <!--                        <select class="form-select search-category" id="searchCategory" style="max-width: 150px;">-->
+                        <!--                            <option value="전체">전체</option>-->
+                        <!--                            <option value="자유게시판">자유게시판</option>-->
+                        <!--                            <option value="펫 도구 후기">펫 도구 후기</option>-->
+                        <!--                            <option value="질문하기">질문하기</option>-->
+                        <!--                            <option value="자랑하기">자랑하기</option>-->
+                        <!--                        </select>-->
                         <input type="text" class="form-control" placeholder="검색어를 입력해주세요" id="searchInput">
                         <button class="btn btn-warning btn-search" type="button" id="searchBtn">검색</button>
                     </div>
@@ -111,69 +121,8 @@
 
                 <div class="board-post-list">
                     <div class="post-container">
-                        <!-- Post Item -->
-                        <div class="post-item">
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <img src="./images/temp.jpg" alt="User" class="user-avatar">
-                                    <div class="post-meta">
-                                        <div class="user-name">강형욱 <span class="board-tag">자유게시판</span></div>
-                                        <div class="post-date">1일 전</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-content">
-                                <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!</p>
-                            </div>
-                            <div class="post-footer">
-                                <div class="post-tag-list">
-                                    <span class="board-tag">#강아지</span>
-                                    <span class="board-tag">#강형욱</span>
-                                    <span class="board-tag">#펫 인형</span>
-                                </div>
+                        <!-- 게시글들이 동적으로 추가됨 -->
 
-                                <div class="reaction-count">
-                                    <span class="like-count">14</span>
-                                    <span class="comment-count">3</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="post-item">
-                            <div class="post-header">
-                                <div class="user-info">
-                                    <img src="./images/temp.jpg" alt="User" class="user-avatar">
-                                    <div class="post-meta">
-                                        <div class="user-name">강형욱 <span class="board-tag">펫 도구 후기</span></div>
-                                        <div class="post-date">1일 전</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="post-content">
-                                <p>요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                    어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!
-                                </p>
-                            </div>
-                            <div class="post-footer">
-                                <div class="post-tag-list">
-                                    <span class="board-tag">#강아지</span>
-                                    <span class="board-tag">#강형욱</span>
-                                    <span class="board-tag">#펫 인형</span>
-                                </div>
-
-                                <div class="reaction-count">
-                                    <span class="like-count">14</span>
-                                    <span class="comment-count">3</span>
-                                </div>
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Pagination -->

@@ -1,13 +1,19 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <link rel="stylesheet" href="./stylesheets/common.css">
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./stylesheets/common.css"/>
     <title>Common</title>
 </head>
 <body>
@@ -15,10 +21,17 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container position-relative">
         <a class="navbar-brand" href="/">
-            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
@@ -33,7 +46,8 @@
                     <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
                 </li>
             </ul>
         </div>
@@ -41,16 +55,30 @@
 </nav>
 
 <!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel">
+<div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="loginModalLabel"
+>
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header border-0">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
             </div>
             <div class="modal-body text-center pb-5">
                 <!-- 로고 이미지 -->
                 <div class="logo-container my-5">
-                    <img src="./images/logo_large.png" alt="PetTalk Logo" class="modal-logo">
+                    <img
+                            src="./images/logo_large.png"
+                            alt="PetTalk Logo"
+                            class="modal-logo"
+                    />
                 </div>
 
                 <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
@@ -58,16 +86,26 @@
                 <!-- 카카오 로그인 버튼 -->
                 <div class="d-grid login-buttons">
                     <button class="btn btn-kakao">
-                        <img src="./images/kakao_login.png" alt="Kakao" class="login-img">
+                        <img
+                                src="./images/kakao_login.png"
+                                alt="Kakao"
+                                class="login-img"
+                        />
                     </button>
 
                     <!-- 네이버 로그인 버튼 -->
                     <button class="btn btn-naver">
-                        <img src="./images/naver_login.png" alt="Naver" class="login-img">
+                        <img
+                                src="./images/naver_login.png"
+                                alt="Naver"
+                                class="login-img"
+                        />
                     </button>
                 </div>
 
-                <p class="text-muted mt-4 small">로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.</p>
+                <p class="text-muted mt-4 small">
+                    로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.
+                </p>
             </div>
         </div>
     </div>
@@ -104,16 +142,18 @@
             </div>
         </div>
 
-        <hr class="my-4 border-light">
+        <hr class="my-4 border-light"/>
 
         <div class="text-center small">
             <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
         </div>
     </div>
 </footer>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"
+></script>
 <script src="./javascripts/common.js"></script>
 </body>
 </html>
