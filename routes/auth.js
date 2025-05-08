@@ -7,14 +7,17 @@ const path = require("path");
 function handleLogin(req, res) {
   const BACKEND_URL = process.env.BACKEND_URL;
   const requestUrl = BACKEND_URL + `/api/v1/auth/login`;
-  console.log(requestUrl);
+  const { accessToken, refreshToken } = req.body;
 
   fetch(requestUrl, {
     method: "POST",
     headers: {
-      cookie: req.headers.cookie,
+      "Content-Type": "application/json",
     },
-    credentials: "include",
+    body: JSON.stringify({
+      accessToken,
+      refreshToken,
+    }),
   })
     .then((response) => response.json())
     .then((data) => res.json(data))
@@ -36,10 +39,14 @@ function handleNaverLogin(req, res) {
   res.redirect(NAVER_AUTH_URL);
 }
 
-// 토큰이 쿠키에 담겨서 옴
 function handleOAuthCallBack() {
   return (req, res) => {
-    return res.redirect(`/auth/login`);
+    const accessToken = req.query.accessToken;
+    const refreshToken = req.query.refreshToken;
+
+    return res.redirect(
+      `/auth/login?accessToken=${accessToken}&refreshToken=${refreshToken}`
+    );
   };
 }
 
