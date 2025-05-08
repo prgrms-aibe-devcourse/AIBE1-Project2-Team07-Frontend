@@ -1,6 +1,6 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // API 기본 URL (실제 백엔드 URL로 변경 필요)
-    const API_BASE_URL = 'https://api.example.com';
+    const API_BASE_URL = 'https://dev.tuituiworld.store/api/v1/';
 
     // 페이지네이션 설정
     const ITEMS_PER_PAGE = 5;
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const prevBtn = document.createElement('li');
             prevBtn.className = 'page-item';
             prevBtn.innerHTML = '<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
-            prevBtn.addEventListener('click', function(e) {
+            prevBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 goToPage(currentPage - 1);
             });
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const pageItem = document.createElement('li');
             pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
             pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-            pageItem.addEventListener('click', function(e) {
+            pageItem.addEventListener('click', function (e) {
                 e.preventDefault();
                 goToPage(i);
             });
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nextBtn = document.createElement('li');
             nextBtn.className = 'page-item';
             nextBtn.innerHTML = '<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
-            nextBtn.addEventListener('click', function(e) {
+            nextBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 goToPage(currentPage + 1);
             });
@@ -335,8 +335,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // return await response.json();
 
             // 백엔드 연동 없이 성공 시뮬레이션 (백엔드 연동 시 제거)
-            console.log('예약 요청:', { trainerId, serviceType, ...bookingDetails });
-            return { success: true, message: '예약이 완료되었습니다.' };
+            console.log('예약 요청:', {trainerId, serviceType, ...bookingDetails});
+            return {success: true, message: '예약이 완료되었습니다.'};
         } catch (error) {
             console.error('예약 요청 중 오류 발생:', error);
             throw error;
@@ -412,10 +412,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // return data;
 
             // 백엔드 연동 없이 성공 시뮬레이션 (백엔드 연동 시 제거)
-            console.log('로그인 시도:', { email });
+            console.log('로그인 시도:', {email});
             const fakeToken = 'fake-auth-token-' + Date.now();
             localStorage.setItem('auth_token', fakeToken);
-            return { success: true, token: fakeToken, user: { email } };
+            return {success: true, token: fakeToken, user: {email}};
         } catch (error) {
             console.error('로그인 중 오류 발생:', error);
             throw error;
@@ -425,16 +425,16 @@ document.addEventListener('DOMContentLoaded', function() {
     // 검색창 이벤트 리스너 설정 (HTML에 검색창이 있는 경우)
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
-        searchInput.addEventListener('input', debounce(function(e) {
+        searchInput.addEventListener('input', debounce(function (e) {
             const searchTerm = e.target.value.trim();
-            filterTrainers({ searchTerm });
+            filterTrainers({searchTerm});
         }, 300));
     }
 
     // 디바운스 함수 (검색 입력 최적화)
     function debounce(func, wait) {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), wait);
         };
@@ -443,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 로그인 폼 이벤트 리스너 설정 (HTML에 로그인 폼이 있는 경우)
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
-        loginForm.addEventListener('submit', async function(e) {
+        loginForm.addEventListener('submit', async function (e) {
             e.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;

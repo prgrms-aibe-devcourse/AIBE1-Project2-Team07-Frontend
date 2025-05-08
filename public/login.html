@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title></title>
-  </head>
-  <body>
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
+</head>
+<body>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get("accessToken");
         const refreshToken = urlParams.get("refreshToken");
 
         if (accessToken || refreshToken) {
-          const url = new URL(window.location.href);
-          url.searchParams.delete("accessToken");
-          url.searchParams.delete("refreshToken");
-          window.history.replaceState(
-            {},
-            document.title,
-            url.pathname + url.search
-          );
+            const url = new URL(window.location.href);
+            url.searchParams.delete("accessToken");
+            url.searchParams.delete("refreshToken");
+            window.history.replaceState(
+                {},
+                document.title,
+                url.pathname + url.search
+            );
 
-          const response = await fetch("/auth/my", {
-            method: "POST", // 서버는 POST로 라우터 정의되어 있음
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-          });
+            const response = await fetch("/auth/my", {
+                method: "POST", // 서버는 POST로 라우터 정의되어 있음
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+            });
 
-          const user = await response.json();
+            const user = await response.json();
 
-          localStorage.setItem("user", JSON.stringify(user));
-          localStorage.setItem("accessToken", accessToken);
-          localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("user", JSON.stringify(user));
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
 
-          // window.location.href = "/";
+            window.location.href = "/";
         } else {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          // window.location.href = "/?error";
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            window.location.href = "/?error";
         }
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>
