@@ -2,7 +2,7 @@
 let messages = []; // 채팅 기록 저장용
 let waitingForResponse = false; // 응답 대기 중 상태 플래그 (중복 요청 방지)
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
     // 프롬프트 예시 카드 아이템 추가
     initPromptExampleItems();
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initTrainerCardClicks();
 
     // 후기 캐러셀 초기화
-    initReviewCarousel();
+    await initReviewCarousel();
 
     // 훈련사 캐러셀 초기화
     initTrainerSection();
@@ -93,8 +93,9 @@ function initTrainerCardClicks() {
 /**
  * 리뷰 캐러셀 초기화
  */
-function initReviewCarousel() {
-    const reviews = fetchReviews();
+async function initReviewCarousel() {
+    const reviews = await fetchReviews();
+    console.log("reviews: " + reviews);
     const cardsPerSlide = getCardsPerSlide();
     renderReviewCarousel(reviews, cardsPerSlide);
 }
@@ -231,37 +232,22 @@ function removeTypingIndicator() {
  * @param {string} userMessage - 사용자가 입력한 메시지
  */
 async function fetchBotResponse(userMessage) {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
     try {
-        /* --- 실제 API 호출 예시 ---
-        // TODO: 백엔드 API 완료되면 수정하기
-        // GET 방식 예시
-        // const response = await fetch(`/api/llm/chat?prompt=${encodeURIComponent(userMessage)}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         // 필요한 경우 인증 헤더 추가
-        //         // 'Authorization': 'Bearer ' + localStorage.getItem('token')
-        //     }
-        // });
+        const response = await fetch(`https://dev.tuituiworld.store/api/v1/mcp/chat?prompt=${encodeURIComponent(userMessage)}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getAccessToken()
+            }
+        });
 
-        // if (!response.ok) { // 응답 상태 코드가 200-299 범위가 아닌 경우
-        //     // 서버에서 보낸 오류 메시지를 포함하여 에러 객체 생성
-        //     const errorData = await response.json().catch(() => ({})); // 오류 응답 본문 파싱 시도
-        //     throw new Error(`API 오류: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
-        // }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`API 오류: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+        }
 
-        // const data = await response.json(); // 성공적인 응답 본문 파싱
-        // const botMessage = data.message || '응답 데이터를 찾을 수 없습니다.';
-        */
-
-        // 임시값
-        const botMessage = `"${userMessage}"에 대한 임시 답변입니다.   
-        [네이버](https://www.naver.com)  
-        [유튜브](https://www.youtube.com)  
-        [구글쓰](https://www.google.com)  
-        Markdown **지원** *테스트*. \n\`\`\`javascript\nconsole.log('코드 블록 테스트');\n\`\`\``;
+        const data = await response.json();
+        const botMessage = data.message || '응답 데이터를 찾을 수 없습니다.';
 
         removeTypingIndicator();
         appendMessage('assistant', botMessage);
@@ -289,43 +275,31 @@ function scrollToBottom() {
     }
 }
 
+function getAccessToken() {
+    const accessToken = localStorage.getItem(`accessToken`);
+
+    return accessToken;
+}
+
 /**
  * 리뷰 데이터를 반환
  * TODO: API 연결할 때 코드 수정 필요
  */
-function fetchReviews() {
-    return [
-        {
-            trainer: "강형욱 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+1",
-            text: "정말 이게 될까 하면서 교육 요청드린거였는데... 다음번에 산책 교육으로 또 뵙겠습니다!!"
-        },
-        {
-            trainer: "김형 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+2",
-            text: "... 다음번에 산책 교육으로 또 뵙겠습니다!!"
-        },
-        {
-            trainer: "누구요 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+3",
-            text: "다시는 만나지 말아요. 정말 이게 될까 하면서 교육 요청드린거였는데..!"
-        },
-        {
-            trainer: "홍길동 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+4",
-            text: "강아지도 저도 스트레스 받지 않게 교육할 수 있을 거라는 희망을 얻었습니다."
-        },
-        {
-            trainer: "이순신 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+5",
-            text: "정확한 진단과 꼼꼼한 설명으로 많은 도움이 되었습니다!"
-        },
-        {
-            trainer: "김유신 훈련사",
-            image: "https://placehold.co/400x400?text=Review+Image+6",
-            text: "정말 만족스러운 결과였습니다. 감사합니다!"
+async function fetchReviews() {
+    const response = await fetch(`https://dev.tuituiworld.store/api/v1/reviews/top-liked?limit=9`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${getAccessToken()}`
         }
-    ];
+    });
+
+    const data = await response.json();
+
+    return data.map(review => ({
+        trainer: review.trainerName,
+        image: review.reviewImageUrl || "https://placehold.co/400x400?text=No+Image",
+        text: review.comment
+    }));
 }
 
 /**
