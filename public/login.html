@@ -1,74 +1,35 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title></title>
-  </head>
-  <body>
-    <script>
-      document.addEventListener("DOMContentLoaded", async () => {
+</head>
+<body>
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
         const urlParams = new URLSearchParams(window.location.search);
         const accessToken = urlParams.get("accessToken");
         const refreshToken = urlParams.get("refreshToken");
 
         if (accessToken || refreshToken) {
-          const url = new URL(window.location.href);
-          url.searchParams.delete("accessToken");
-          url.searchParams.delete("refreshToken");
-          window.history.replaceState(
-            {},
-            document.title,
-            url.pathname + url.search
-          );
-        }
-
-        async function fetchAndStoreTokens() {
-          try {
-            const response = await fetch("/auth", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                accessToken,
-                refreshToken,
-              }),
-            });
-
-            if (!response.ok) {
-              console.log(response.status);
-              throw new Error("토큰 요청 실패");
-            }
-
-            const data = await response.json();
-
-            if (
-              !data.userInfo ||
-              !data.tokenInfo?.accessToken ||
-              !data.tokenInfo?.refreshToken
-            ) {
-              throw new Error("불완전한 응답 데이터");
-            }
-
-            localStorage.setItem("user", JSON.stringify(data.userInfo));
-            localStorage.setItem("accessToken", data.tokenInfo.accessToken);
-            localStorage.setItem("refreshToken", data.tokenInfo.refreshToken);
-
+            const url = new URL(window.location.href);
+            url.searchParams.delete("accessToken");
+            url.searchParams.delete("refreshToken");
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+            window.history.replaceState(
+                {},
+                document.title,
+                url.pathname + url.search
+            );
             window.location.href = "/";
-          } catch (error) {
-            console.error("토큰 처리 실패:", error);
-
-            localStorage.removeItem("user");
+        } else {
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
-
             window.location.href = "/?error";
-          }
         }
-
-        await fetchAndStoreTokens();
-      });
-    </script>
-  </body>
+    });
+</script>
+</body>
 </html>
