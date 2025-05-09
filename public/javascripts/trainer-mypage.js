@@ -269,6 +269,15 @@ async function showProfile() {
                   </div>
                 </div>
                 <div class="profile-details align-self-center ms-4">
+                    <div class="info-row d-flex align-items-center mb-3">
+                    <label class="label col-form-label me-3">이름</label>
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control form-control-sm"
+                      value="${userData.name || ''}"
+                    >
+                  </div>
                   <div class="info-row d-flex align-items-center mb-3">
                     <label class="label col-form-label me-3">닉네임</label>
                     <input
@@ -290,6 +299,7 @@ async function showProfile() {
                   </div>
                 </div>
             </div>
+            <button class="btn btn-warning mt-3 mx-auto d-block" id="profile-edit-btn">수정하기</button>
             <div class="cert-images">
                 <h5>자격증</h5>
                 <div class="cert-container">
@@ -300,12 +310,12 @@ async function showProfile() {
                             <div class="cert-label">${cert.name || '자격증 이름 없음'}</div>
                         </div>
                     `).join('') :
-            '<p>등록된 자격증이 없습니다.</p>'}
+            '<p style="display: flex; align-items: center; justify-content: center">등록된 자격증이 없습니다.</p>'}
                     <div class="cert-add">
                         <button type="button" class="btn edit-button" id="add-cert-btn">+</button>
                     </div>
                 </div>
-                <button class="btn btn-warning mt-3 mx-auto d-block" id="profile-edit-btn">수정하기</button>
+                
             </div>
         `;
 
@@ -806,49 +816,6 @@ async function showMyAdvices(filteredAdvices = null) {
     }
 }
 
-// 상담 관련 이벤트 리스너 연결
-function attachAdviceEventListeners(adviceData) {
-    // 상세보기 버튼 이벤트
-    document.querySelectorAll('.view-detail-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            if (adviceId) {
-                showAdviceDetail(adviceId, adviceData);
-            }
-        });
-    });
-
-    // 수락하기 버튼 이벤트
-    document.querySelectorAll('.accept-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            if (adviceId) {
-                showAcceptModal(adviceId, adviceData);
-            }
-        });
-    });
-
-    // 거절하기 버튼 이벤트
-    document.querySelectorAll('.reject-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            if (adviceId) {
-                showRejectModal(adviceId, adviceData);
-            }
-        });
-    });
-
-    // 후기 보기 버튼 이벤트
-    document.querySelectorAll('.view-review-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            if (adviceId) {
-                viewAdviceReview(adviceId);
-            }
-        });
-    });
-}
-
 // 상담 상세 정보 표시 함수
 function showAdviceDetail(adviceId, adviceData) {
     try {
@@ -1256,8 +1223,8 @@ async function updateProfileImage() {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/files/upload', {
-                    method: 'POST',
+                const uploadResponse = await fetch('http://dev.tuituiworld.store/api/v1/users/updateImage', {
+                    method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
@@ -1265,28 +1232,8 @@ async function updateProfileImage() {
                 });
 
                 if (!uploadResponse.ok) {
-                    throw new Error(`이미지 업로드 실패: ${uploadResponse.status}`);
+                    console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
                 }
-
-                const uploadResult = await uploadResponse.json();
-                const imageUrl = uploadResult.url; // API 응답에서 이미지 URL 추출
-
-                // 프로필 이미지 URL 업데이트 API 호출
-                const updateResponse = await fetch('https://dev.tuituiworld.store/api/v1/users/profile-image', {
-                    method: 'PUT',
-                    headers: {
-                        'accept': '*/*',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ profileImageUrl: imageUrl })
-                });
-
-                if (!updateResponse.ok) {
-                    throw new Error(`프로필 이미지 업데이트 실패: ${updateResponse.status}`);
-                }
-
-                console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
 
             } catch (error) {
                 console.error('프로필 이미지 업데이트 중 오류 발생:', error);
@@ -1307,32 +1254,36 @@ async function updateProfileData() {
     try {
         const token = validateToken();
 
+        const nameInput = document.querySelector('input[name="name"]');
         const nicknameInput = document.querySelector('input[name="nickname"]');
-        const emailInput = document.querySelector('input[name="email"]');
 
-        if (!nicknameInput || !emailInput) {
+        if (!nicknameInput || !nameInput) {
             throw new Error('필수 입력 필드를 찾을 수 없습니다.');
         }
 
+        const name = nameInput.value.trim();
         const nickname = nicknameInput.value.trim();
-        const email = emailInput.value.trim();
 
+        if (!name) {
+            alert('이름을 입력해주세요.');
+            return;
+        }
         if (!nickname) {
             alert('닉네임을 입력해주세요.');
             return;
         }
 
         // 프로필 업데이트 API 호출
-        const response = await fetch('https://dev.tuituiworld.store/api/v1/users/me', {
+        const response = await fetch('https://dev.tuituiworld.store/api/v1/users/update', {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
-                'Content-Type': 'application/json',
+                'content-type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                nickname: nickname,
-                email: email
+                name: name,
+                nickname: nickname
             })
         });
 
@@ -1477,152 +1428,4 @@ function attachAdviceEventListeners(adviceData) {
     } catch (error) {
         console.error('상담 이벤트 리스너 연결 중 오류 발생:', error);
     }
-}
-
-// 상담 상세 정보 모달 표시
-function showAdviceDetail(adviceId, adviceData) {
-    try {
-        const advice = adviceData.find(item => item.id == adviceId);
-        if (!advice) {
-            throw new Error('해당 상담 정보를 찾을 수 없습니다.');
-        }
-
-        const modalElement = document.getElementById('detailModal');
-        if (!modalElement) {
-            throw new Error('상담 상세 모달을 찾을 수 없습니다.');
-        }
-
-        // 모달 데이터 설정 - 안전하게 속성 확인
-        const authorElement = modalElement.querySelector('.advice-author');
-        if (authorElement) {
-            authorElement.textContent = `작성자: ${advice.trainerName || '미상'}`;
-        }
-
-        const dateElement = modalElement.querySelector('.advice-date');
-        if (dateElement) {
-            dateElement.textContent = `신청일: ${advice.createdAt || '미상'}`;
-        }
-
-        const titleElement = modalElement.querySelector('.advice-title');
-        if (titleElement) {
-            titleElement.textContent = advice.serviceType || '제목 미상';
-        }
-
-        const petTypeElement = modalElement.querySelector('.pet-type');
-        if (petTypeElement) {
-            petTypeElement.textContent = advice.petType || '반려동물 종류 미상';
-        }
-
-        const petBreedElement = modalElement.querySelector('.pet-breed');
-        if (petBreedElement) {
-            petBreedElement.textContent = advice.petBreed || '품종 미상';
-        }
-
-        const petAgeElement = modalElement.querySelector('.pet-age');
-        if (petAgeElement) {
-            petAgeElement.textContent = advice.petMonthAge ? `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 미상';
-        }
-
-        const contentElement = modalElement.querySelector('.advice-content');
-        if (contentElement) {
-            contentElement.textContent = advice.content || '내용 미상';
-        }
-
-        // 상담 내역 표시 (API에서 채팅 히스토리 받아와야 함)
-        const chatMessages = modalElement.querySelector('.chat-messages');
-        if (chatMessages) {
-            chatMessages.innerHTML = '<p>채팅 내역이 없습니다.</p>';
-        }
-
-        // 모달 표시
-        const bsModal = new bootstrap.Modal(modalElement);
-        bsModal.show();
-
-        // 답변 등록 버튼 이벤트
-        const replyBtn = modalElement.querySelector('.reply-btn');
-        if (replyBtn) {
-            // 이전 이벤트 리스너 제거 (중복 방지)
-            replyBtn.replaceWith(replyBtn.cloneNode(true));
-            const newReplyBtn = modalElement.querySelector('.reply-btn');
-
-            newReplyBtn.addEventListener('click', async function() {
-                try {
-                    const messageElement = modalElement.querySelector('#replyMessage');
-                    if (!messageElement) {
-                        throw new Error('답변 입력 필드를 찾을 수 없습니다.');
-                    }
-
-                    const message = messageElement.value.trim();
-                    if (!message) {
-                        alert('답변 내용을 입력해주세요.');
-                        return;
-                    }
-
-                    await sendAdviceReply(adviceId, message);
-                    alert('답변이 성공적으로 등록되었습니다.');
-                    bsModal.hide();
-                    // 상담 목록 새로고침
-                    showMyAdvices();
-                } catch (error) {
-                    console.error('답변 등록 중 오류 발생:', error);
-                    alert('답변 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-                }
-            });
-        }
-
-    } catch (error) {
-        console.error('상담 상세 정보 표시 중 오류 발생:', error);
-        alert('상담 정보를 불러오는 중 오류가 발생했습니다.');
-    }
-}
-
-// 상담 수락 모달 표시
-function showAcceptModal(adviceId, adviceData) {
-    try {
-        const advice = adviceData.find(item => item.id == adviceId);
-        if (!advice) {
-            throw new Error('해당 상담 정보를 찾을 수 없습니다.');
-        }
-
-        const modalElement = document.getElementById('acceptModal');
-        if (!modalElement) {
-            throw new Error('상담 수락 모달을 찾을 수 없습니다.');
-        }
-
-        // 모달 데이터 설정 - 안전하게 속성 확인
-        const authorElement = modalElement.querySelector('.advice-author');
-        if (authorElement) {
-            authorElement.textContent = `작성자: ${advice.trainerName || '미상'}`;
-        }
-
-        const dateElement = modalElement.querySelector('.advice-date');
-        if (dateElement) {
-            dateElement.textContent = `신청일: ${advice.createdAt || '미상'}`;
-        }
-
-        const titleElement = modalElement.querySelector('.advice-title');
-        if (titleElement) {
-            titleElement.textContent = advice.serviceType || '제목 미상';
-        }
-
-        const petTypeElement = modalElement.querySelector('.pet-type');
-        if (petTypeElement) {
-            petTypeElement.textContent = advice.petType || '반려동물 종류 미상';
-        }
-
-        const petBreedElement = modalElement.querySelector('.pet-breed');
-        if (petBreedElement) {
-            petBreedElement.textContent = advice.petBreed || '품종 미상';
-        }
-
-        const petAgeElement = modalElement.querySelector('.pet-age');
-        if (petAgeElement) {
-            petAgeElement.textContent = advice.petMonthAge ? `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
-        }
-
-        const contentElement = modalElement.querySelector('.advice-content');
-        if (contentElement) {
-            contentElement.textContent = advice.content || '내용 미상';
-        }
-    }catch (error) {}
 }
