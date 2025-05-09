@@ -125,74 +125,77 @@ const adviceRequests = [
 function showUserAdvices(filteredAdvices = null) {
     hideAllContent();
 
-    // 게시글 목록 보이게 설정
-    document.getElementById('post-container').style.display = 'block';
+    // 게시글 영역 표시
+    const postContainer = document.getElementById('post-container');
+    if (postContainer) postContainer.style.display = 'block';
 
-    // 페이지네이션 보이게 설정
+    // 페이지네이션 표시
     const pagination = document.querySelector('.pagination');
     if (pagination) pagination.parentElement.style.display = 'block';
 
     // 검색바 표시
     const searchBar = document.querySelector('.search-bar');
-    if (searchBar) searchBar.style.display = 'block';
+    if (searchBar) searchBar.style.display = 'flex';
 
     // 필터링된 데이터 또는 원본 데이터 사용
-    let dataToShow = filteredAdvices || [...userAdviceRequests];
+    let dataToShow = filteredAdvices || currentPosts;
 
     // 데이터가 비어있는 경우
-    if (dataToShow.length === 0) {
+    if (!dataToShow || dataToShow.length === 0) {
         document.getElementById('post-container').innerHTML = '<p class="no-results">상담 내역이 없습니다.</p>';
         return;
     }
 
-    // 페이징 처리 (기존 currentPage 변수 사용)
+    // 페이징 처리
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, dataToShow.length);
     const currentPageAdvices = dataToShow.slice(startIndex, endIndex);
 
     // 상담내역 렌더링
     const advicesHTML = currentPageAdvices.map(advice => {
-        // 리뷰 데이터 찾기 (hasReview가 true인 경우)
-        let reviewData = null;
-        if (advice.hasReview) {
-            // 실제로는 API에서 리뷰 데이터를 가져오겠지만 여기서는 더미데이터에서 찾습니다
-            reviewData = myReviews.find(r => r.id === advice.id) || { rating: 0 };
-        }
-
         return `
         <div class="user-advice-item">
             <div class="advice-header">
                 <div class="advice-title-section">
-                    <h5 class="advice-title">${advice.postTitle}</h5>
-                    <span class="advice-status ${advice.status.includes('대기') ? 'status-pending' :
-            advice.status.includes('진행') ? 'status-progress' :
-                'status-completed'}">${advice.status}</span>
+                    <h5 class="advice-title">${advice.trainerName || '배정 대기중'} 훈련사</h5>
+                    <span class="advice-status ${
+            advice.applyStatus === 'PENDING'  ? 'status-pending'
+                : advice.applyStatus === 'APPROVED' ? 'status-progress'
+                    : advice.applyStatus === 'REJECTED' ? 'status-completed'
+                        : 'status-completed'
+        }">
+  ${
+            advice.applyStatus === 'PENDING'  ? '답변 대기'
+                : advice.applyStatus === 'APPROVED' ? '상담 수락'
+                    : advice.applyStatus === 'REJECTED' ? '상담 거절'
+                        : advice.applyStatus || '알 수 없음'
+        }
+</span>
                 </div>
                 <div class="advice-meta">
-                    <span class="advice-trainer">훈련사: ${advice.trainerName}</span>
-                    <span class="advice-date">${advice.date}</span>
+                    <span class="advice-date">${advice.createdAt || '날짜 정보 없음'}</span>
                 </div>
             </div>
             <div class="advice-details">
                 <div class="pet-info">
-                    <span class="pet-type">${advice.petType}</span>
-                    <span class="pet-breed">${advice.petBreed}</span>
-                    <span class="pet-age">${advice.petAge}</span>
+                    <span class="pet-type">${advice.petType || '반려동물 종류 없음'}</span>
+                    <span class="pet-breed">${advice.petBreed || '품종 정보 없음'}</span>
+                    <span class="pet-age">${advice.petMonthAge ? `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 정보 없음'}</span>
                 </div>
             </div>
             <div class="advice-body">
-                <p class="advice-content">${advice.comment}</p>
+                <p class="advice-content" data-content="${advice.content}">${advice.content || ''}</p>
             </div>
             <div class="advice-actions">
-                <button data-id="${advice.id}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
-                ${advice.status === "답변 완료" && !advice.hasReview ?
-            `<button data-id="${advice.id}" data-trainer="${advice.trainerName}" class="btn btn-success btn-sm write-review-btn">리뷰 작성</button>` :
-            advice.hasReview ?
+                <button data-id="${advice.applyId}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                ${advice.applyStatus === "답변 완료" && !advice.hasReviewed ?
+            `<button data-id="${advice.id}" data-trainer="${advice.trainerName || '훈련사'}" class="btn btn-success btn-sm write-review-btn">리뷰 작성</button>` :
+            advice.hasReviewed ?
                 `<div class="review-button-container">
-                            <button data-id="${advice.id}" class="btn btn-outline-secondary btn-sm view-review-btn">
-                                작성한 리뷰 보기
-                            </button>
-                        </div>` :
+                        <button data-id="${advice.id}" class="btn btn-outline-secondary btn-sm view-review-btn">
+                            작성한 리뷰 보기
+                        </button>
+                    </div>` :
                 ''
         }
             </div>
@@ -217,16 +220,44 @@ function generateStarRating(rating) {
     return `<span class="star-rating-text">${stars}</span>`;
 }
 
+async function fetchAdviceDetail(applyId) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/match/${applyId}/answer`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        if (!res.ok) throw new Error('내가 신청한 상담 상세 조회 실패');
+        const data = await res.json();
+        console.log(data);
+        return data || [];
+    } catch (err) {
+        console.error(err);
+        alert('내가 신청한 상담 상세조회를 불러오는데 실패했습니다.');
+        return [];
+    }
+}
+
 // 상담 내역 이벤트 리스너 추가
 function attachUserAdviceEventListeners() {
+    const content = this.getAttribute('data-content');
+    console.log(content);
     // 상세보기 버튼
     document.querySelectorAll('.view-detail-btn').forEach(btn => {
         btn.addEventListener('click', function() {
+            // ① data-id 속성에서 ID 가져오기
             const adviceId = this.getAttribute('data-id');
-            // 해당 상담 내역 데이터 찾기
-            const adviceData = userAdviceRequests.find(advice => advice.id === parseInt(adviceId));
-            // 올바른 트레이너 이름 전달
-            showAdviceDetailModal(adviceId, adviceData.trainerName);
+            console.log(adviceId);
+            // ② currentPosts 배열에서 applyId 가 일치하는 객체 찾기
+            const adviceData = currentPosts.find(a => a.applyId === parseInt(adviceId, 10));
+            // const adviceData = await fetchAdviceDetail(adviceId);
+            if (adviceData) {
+                // ③ 찾은 데이터로 상세모달 띄우기
+                showAdviceDetailModal(adviceId, adviceData.trainerName, content);
+                console.log('상세보기 호출된 adviceId:', adviceId);
+            } else {
+                alert('상담 정보를 찾을 수 없습니다.');
+            }
         });
     });
 
@@ -421,20 +452,9 @@ function showReviewDetailModal(adviceId){
 }
 
 // 상담 상세보기 모달 표시
-function showAdviceDetailModal(adviceId, trainerName) {
-    // 데이터를 찾음 (실제로는 ID로 서버에서 가져옴)
-    const adviceData = adviceRequests.find(advice => advice.id === parseInt(adviceId)) || {
-        id: adviceId,
-        author: "사용자",
-        postTitle: "상담 제목",
-        status: "답변 대기중",
-        date: "2025-04-23",
-        petType: "반려동물",
-        petBreed: "품종",
-        petAge: "나이",
-        comment: "상담 내용이 없습니다.",
-        chats: []
-    };
+function showAdviceDetailModal(adviceId, trainerName, content) {
+
+    const adviceData = fetchAdviceDetail(adviceId);
 
     // 기존 모달이 있으면 제거
     let existingModal = document.getElementById('adviceDetailModal');
@@ -454,7 +474,7 @@ function showAdviceDetailModal(adviceId, trainerName) {
             </div>
         `).join('');
     } else {
-        if (adviceData.status === "답변 대기중") {
+        if (adviceData.status === "PENDING") {
             chatsHTML = `
                 <div class="chat-waiting">
                     <p class="text-center text-muted">
@@ -484,15 +504,13 @@ function showAdviceDetailModal(adviceId, trainerName) {
                         <div class="advice-detail-info mb-4">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <p><strong>상담 날짜:</strong> ${adviceData.date}</p>
-                                    <p><strong>상담 상태:</strong> <span class="badge ${
-        adviceData.status.includes('대기') ? 'bg-warning' :
-            adviceData.status.includes('진행') ? 'bg-info' :
-                'bg-success'
-    }">${adviceData.status}</span></p>
+                                    <p><strong>상담 날짜:</strong> ${adviceData.createdAt}</p>
+                                    <p><strong>상담 상태:</strong> 
+                                        <span class="badge ${adviceData.applyStatus === 'PENDING' ? 'bg-warning' : adviceData.applyStatus === 'APPROVED'  ? 'bg-info' : 'bg-success'}"> ${ adviceData.applyStatus === 'PENDING'   ? '답변 대기' : adviceData.applyStatus === 'APPROVED'  ? '상담 수락' : (adviceData.applyStatus || '알 수 없음')} </span>
+                                    </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>반려동물:</strong> ${adviceData.petType} (${adviceData.petBreed}, ${adviceData.petAge})</p>
+                                    <p><strong>반려동물:</strong> ${adviceData.petType} (${adviceData.petBreed}, ${adviceData.petMonthAge})</p>
                                     <p><strong>훈련사:</strong> ${trainerName || '미배정'}</p>
                                 </div>
                             </div>
@@ -501,14 +519,14 @@ function showAdviceDetailModal(adviceId, trainerName) {
                         <div class="advice-question-section mb-4">
                             <h6 class="section-title">상담 요청 내용</h6>
                             <div class="advice-question p-3 bg-light rounded">
-                                ${adviceData.comment}
+                                ${content}
                             </div>
                         </div>
 
                         <div class="advice-chat-section">
                             <h6 class="section-title">상담 내역</h6>
                             <div class="chat-container">
-                                ${chatsHTML}
+                                ${adviceData.content}
                             </div>
                         </div>
                        

@@ -16,44 +16,53 @@ console.log(storedUser);
 // 전역 변수로 현재 페이지와 페이지당 아이템 개수 설정
 let currentPage = 1;
 const itemsPerPage = 5;
+// 현재 로드된 게시물을 전역 변수로 저장 (검색에 사용)
+let currentPosts = [];
+let searchQuery = '';
 
-function setupSearchButton() {
+async function setupSearchButton() {
     const searchButton = document.getElementById('search-button');
     const searchInput = document.getElementById('search-input');
 
     if (searchButton && searchInput) {
-        searchButton.addEventListener('click', function () {
+        searchButton.addEventListener('click', async function () {
             const query = searchInput.value.trim().toLowerCase();
+            searchQuery = query;
 
             if (query) {
                 const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
                 let searchResults = [];
 
-                if (activeTab === 'tab-review') {
-                    // 후기에서 검색
-                    searchResults = dummyReviews.filter(review =>
-                        review.name.toLowerCase().includes(query) ||
-                        review.content.toLowerCase().includes(query)
-                    );
-
-                    currentPage = 1;
-                    createReviewElement(searchResults, currentPage);
-                } else {
-                    // 게시글에서 검색
-                    searchResults = filteredPosts.filter(post =>
-                        post.title.toLowerCase().includes(query) ||
-                        post.content.toLowerCase().includes(query)
+                // 현재 로드된 게시물에서 검색
+                if (currentPosts && currentPosts.length > 0) {
+                    searchResults = currentPosts.filter(post =>
+                        (post.title && post.title.toLowerCase().includes(query)) ||
+                        (post.content && post.content.toLowerCase().includes(query))
                     );
 
                     currentPage = 1;
                     renderPosts(searchResults, currentPage);
+                } else {
+                    // 검색할 데이터가 없는 경우
+                    alert('검색할 데이터가 없습니다. 먼저 게시물을 불러와주세요.');
                 }
 
                 if (searchResults.length === 0) {
                     alert(`'${query}'에 해당하는 결과가 없습니다.`);
                 }
             } else {
-                alert('검색어를 입력하세요.');
+                // 검색어가 비었을 경우 전체 목록 표시
+                const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
+
+                if (activeTab === 'tab-mypost') {
+                    const myPosts = await fetchMyPosts();
+                    currentPosts = myPosts;
+                    renderPosts(myPosts, 1);
+                } else if (activeTab === 'tab-liked') {
+                    const likedPosts = await fetchLikedPosts();
+                    currentPosts = likedPosts;
+                    renderPosts(likedPosts, 1);
+                }
             }
         });
 
@@ -131,7 +140,7 @@ async function fetchMyPosts() {
         });
         if (!res.ok) throw new Error('내 게시물 조회 실패');
         const data = await res.json();
-        console.log(data);
+        console.log('내 게시물:', data);
         return data;
     } catch (err) {
         console.error(err);
@@ -149,7 +158,7 @@ async function fetchLikedPosts() {
         });
         if (!res.ok) throw new Error('내가 좋아요한 게시물 조회 실패');
         const data = await res.json();
-        console.log(data);
+        console.log('좋아요한 게시물:', data);
         return data;
     } catch (err) {
         console.error(err);
@@ -158,20 +167,20 @@ async function fetchLikedPosts() {
     }
 }
 
-async function fetchCommentPosts() {
+async function fetchMyAdvice() {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/comments/users/me`, {
+        const res = await fetch(`${API_BASE_URL}/api/v1/match/user`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
-        if (!res.ok) throw new Error('내가 댓글 단 게시물 조회 실패');
-        const data = await res.json();
-        console.log(data);
-        return data;
+        if (!res.ok) throw new Error('내가 신청한 상담 조회 실패');
+        const result = await res.json();
+        console.log(result.data);
+        return result.data || [];
     } catch (err) {
         console.error(err);
-        alert('내가 댓글 단 게시물을 불러오는데 실패했습니다.');
+        alert('내가 신청한 상담을 불러오는데 실패했습니다.');
         return [];
     }
 }
@@ -186,7 +195,6 @@ function renderPosts(posts, page = 1) {
     // 페이지에 맞는 게시글만 추출
     const startIndex = (page - 1) * itemsPerPage;
     const paginatedPosts = posts.slice(startIndex, startIndex + itemsPerPage);
-    const searchBar = document.querySelector('.search-bar');
 
     if (paginatedPosts.length === 0) {
         postListElement.innerHTML = '<div class="alert alert-info">게시글이 없습니다.</div>';
@@ -197,17 +205,22 @@ function renderPosts(posts, page = 1) {
         const postElement = document.createElement('div');
         postElement.className = 'post-item';
 
+        // 이미지 URL 확인 및 기본값 설정
+        const imageUrl = post.imageUrls && post.imageUrls.length > 0
+            ? post.imageUrls[0]
+            : 'https://placehold.co/300x200';
+
         postElement.innerHTML = `
             <div class="post-info">
-                <h3 class="post-title">${post.postCategory}</h3>
-                <h4>${post.title}</h4>
-                <p class="post-content">${post.content}</p>
+                <h3 class="post-title">${post.postCategory || '카테고리 없음'}</h3>
+                <h4>${post.title || '제목 없음'}</h4>
+                <p class="post-content">${post.content || '내용 없음'}</p>
                 <div class="post-meta">
-                    좋아요 수: ${post.likeCount} &nbsp;&nbsp; 댓글 수: ${post.commentCount}
+                    좋아요 수: ${post.likeCount || 0} &nbsp;&nbsp; 댓글 수: ${post.commentCount || 0}
                 </div>
             </div>
             <div class="post-image">
-                <img src="${post.imageUrls}" alt="게시글 이미지">
+                <img src="${imageUrl}" alt="게시글 이미지">
             </div>
         `;
         postListElement.appendChild(postElement);
@@ -261,17 +274,17 @@ function addPaginationEvents() {
             if (text === '«') {
                 if (currentPage > 1) {
                     currentPage--;
-                    renderPosts(filteredPosts, currentPage);
+                    renderPosts(currentPosts, currentPage);
                 }
             } else if (text === '»') {
-                const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+                const totalPages = Math.ceil(currentPosts.length / itemsPerPage);
                 if (currentPage < totalPages) {
                     currentPage++;
-                    renderPosts(filteredPosts, currentPage);
+                    renderPosts(currentPosts, currentPage);
                 }
             } else {
                 currentPage = parseInt(text);
-                renderPosts(filteredPosts, currentPage);
+                renderPosts(currentPosts, currentPage);
             }
         });
     });
@@ -320,7 +333,6 @@ function showPostContent() {
 
 // 탭 메뉴 활성화 처리 및 필터링
 function setupTabEvents() {
-    const searchBar = document.querySelector('.search-bar');
     document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
         tab.addEventListener('click', async function (e) {
             e.preventDefault();
@@ -337,6 +349,11 @@ function setupTabEvents() {
             // 페이지 초기화
             currentPage = 1;
 
+            // 검색어 초기화
+            const searchInput = document.getElementById('search-input');
+            if (searchInput) searchInput.value = '';
+            searchQuery = '';
+
             // 필터링 적용
             switch (tabId) {
                 case 'tab-profile':
@@ -345,25 +362,25 @@ function setupTabEvents() {
                 case 'tab-mypost':
                     showPostContent();
                     const myPosts = await fetchMyPosts();
-                    filteredPosts = myPosts;
-                    renderPosts(filteredPosts, currentPage);
+                    currentPosts = myPosts; // 현재 로드된 게시물 저장
+                    renderPosts(myPosts, currentPage);
                     break;
                 case 'tab-liked':
                     showPostContent();
                     const likedPosts = await fetchLikedPosts();
-                    filteredPosts = likedPosts;
-                    renderPosts(filteredPosts, currentPage);
+                    currentPosts = likedPosts; // 현재 로드된 게시물 저장
+                    renderPosts(likedPosts, currentPage);
                     break;
                 case 'tab-advice':
-                    showUserAdvices();
-                    if (searchBar) searchBar.style.display = 'flex';
+                    const myAdvices = await fetchMyAdvice();
+                    currentPosts = myAdvices; // 현재 로드된 게시물 저장
+                    showUserAdvices(myAdvices, currentPage);
                     break;
                 default:
                     showPostContent();
-                    renderPosts(filteredPosts, currentPage);
             }
 
-            console.log(`탭 ${this.textContent} 클릭됨 - ${tabId === 'tab-review' ? dummyReviews.length : filteredPosts.length}개 ${tabId === 'tab-review' ? '리뷰' : '게시글'} 필터링됨`);
+            console.log(`탭 ${this.textContent} 클릭됨 - ${currentPosts.length}개 게시글 로드됨`);
         });
     });
 }
@@ -380,26 +397,36 @@ function setupProfileButtons() {
 
 // 프로필 이미지 변경 이벤트 설정
 function setupProfileImage() {
-    const profileImage = document.querySelector('.profile-image');
-    profileImage.addEventListener("click", () => {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = 'image/*';
-        fileInput.style.display = 'none';
+    document.addEventListener('click', function(e) {
+        // 이미지나 오버레이를 클릭했을 때만 작동하도록
+        if (e.target.classList.contains('profile-image') ||
+            e.target.classList.contains('profile-image-overlay') ||
+            e.target.classList.contains('camera-icon')) {
 
-        document.body.appendChild(fileInput);
-        fileInput.click();
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.style.display = 'none';
 
-        fileInput.addEventListener('change', () => {
-            const file = fileInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    profileImage.src = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        });
+            document.body.appendChild(fileInput);
+            fileInput.click();
+
+            fileInput.addEventListener('change', () => {
+                const file = fileInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function (e) {
+                        const profileImage = document.querySelector('.profile-image');
+                        if (profileImage) {
+                            profileImage.src = e.target.result;
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+                // 사용 후 제거
+                document.body.removeChild(fileInput);
+            });
+        }
     });
 }
 
@@ -409,6 +436,7 @@ window.addEventListener('DOMContentLoaded', () => {
     setupTabEvents();
     setupProfileButtons();
     setupSearchButton();
+    setupProfileImage();
 
     // 기본적으로 프로필 탭을 활성화하고 프로필 정보 표시
     const profileTab = document.getElementById('tab-profile');
@@ -422,6 +450,4 @@ window.addEventListener('DOMContentLoaded', () => {
         // 프로필 정보 표시
         renderProfile();
     }
-
-    setupProfileImage();
 });
