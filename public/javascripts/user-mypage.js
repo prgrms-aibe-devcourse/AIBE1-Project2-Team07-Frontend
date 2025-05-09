@@ -1,132 +1,21 @@
-// 더미 데이터 - 다양한 탭에 대응하는 데이터
-const allPosts = [
-    {
-        id: 1,
-        category: '라운지',
-        title: '요즘 저희애들이 즐겨쓰는 강아지 침대에용',
-        content: '[광고] 안냥하세요! 요즘 강아지 사랑하고 있는 강아지 전용 천연 치약이 있어 추천해 드리려고해요! 클폰하지 않는 한정판으로 유일한 치료소 에서 얻게 되포로 만든 몬 매트리스 N32 포인미 매트리스입니다. ※※ 국내 천연 브랜드에서는 최초로 만든 제품이라 그...',
-        author: '올김올',
-        commentCount: 3,
-        image: './images/cat1.jpeg',
-        isMyPost: true,
-    },
-    {
-        id: 2,
-        category: '라운지',
-        title: '강아지랑 산책할 때 이거 쓰시나요?',
-        content: '요즘 강아지랑 산책할 때 이 하네스 사용하는데 너무 좋아요! 제가 발견한 최고의 하네스인데 혹시 다들 어떤 제품 쓰시는지 궁금해요. 저는 이 제품이 산책할 때 강아지가 끌어당기는 힘을 분산시켜서 어깨나 팔에 부담이 덜 가는 것 같아요. 특히 중대형견 키우시는 분들께 추천드려요...',
-        author: '강아지맘',
-        commentCount: 15,
-        image: 'https://placedog.net/80/80?random=2',
-        isLiked: true
-    },
-    {
-        id: 3,
-        category: '질문',
-        title: '고양이 화장실 모래 추천 부탁드려요',
-        content: '안녕하세요, 최근에 고양이를 입양했는데 화장실 모래 추천 부탁드립니다. 지금 쓰는 모래가 너무 먼지가 많이 나서 다른 제품을 찾고 있어요. 냄새 잡는 효과가 좋으면서도 먼지가 적게 나는 제품이 있을까요? 미리 감사드립니다!',
-        author: '집사초보',
-        commentCount: 8,
-        image: 'https://placedog.net/80/80?random=3',
-        isMyPost: true,
-        isLiked: true,
-    },
-    {
-        id: 4,
-        category: '자랑',
-        title: '우리 강아지 생일 파티 했어요!',
-        content: '어제 우리 뽀미 생일이라 작은 파티를 했어요~ 강아지용 케이크도 주문하고 친구들도 불러서 재밌게 놀았답니다. 사진 몇 장 공유해요! 다들 귀엽다고 해주셔서 너무 기분 좋았어요. 특히 저희 뽀미가 케이크 앞에서 포즈 취하는 모습이 너무 사랑스러워서...',
-        author: '뽀미맘',
-        commentCount: 12,
-        image: 'https://placedog.net/80/80?random=4',
-        isMyReview: true,
-        hasMyComment: true
-    },
-    {
-        id: 5,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true,
-        hasMyComment: true
-    },
-    {
-        id: 6,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    },
-    {
-        id: 7,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    },
-    {
-        id: 8,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    },
-    {
-        id: 9,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    },
-    {
-        id: 10,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    },
-    {
-        id: 11,
-        category: '정보',
-        title: '동물병원 비용 비교해봤어요',
-        content: '동네 동물병원 5군데 다니면서 비용 비교해봤습니다. 기본 진료비부터 예방접종, 중성화수술까지 꽤 차이가 나더라고요. 표로 정리해봤으니 참고하세요! 특히 A동물병원은 진료비는 저렴한데 약값이 비싸고, C동물병원은 전체적으로 가격대가 높지만 시설이 좋았어요...',
-        author: '경제적집사',
-        commentCount: 23,
-        image: 'https://placedog.net/80/80?random=5',
-        isMyPost: true
-    }
-];
+const API_BASE_URL = "http://localhost:8444";
 
-// 더미 프로필 데이터
-const dummyProfile = {
-    nickname: '홍길동',
-    name: '홍길동',
-    email: 'example.gmail.com',
-    img: "https://placehold.co/180x180"
-};
+// 로컬스토리지에서 user 정보
+const userJSON = localStorage.getItem('user');
+const accessToken = localStorage.getItem('accessToken');
+if (!userJSON) {
+    // 로그인 정보가 없으면 로그인 페이지로 이동
+    window.location.href = '/';
+}
+const storedUser = JSON.parse(userJSON);
+const imgUrl = storedUser.profileImageUrl && storedUser.profileImageUrl.trim()
+    ? storedUser.profileImageUrl
+    : 'https://placehold.co/180x180';
+console.log(storedUser);
 
 // 전역 변수로 현재 페이지와 페이지당 아이템 개수 설정
 let currentPage = 1;
 const itemsPerPage = 5;
-let filteredPosts = [...allPosts]; // 초기에는 모든 게시글을 표시
 
 function setupSearchButton() {
     const searchButton = document.getElementById('search-button');
@@ -177,6 +66,116 @@ function setupSearchButton() {
     }
 }
 
+// 프로필 정보 렌더링 함수
+function renderProfile() {
+    let profileSection = document.querySelector('.profile-section');
+
+    // 모든 컨텐츠 영역 숨기기 (검색바도 여기서 숨겨짐)
+    hideAllContent();
+
+    if (!profileSection) {
+        profileSection = document.createElement('div');
+        profileSection.className = 'profile-section';
+
+        profileSection.innerHTML = `
+            <div class="profile-image-container">
+                <img src="${imgUrl}" alt="프로필 이미지" class="profile-image">
+                <div class="profile-image-overlay">
+                    <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
+                </div>
+            </div>
+            
+            <div class="profile-info">
+                <div class="profile-info-row">
+                    <div class="profile-info-label">닉네임</div>
+                    <div class="profile-info-value">
+                        <input type="text" class="profile-input" name="nickname" value="${storedUser.nickname}">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-label">이름</div>
+                    <div class="profile-info-value">
+                        <input type="text" class="profile-input" name="name" value="${storedUser.name}">
+                    </div>
+                </div>
+                <div class="profile-info-row">
+                    <div class="profile-info-label">이메일</div>
+                    <div class="profile-info-value">
+                        <input type="email" class="profile-input" name="email" value="${storedUser.email}">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-button-group">
+                <button class="profile-button save-button">저장하기</button>
+                <button class="profile-button edit-button">훈련사 신청</button>
+            </div>
+        `;
+
+        const contentWrapper = document.querySelector('.content-wrapper');
+        if (contentWrapper) {
+            contentWrapper.appendChild(profileSection); // 위치에 상관없이 항상 추가
+        }
+    }
+
+    // 프로필 섹션만 보이게 설정
+    profileSection.style.display = 'block';
+}
+
+async function fetchMyPosts() {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/posts/users/me`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        if (!res.ok) throw new Error('내 게시물 조회 실패');
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+        alert('내 게시물을 불러오는데 실패했습니다.');
+        return [];
+    }
+}
+
+async function fetchLikedPosts() {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/posts/users/liked`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        if (!res.ok) throw new Error('내가 좋아요한 게시물 조회 실패');
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+        alert('내가 좋아요한 게시물을 불러오는데 실패했습니다.');
+        return [];
+    }
+}
+
+async function fetchCommentPosts() {
+    try {
+        const res = await fetch(`${API_BASE_URL}/api/v1/comments/users/me`, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        if (!res.ok) throw new Error('내가 댓글 단 게시물 조회 실패');
+        const data = await res.json();
+        console.log(data);
+        return data;
+    } catch (err) {
+        console.error(err);
+        alert('내가 댓글 단 게시물을 불러오는데 실패했습니다.');
+        return [];
+    }
+}
+
 // 게시글 렌더링 함수 - 페이지네이션 적용
 function renderPosts(posts, page = 1) {
     const postListElement = document.getElementById('post-container');
@@ -200,15 +199,15 @@ function renderPosts(posts, page = 1) {
 
         postElement.innerHTML = `
             <div class="post-info">
-                <h3 class="post-title">${post.category}</h3>
+                <h3 class="post-title">${post.postCategory}</h3>
                 <h4>${post.title}</h4>
                 <p class="post-content">${post.content}</p>
                 <div class="post-meta">
-                    작성자: ${post.author} &nbsp;&nbsp; 댓글: ${post.commentCount}
+                    좋아요 수: ${post.likeCount} &nbsp;&nbsp; 댓글 수: ${post.commentCount}
                 </div>
             </div>
             <div class="post-image">
-                <img src="${post.image}" alt="게시글 이미지">
+                <img src="${post.imageUrls}" alt="게시글 이미지">
             </div>
         `;
         postListElement.appendChild(postElement);
@@ -278,63 +277,6 @@ function addPaginationEvents() {
     });
 }
 
-// 프로필 정보 렌더링 함수
-function renderProfile() {
-    let profileSection = document.querySelector('.profile-section');
-
-    // 모든 컨텐츠 영역 숨기기 (검색바도 여기서 숨겨짐)
-    hideAllContent();
-
-    if (!profileSection) {
-        profileSection = document.createElement('div');
-        profileSection.className = 'profile-section';
-
-        profileSection.innerHTML = `
-            <div class="profile-image-container">
-                <img src="https://placehold.co/180x180" alt="프로필 이미지" class="profile-image">
-                <div class="profile-image-overlay">
-                    <img src="images/icons/camera.svg" alt="사진 아이콘" class="camera-icon">
-                </div>
-            </div>
-            
-            <div class="profile-info">
-                <div class="profile-info-row">
-                    <div class="profile-info-label">닉네임</div>
-                    <div class="profile-info-value">
-                        <input type="text" class="profile-input" name="nickname" value="${dummyProfile.nickname}">
-                    </div>
-                </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-label">이름</div>
-                    <div class="profile-info-value">
-                        <input type="text" class="profile-input" name="name" value="${dummyProfile.name}">
-                    </div>
-                </div>
-                <div class="profile-info-row">
-                    <div class="profile-info-label">이메일</div>
-                    <div class="profile-info-value">
-                        <input type="email" class="profile-input" name="email" value="${dummyProfile.email}">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="profile-button-group">
-                <button class="profile-button save-button">저장하기</button>
-                <button class="profile-button edit-button">훈련사 신청</button>
-            </div>
-        `;
-
-        const contentWrapper = document.querySelector('.content-wrapper');
-        if (contentWrapper) {
-            contentWrapper.appendChild(profileSection); // 위치에 상관없이 항상 추가
-        }
-    }
-
-    // 프로필 섹션만 보이게 설정
-    profileSection.style.display = 'block';
-}
-
-
 // 모든 컨텐츠 영역 숨기기
 function hideAllContent() {
     // 게시글 컨테이너 숨기기
@@ -376,28 +318,11 @@ function showPostContent() {
     if (searchBar) searchBar.style.display = 'flex';
 }
 
-// 리뷰 관련 컨텐츠 표시 함수
-function showReviewContent() {
-    hideAllContent();
-
-    // 후기 영역 표시
-    const reviewSection = document.getElementById('review-section');
-    if (reviewSection) reviewSection.style.display = 'block';
-
-    // 페이지네이션 표시
-    const pagination = document.querySelector('.pagination');
-    if (pagination) pagination.parentElement.style.display = 'block';
-
-    // 검색바 표시 - flex로 통일
-    const searchBar = document.querySelector('.search-bar');
-    if (searchBar) searchBar.style.display = 'flex';
-}
-
 // 탭 메뉴 활성화 처리 및 필터링
 function setupTabEvents() {
     const searchBar = document.querySelector('.search-bar');
     document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
-        tab.addEventListener('click', function (e) {
+        tab.addEventListener('click', async function (e) {
             e.preventDefault();
             // 모든 탭에서 active 클래스 제거
             document.querySelectorAll('.tab-menu .nav-link').forEach(t => {
@@ -415,34 +340,25 @@ function setupTabEvents() {
             // 필터링 적용
             switch (tabId) {
                 case 'tab-profile':
-                    // 프로필 탭 - 프로필 정보 표시
                     renderProfile();
                     break;
                 case 'tab-mypost':
-                    // 내가 쓴 글 탭
-                    filteredPosts = allPosts.filter(post => post.isMyPost);
                     showPostContent();
+                    const myPosts = await fetchMyPosts();
+                    filteredPosts = myPosts;
                     renderPosts(filteredPosts, currentPage);
                     break;
                 case 'tab-liked':
-                    // 좋아요한 글 탭
-                    filteredPosts = allPosts.filter(post => post.isLiked);
                     showPostContent();
-                    renderPosts(filteredPosts, currentPage);
-                    break;
-                case 'tab-comment':
-                    // 내가 댓 달은 탭
-                    filteredPosts = allPosts.filter(post => post.hasMyComment);
-                    showPostContent();
+                    const likedPosts = await fetchLikedPosts();
+                    filteredPosts = likedPosts;
                     renderPosts(filteredPosts, currentPage);
                     break;
                 case 'tab-advice':
-                    // 상담 내역 탭
                     showUserAdvices();
                     if (searchBar) searchBar.style.display = 'flex';
                     break;
                 default:
-                    filteredPosts = [...allPosts];
                     showPostContent();
                     renderPosts(filteredPosts, currentPage);
             }
@@ -505,9 +421,6 @@ window.addEventListener('DOMContentLoaded', () => {
         profileTab.classList.add('active');
         // 프로필 정보 표시
         renderProfile();
-    } else {
-        // 프로필 탭이 없으면 기본 게시글 표시
-        renderPosts(allPosts, currentPage);
     }
 
     setupProfileImage();
