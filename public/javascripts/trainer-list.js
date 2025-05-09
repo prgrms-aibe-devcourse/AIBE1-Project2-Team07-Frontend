@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     ];
 
-
+    // TODO: 카드 템플릿이 좀 다름
     // 트레이너 카드 렌더링 함수
     function renderTrainerCards(trainers) {
         const container = document.querySelector('.trainer-cards-container');
@@ -116,23 +116,34 @@ document.addEventListener('DOMContentLoaded', function () {
             cardEl.style.cursor = 'pointer';
             // 클릭 시 상세 페이지로 이동
             cardEl.addEventListener('click', () => {
-                window.location.href = `/profile?id=${trainer.id}`;
+                window.location.href = `/trainers/profile/${trainer.nickname}`;
             });
 
             // 이미지 설정
-            cardClone.querySelector('.trainer-image img').src = trainer.mainImage;
-            cardClone.querySelector('.profile-img').src = trainer.profileImage;
+            cardClone.querySelector('.trainer-image img').src = trainer.photos?.[0]?.fileUrl || 'images/cat.png';
+            cardClone.querySelector('.profile-img').src = trainer.profileImageUrl || 'images/basic_profile.png';
 
             // 텍스트 데이터 설정
-            cardClone.querySelector('.trainer-name').textContent = `${trainer.name} · ${trainer.certification}`;
-            cardClone.querySelector('.trainer-description').textContent = trainer.description;
-            cardClone.querySelector('.rating').textContent = `평점: ${trainer.rating}`;
-            cardClone.querySelector('.trainer-tags').textContent = trainer.tags.join(' ');
+            const certName = trainer.certifications[0]?.certName;
+            cardClone.querySelector('.trainer-name').textContent = `${trainer.name}${certName ? ' · ' + certName : ''}`;
+            cardClone.querySelector('.trainer-description').textContent = trainer.introduction;
+            cardClone.querySelector('.rating').textContent = `평점: ${trainer.averageRating || '0'}/5점`;
+            cardClone.querySelector('.trainer-tags').textContent = Array.isArray(trainer.specializations)
+                ? trainer.specializations.map(tag => `#${tag}`).join(' ')
+                : '';
+
 
             // 가격 설정
             const priceElements = cardClone.querySelectorAll('.price-value');
-            priceElements[0].textContent = `${trainer.consultationPrice}원`;
-            priceElements[1].textContent = `${trainer.visitPrice}원`;
+            const serviceFees = trainer.serviceFees || [];
+
+            // 각 서비스 타입에 맞는 요금 찾기
+            const visitFee = serviceFees.find(fee => fee.serviceType === 'VISIT_TRAINING')?.feeAmount || 0;
+            const videoFee = serviceFees.find(fee => fee.serviceType === 'VIDEO_TRAINING')?.feeAmount || 0;
+
+            priceElements[0].textContent = `${visitFee.toLocaleString()}원`;  // 방문 훈련
+            priceElements[1].textContent = `${videoFee.toLocaleString()}원`;  // 화상 훈련
+
 
             // 버튼 이벤트 설정
             const consultBtn = cardClone.querySelector('.consultation-btn');
@@ -141,13 +152,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // 상담 버튼
             consultBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/profile?id=${trainer.id}&serviceType=video`;
+                window.location.href = `/trainers/profile/${trainer.nickname}?serviceType=video`;
             });
 
             // 방문 버튼
             visitBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/profile?id=${trainer.id}&serviceType=visit`;
+                window.location.href = `/trainers/profile/${trainer.nickname}?serviceType=visit`;
             });
 
             // 컨테이너에 카드 추가
@@ -175,8 +186,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const prevBtn = document.createElement('li');
             prevBtn.className = 'page-item';
             prevBtn.innerHTML = '<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
-            prevBtn.addEventListener('click', function (e) {
+            prevBtn.addEventListener('click', async function (e) {
                 e.preventDefault();
+                await fetchTrainers(currentPage - 2);
                 goToPage(currentPage - 1);
             });
             paginationContainer.appendChild(prevBtn);
@@ -187,8 +199,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const pageItem = document.createElement('li');
             pageItem.className = `page-item ${i === currentPage ? 'active' : ''}`;
             pageItem.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-            pageItem.addEventListener('click', function (e) {
+            pageItem.addEventListener('click', async function (e) {
                 e.preventDefault();
+                await fetchTrainers(i - 1);
                 goToPage(i);
             });
             paginationContainer.appendChild(pageItem);
@@ -199,8 +212,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const nextBtn = document.createElement('li');
             nextBtn.className = 'page-item';
             nextBtn.innerHTML = '<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
-            nextBtn.addEventListener('click', function (e) {
+            nextBtn.addEventListener('click', async function (e) {
                 e.preventDefault();
+                await fetchTrainers(currentPage);
                 goToPage(currentPage + 1);
             });
             paginationContainer.appendChild(nextBtn);
@@ -217,7 +231,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function displayTrainers() {
         const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
-        const pageTrainers = allTrainers.slice(startIndex, endIndex);
+        const pageTrainers = allTrainers;
+        console.log('pageTrainers:', pageTrainers);
 
         renderTrainerCards(pageTrainers);
         renderPagination();
@@ -255,6 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=${serviceType}`;
     }
 
+
     // 트레이너 데이터 로드 함수
     async function loadTrainerData() {
         try {
@@ -263,18 +279,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 백엔드 API에서 트레이너 데이터 가져오기
             // 실제 구현 시 주석 해제
-            // const response = await fetch(`${API_BASE_URL}/trainers`);
-            // if (!response.ok) {
-            //     throw new Error(`API 오류: ${response.status}`);
-            // }
-            // const data = await response.json();
-            // const trainers = data.trainers || [];
-
-            // 샘플 데이터 사용 (백엔드 연동 시 제거)
-            allTrainers = sampleTrainersData;
-
-            // 총 페이지 수 계산
-            totalPages = Math.ceil(allTrainers.length / ITEMS_PER_PAGE);
+            await fetchTrainers(0);
 
             // 트레이너 카드 렌더링
             displayTrainers();
@@ -290,6 +295,28 @@ document.addEventListener('DOMContentLoaded', function () {
             // 로딩 표시 숨기기 (선택사항)
             // document.querySelector('.loading-spinner').style.display = 'none';
         }
+    }
+
+    async function fetchTrainers(pageNo) {
+        console.log(`pageNo: ${pageNo}`);
+        const response = await fetch(`/trainers/users?page=${pageNo}`);
+        if (!response.ok) {
+            throw new Error(`API 오류: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const trainers = data.trainerList || [];
+
+        if (trainers.length === 0) {
+            throw new Error(`API 오류: ${response.status}`);
+        }
+
+        allTrainers = data.trainerList || [];
+        totalPages = data.totalPages;
+
+        console.log('allTrainers:', allTrainers);
+        console.log(`currentPage: ${currentPage}`);
+        console.log('totalPages:', totalPages);
     }
 
     // 트레이너 상세 정보 가져오기
@@ -372,54 +399,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 페이지 표시
         displayTrainers();
-    }
-
-    // 로그인 상태 확인
-    function isLoggedIn() {
-        // localStorage에서 인증 토큰 확인
-        return !!localStorage.getItem('auth_token');
-    }
-
-    // 인증 토큰 가져오기
-    function getAuthToken() {
-        return localStorage.getItem('auth_token');
-    }
-
-    // 로그인 함수
-    async function login(email, password) {
-        try {
-            // 실제 구현 시 주석 해제
-            // const response = await fetch(`${API_BASE_URL}/auth/login`, {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     body: JSON.stringify({ email, password })
-            // });
-            //
-            // if (!response.ok) {
-            //     const errorData = await response.json();
-            //     throw new Error(errorData.message || '로그인 실패');
-            // }
-            //
-            // const data = await response.json();
-            //
-            // // 토큰 저장
-            // if (data.token) {
-            //     localStorage.setItem('auth_token', data.token);
-            // }
-            //
-            // return data;
-
-            // 백엔드 연동 없이 성공 시뮬레이션 (백엔드 연동 시 제거)
-            console.log('로그인 시도:', {email});
-            const fakeToken = 'fake-auth-token-' + Date.now();
-            localStorage.setItem('auth_token', fakeToken);
-            return {success: true, token: fakeToken, user: {email}};
-        } catch (error) {
-            console.error('로그인 중 오류 발생:', error);
-            throw error;
-        }
     }
 
     // 검색창 이벤트 리스너 설정 (HTML에 검색창이 있는 경우)

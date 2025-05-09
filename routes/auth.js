@@ -21,7 +21,7 @@ router.all("/oauth2/callback", (req, res) => {
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: true,
-        maxAge: 720 * 1000, // 2시간
+        maxAge: 72000000 * 1000, // 2시간
     });
 
     res.cookie("refreshToken", refreshToken, {
