@@ -1223,7 +1223,7 @@ async function updateProfileImage() {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const uploadResponse = await fetch('http://dev.tuituiworld.store/api/v1/users/updateImage', {
+                const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/users/updateImage', {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
