@@ -483,7 +483,7 @@ async function showMyReviews(filteredReviews = null) {
             reviewData = filteredReviews;
         } else {
             try {
-                reviewData = await apiRequest('https://dev.tuituiworld.store/api/v1/reviews/users/me');
+                reviewData = await apiRequest('https://dev.tuituiworld.store/api/v1/reviews/users/trainer');
             } catch (error) {
                 if (error.message.includes('로그인이 필요한 서비스입니다')) {
                     document.getElementById('review-section').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
@@ -785,7 +785,7 @@ async function showMyAdvices(filteredAdvices = null) {
                     <button data-id="${advice.id}" class="btn btn-outline-danger btn-sm reject-btn">거절하기</button>
                     ` : ''}
                     ${advice.applyStatus === 'APPROVED' && advice.hasReviewed ? `
-                    <button data-id="${advice.id}" class="btn btn-info btn-sm view-review-btn">후기 보기</button>
+                    <button data-id="${advice.id}" class="btn btn-outline-secondary btn-sm view-review-btn">작성된 리뷰 보기</button>
                     ` : ''}
                 </div>
             </div>

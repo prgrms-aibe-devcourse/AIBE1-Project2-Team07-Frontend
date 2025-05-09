@@ -258,7 +258,7 @@ async function loadTrainerDataByNickname(trainerNickname) {
 
         // API 데이터를 기존 사이트 형식으로 변환
         trainerData = convertApiDataToSiteFormat(apiData);
-
+        window.nickname = apiData.nickname;
         // UI 렌더링
         renderTrainerProfile(trainerData);
 
@@ -284,7 +284,8 @@ function convertApiDataToSiteFormat(apiData) {
     const defaultPhoto = "https://placedog.net/600/400?random";
 
     // 전문 분야 배열을 문자열로 변환
-    const specialties = apiData.specializations ? apiData.specializations.join(', ') : '';
+    const specialties = apiData.specializationText;
+    const tags = apiData.specializations ? apiData.specializations : [];
 
     // 서비스 요금 변환 (새 형식에 맞춤)
     const prices = [];
@@ -365,6 +366,7 @@ function convertApiDataToSiteFormat(apiData) {
         reviewCount: apiData.reviewCount || 0,
         career: apiData.representativeCareer || `반려견 훈련 ${apiData.experienceYears || 0}년 경력`,
         specialties: specialties || apiData.specializationText || "기본 훈련, 행동 교정",
+        tags: tags,
         locations: apiData.visitingAreas || "서울 전역",
         photos: photos,
         qualifications: qualifications,
@@ -408,6 +410,47 @@ function renderTrainerProfile(data) {
 
     // 트레이너 프로필 이미지
     template.querySelector('#trainer-profile-image').src = data.profileImage;
+
+    if (data.tags && data.tags.length > 0) {
+        // trainer-info 바로 다음에 태그 컨테이너 추가
+        const trainerInfo = template.querySelector('.trainer-info');
+
+        if (trainerInfo) {
+            // 기존 태그 컨테이너가 있는지 확인
+            let tagsContainer = template.querySelector('.trainer-tags-container');
+
+            // 없으면 생성
+            if (!tagsContainer) {
+                tagsContainer = document.createElement('div');
+                tagsContainer.className = 'trainer-tags-container mb-4';
+
+                // 태그 제목 추가
+                const tagsTitle = document.createElement('h5');
+                tagsTitle.className = 'tags-title mb-3';
+                tagsTitle.textContent = '태그';
+                tagsContainer.appendChild(tagsTitle);
+
+                // 태그들을 담을 div 생성
+                const tagsDiv = document.createElement('div');
+                tagsDiv.id = 'trainer-tags';
+                tagsDiv.className = 'trainer-tags';
+                tagsContainer.appendChild(tagsDiv);
+
+                // trainer-info 다음, hr 전에 삽입
+                const nextHr = trainerInfo.nextElementSibling;
+                trainerInfo.parentNode.insertBefore(tagsContainer, nextHr);
+            }
+
+            // 태그 렌더링
+            const tagsEl = tagsContainer.querySelector('#trainer-tags');
+            data.tags.forEach(tag => {
+                const tagSpan = document.createElement('span');
+                tagSpan.className = 'badge me-2 mb-2';
+                tagSpan.textContent = `#${tag}`;
+                tagsEl.appendChild(tagSpan);
+            });
+        }
+    }
 
     // 트레이너 사진 갤러리
     const photosContainer = template.querySelector('#trainer-photos');
