@@ -269,6 +269,15 @@ async function showProfile() {
                   </div>
                 </div>
                 <div class="profile-details align-self-center ms-4">
+                    <div class="info-row d-flex align-items-center mb-3">
+                    <label class="label col-form-label me-3">이름</label>
+                    <input
+                      type="text"
+                      name="name"
+                      class="form-control form-control-sm"
+                      value="${userData.name || ''}"
+                    >
+                  </div>
                   <div class="info-row d-flex align-items-center mb-3">
                     <label class="label col-form-label me-3">닉네임</label>
                     <input
@@ -290,6 +299,7 @@ async function showProfile() {
                   </div>
                 </div>
             </div>
+            <button class="btn btn-warning mt-3 mx-auto d-block" id="profile-edit-btn">수정하기</button>
             <div class="cert-images">
                 <h5>자격증</h5>
                 <div class="cert-container">
@@ -300,12 +310,12 @@ async function showProfile() {
                             <div class="cert-label">${cert.name || '자격증 이름 없음'}</div>
                         </div>
                     `).join('') :
-            '<p>등록된 자격증이 없습니다.</p>'}
+            '<p style="display: flex; align-items: center; justify-content: center">등록된 자격증이 없습니다.</p>'}
                     <div class="cert-add">
                         <button type="button" class="btn edit-button" id="add-cert-btn">+</button>
                     </div>
                 </div>
-                <button class="btn btn-warning mt-3 mx-auto d-block" id="profile-edit-btn">수정하기</button>
+                
             </div>
         `;
 
@@ -1256,35 +1266,13 @@ async function updateProfileImage() {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/files/upload', {
-                    method: 'POST',
+                const uploadResponse = await fetch('http://dev.tuituiworld.store/api/v1/users/updateImage', {
+                    method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
                     },
                     body: formData
                 });
-
-                if (!uploadResponse.ok) {
-                    throw new Error(`이미지 업로드 실패: ${uploadResponse.status}`);
-                }
-
-                const uploadResult = await uploadResponse.json();
-                const imageUrl = uploadResult.url; // API 응답에서 이미지 URL 추출
-
-                // 프로필 이미지 URL 업데이트 API 호출
-                const updateResponse = await fetch('https://dev.tuituiworld.store/api/v1/users/profile-image', {
-                    method: 'PUT',
-                    headers: {
-                        'accept': '*/*',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ profileImageUrl: imageUrl })
-                });
-
-                if (!updateResponse.ok) {
-                    throw new Error(`프로필 이미지 업데이트 실패: ${updateResponse.status}`);
-                }
 
                 console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
 
@@ -1307,32 +1295,36 @@ async function updateProfileData() {
     try {
         const token = validateToken();
 
+        const nameInput = document.querySelector('input[name="name"]');
         const nicknameInput = document.querySelector('input[name="nickname"]');
-        const emailInput = document.querySelector('input[name="email"]');
 
-        if (!nicknameInput || !emailInput) {
+        if (!nicknameInput || !nameInput) {
             throw new Error('필수 입력 필드를 찾을 수 없습니다.');
         }
 
+        const name = nameInput.value.trim();
         const nickname = nicknameInput.value.trim();
-        const email = emailInput.value.trim();
 
+        if (!name) {
+            alert('이름을 입력해주세요.');
+            return;
+        }
         if (!nickname) {
             alert('닉네임을 입력해주세요.');
             return;
         }
 
         // 프로필 업데이트 API 호출
-        const response = await fetch('https://dev.tuituiworld.store/api/v1/users/me', {
+        const response = await fetch('https://dev.tuituiworld.store/api/v1/users/update', {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
-                'Content-Type': 'application/json',
+                'content-type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                nickname: nickname,
-                email: email
+                name: name,
+                nickname: nickname
             })
         });
 
