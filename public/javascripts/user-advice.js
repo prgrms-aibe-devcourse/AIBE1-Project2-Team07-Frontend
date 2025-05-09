@@ -42,7 +42,7 @@ function showUserAdvices(filteredAdvices = null) {
                         : 'status-completed'
         }">
   ${
-            advice.applyStatus === 'PENDING'  ? '답변 대기'
+            advice.applyStatus === 'PENDING'  ? '상담 대기'
                 : advice.applyStatus === 'APPROVED' ? '상담 수락'
                     : advice.applyStatus === 'REJECTED' ? '상담 거절'
                         : advice.applyStatus || '알 수 없음'
@@ -64,7 +64,7 @@ function showUserAdvices(filteredAdvices = null) {
                 <p class="advice-content">${advice.content || ''}</p>
             </div>
             <div class="advice-actions">
-                <button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" data-content="${advice.content}" data-status="${advice.status}" data-pet-type="${advice.petType}" data-pet-breed="${advice.petBreed}" data-pet-month-age="${advice.petMonthAge}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                <button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" data-content="${advice.content}" data-status="${advice.applyStatus}" data-pet-type="${advice.petType}" data-pet-breed="${advice.petBreed}" data-pet-month-age="${advice.petMonthAge}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
                 ${advice.applyStatus === "답변 완료" && !advice.hasReviewed ?
             `<button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" class="btn btn-success btn-sm write-review-btn">리뷰 작성</button>` :
             advice.hasReviewed ?
@@ -141,9 +141,6 @@ function attachUserAdviceEventListeners() {
     // 상세보기 버튼
     document.querySelectorAll('.view-detail-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            // ① data-id 속성에서 ID 가져오기
-            // const adviceId = this.getAttribute('data-id');
-            // const content = this.getAttribute('data-content');
             const id        = this.dataset.id;
             const trainer   = this.dataset.trainer;
             const content   = this.dataset.content;
@@ -156,7 +153,7 @@ function attachUserAdviceEventListeners() {
                 : '나이 정보 없음';
 
             const adviceData = currentPosts.find(a => a.applyId === parseInt(id, 10));
-
+            console.log(status);
             if (adviceData) {
                 showAdviceDetailModal(id, trainer, content, status, petType, petBreed, petAge);
                 console.log('상세보기 호출된 adviceId:', id);
