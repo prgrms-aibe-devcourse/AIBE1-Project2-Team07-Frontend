@@ -1,15 +1,18 @@
 (function () {
     const refreshToken = localStorage.getItem("refreshToken");
     const loginBtn = document.getElementById("loginBtn");
+    const myProfile = document.getElementById("myProfile");
 
     // 로그인 상태 체크 후 버튼 숨기기/보이기
     if (loginBtn) {
         if (refreshToken) {
             // 로그인 상태일 때 버튼 숨기기
             loginBtn.style.display = "none";
+            myProfile.style.display = "block";
         } else {
             // 로그인 상태가 아닐 때 버튼 보이기
             loginBtn.style.display = "block";
+            myProfile.style.display = "none";
         }
     }
 })();

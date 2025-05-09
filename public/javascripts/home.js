@@ -238,7 +238,7 @@ async function fetchBotResponse(userMessage) {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
+                // Authorization: `Bearer ${accessToken}`,
             },
         });
 

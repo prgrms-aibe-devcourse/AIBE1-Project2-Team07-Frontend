@@ -115,6 +115,59 @@
     border-top-left-radius: 0;
 }
 
+/* 마크다운 콘텐츠 기본 스타일 조정 */
+.bot-message .markdown-content {
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 100%;
+    word-break: break-word;
+}
+
+/* 제목 크기 조정 */
+.bot-message .markdown-content h2 {
+    font-size: 18px;
+    margin: 16px 0 8px;
+}
+
+.bot-message .markdown-content h3 {
+    font-size: 16px;
+    margin: 12px 0 6px;
+}
+
+/* 단락 스타일 */
+.bot-message .markdown-content p {
+    margin: 6px 0;
+}
+
+/* 이미지 크기 조정 */
+.bot-message .markdown-content img {
+    max-width: 150px;
+    height: auto;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+/* 수평선 스타일 */
+.bot-message .markdown-content hr {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 16px 0;
+}
+
+.bot-message .markdown-content a {
+    color: #6d8bdf;
+    text-decoration: none;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.bot-message .markdown-content a:hover {
+    color: white;
+    background-color: #1E3A8A;
+}
+
 .bot-typing {
     display: flex;
     margin-bottom: 20px;
