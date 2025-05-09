@@ -1231,7 +1231,9 @@ async function updateProfileImage() {
                     body: formData
                 });
 
-                console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
+                if (!uploadResponse.ok) {
+                    console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
+                }
 
             } catch (error) {
                 console.error('프로필 이미지 업데이트 중 오류 발생:', error);
