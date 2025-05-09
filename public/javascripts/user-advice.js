@@ -1,126 +1,3 @@
-// 더미 상담 내역 데이터 (실제로는 서버에서 가져와야 함)
-const userAdviceRequests = [
-    {
-        id: 1,
-        trainerId: 101,
-        trainerName: '강형욱',
-        postTitle: '강아지 분리불안 상담',
-        status: '답변 대기중',
-        date: '2025-05-01',
-        petType: '강아지',
-        petBreed: '말티즈',
-        petAge: '2살',
-        comment: '강아지가 혼자 있을 때 짖고 불안해하는데 어떻게 해결할 수 있을까요?',
-        hasReview: false
-    },
-    {
-        id: 2,
-        trainerId: 102,
-        trainerName: '김민지',
-        postTitle: '고양이 배변훈련 문제',
-        status: '답변 완료',
-        date: '2025-04-25',
-        petType: '고양이',
-        petBreed: '코리안 숏헤어',
-        petAge: '1살',
-        comment: '화장실 사용을 잘 하다가 갑자기 화장실 밖에서 볼일을 보기 시작했어요.',
-        hasReview: false
-    },
-    {
-        id: 3,
-        trainerId: 103,
-        trainerName: '박준호',
-        postTitle: '강아지 산책 시 끌기 문제',
-        status: '답변 완료',
-        date: '2025-04-20',
-        petType: '강아지',
-        petBreed: '골든 리트리버',
-        petAge: '3살',
-        comment: '산책할 때 계속 앞으로 끌고 가서 힘들어요. 어떻게 훈련시킬 수 있을까요?',
-        hasReview: true
-    }
-];
-
-const myReviews = [
-    {
-        id: 1,
-        author: "박*지",
-        content: "펫시터 서비스 너무 만족스러웠어요. 다음에도 꼭 부탁드릴게요!",
-        date: "2025-04-29",
-        rating: 5,
-        image: 'https://placedog.net/80/80?random=6'
-    },
-    {
-        id: 2,
-        author: "이*린",
-        content: "정확한 훈련법 알려주셔서 감사합니다. 우리 강아지가 차분해졌어요.",
-        date: "2025-04-28",
-        rating: 4,
-        image: 'https://placedog.net/80/80?random=6'
-    },
-    {
-        id: 3,
-        author: "박*준",
-        content: "친절한 답변 감사드립니다. 토끼 관리가 한결 수월해졌어요.",
-        date: "2025-04-27",
-        rating: 5,
-        image: 'https://placedog.net/80/80?random=6'
-    }
-];
-
-const adviceRequests = [
-    {
-        id: 1,
-        author: "김민수",
-        postTitle: "강아지 분리불안 해결법",
-        comment: "3살 푸들이 집에 혼자 있으면 계속 울어서요. 훈련 방법이 있을까요?",
-        link: "/posts/dog-anxiety",
-        date: "2025-04-23",
-        status: "답변 대기중",
-        petType: "강아지",
-        petBreed: "푸들",
-        petAge: "3살"
-    },
-    {
-        id: 2,
-        author: "이준호",
-        postTitle: "고양이 식욕부진",
-        comment: "평소 잘 먹던 고양이가 일주일째 밥을 거부해요. 병원 방문 전 체크할 증상 알려주세요.",
-        link: "/posts/cat-appetite",
-        date: "2025-04-22",
-        status: "답변 완료",
-        petType: "고양이",
-        petBreed: "러시안 블루",
-        petAge: "4살",
-        chats: [
-            {
-                type: "trainer",
-                message: "안녕하세요, 이준호님. 고양이 식욕부진은 다양한 원인이 있을 수 있어요. 혹시 최근에 사료를 바꾸셨나요? 또는, 고양이가 평소와 다른 행동을 보이나요?",
-                time: "2025-04-22 10:15"
-            }
-        ]
-    },
-    {
-        id: 3,
-        author: "최하늘",
-        postTitle: "햄스터 야행성 조절",
-        comment: "햄스터가 밤새 울어서 잠을 못 자요. 낮 시간에 깨우는 팁이 있을까요?",
-        link: "/posts/hamster-nocturnal",
-        date: "2025-04-20",
-        status: "답변 완료",
-        petType: "햄스터",
-        petBreed: "드워프 햄스터",
-        petAge: "6개월",
-        chats: [
-            {
-                type: "trainer",
-                message: "안녕하세요, 최하늘님. 햄스터는 본래 야행성 동물이라 활동 패턴을 완전히 바꾸기는 어렵습니다. 하지만 몇 가지 방법으로 야간 소음을 줄일 수 있어요.",
-                time: "2025-04-20 15:30"
-            }
-        ]
-    }
-];
-
 // 사용자 상담내역 표시 함수
 function showUserAdvices(filteredAdvices = null) {
     hideAllContent();
@@ -184,15 +61,15 @@ function showUserAdvices(filteredAdvices = null) {
                 </div>
             </div>
             <div class="advice-body">
-                <p class="advice-content" data-content="${advice.content}">${advice.content || ''}</p>
+                <p class="advice-content">${advice.content || ''}</p>
             </div>
             <div class="advice-actions">
-                <button data-id="${advice.applyId}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                <button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" data-content="${advice.content}" data-status="${advice.status}" data-pet-type="${advice.petType}" data-pet-breed="${advice.petBreed}" data-pet-month-age="${advice.petMonthAge}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
                 ${advice.applyStatus === "답변 완료" && !advice.hasReviewed ?
-            `<button data-id="${advice.id}" data-trainer="${advice.trainerName || '훈련사'}" class="btn btn-success btn-sm write-review-btn">리뷰 작성</button>` :
+            `<button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" class="btn btn-success btn-sm write-review-btn">리뷰 작성</button>` :
             advice.hasReviewed ?
                 `<div class="review-button-container">
-                        <button data-id="${advice.id}" class="btn btn-outline-secondary btn-sm view-review-btn">
+                        <button data-id="${advice.applyId}" class="btn btn-outline-secondary btn-sm view-review-btn">
                             작성한 리뷰 보기
                         </button>
                     </div>` :
@@ -222,39 +99,67 @@ function generateStarRating(rating) {
 
 async function fetchAdviceDetail(applyId) {
     try {
+        console.log(`상담 상세 정보 요청: ID ${applyId}, URL: ${API_BASE_URL}/api/v1/match/${applyId}/answer`);
+        console.log('사용중인 accessToken:', accessToken);
+
         const res = await fetch(`${API_BASE_URL}/api/v1/match/${applyId}/answer`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
             }
         });
-        if (!res.ok) throw new Error('내가 신청한 상담 상세 조회 실패');
+
+        console.log('응답 상태:', res.status, res.statusText);
+
+        if (!res.ok) {
+            const errorText = await res.text();
+            console.error('API 응답 오류:', errorText);
+            throw new Error(`내가 신청한 상담 상세 조회 실패 (상태 코드: ${res.status})`);
+        }
+
         const data = await res.json();
-        console.log(data);
-        return data || [];
+        console.log('상담 상세 데이터:', data);
+        return data || {};
     } catch (err) {
-        console.error(err);
-        alert('내가 신청한 상담 상세조회를 불러오는데 실패했습니다.');
-        return [];
+        console.error('상담 상세 조회 중 오류 발생:', err);
+
+        // 토큰 만료 가능성 체크
+        if (err.message && err.message.includes('401')) {
+            alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
+            // 로그인 페이지로 리디렉션하는 코드 추가 가능
+            // window.location.href = '/login.html';
+            return {};
+        }
+
+        alert('내가 신청한 상담 상세조회를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.');
+        return {};
     }
 }
 
 // 상담 내역 이벤트 리스너 추가
 function attachUserAdviceEventListeners() {
-    const content = this.getAttribute('data-content');
-    console.log(content);
     // 상세보기 버튼
     document.querySelectorAll('.view-detail-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             // ① data-id 속성에서 ID 가져오기
-            const adviceId = this.getAttribute('data-id');
-            console.log(adviceId);
-            // ② currentPosts 배열에서 applyId 가 일치하는 객체 찾기
-            const adviceData = currentPosts.find(a => a.applyId === parseInt(adviceId, 10));
-            // const adviceData = await fetchAdviceDetail(adviceId);
+            // const adviceId = this.getAttribute('data-id');
+            // const content = this.getAttribute('data-content');
+            const id        = this.dataset.id;
+            const trainer   = this.dataset.trainer;
+            const content   = this.dataset.content;
+            const status    = this.dataset.status;
+            const petType   = this.dataset.petType;
+            const petBreed  = this.dataset.petBreed;
+            const rawMonth = parseInt(this.dataset.petMonthAge, 10);
+            const petAge = rawMonth
+                ? `${Math.floor(rawMonth / 12)}년 ${rawMonth % 12}개월`
+                : '나이 정보 없음';
+
+            const adviceData = currentPosts.find(a => a.applyId === parseInt(id, 10));
+
             if (adviceData) {
-                // ③ 찾은 데이터로 상세모달 띄우기
-                showAdviceDetailModal(adviceId, adviceData.trainerName, content);
-                console.log('상세보기 호출된 adviceId:', adviceId);
+                showAdviceDetailModal(id, trainer, content, status, petType, petBreed, petAge);
+                console.log('상세보기 호출된 adviceId:', id);
             } else {
                 alert('상담 정보를 찾을 수 없습니다.');
             }
@@ -264,17 +169,17 @@ function attachUserAdviceEventListeners() {
     // 리뷰 작성 버튼
     document.querySelectorAll('.write-review-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            const trainerName = this.getAttribute('data-trainer');
-            showReviewModal(adviceId, trainerName);
+            const id        = this.dataset.id;
+            // const trainerName = this.getAttribute('data-trainer');
+            showReviewModal(id, trainerName);
         });
     });
 
     // 작성한 리뷰 보기 버튼
     document.querySelectorAll('.view-review-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            const adviceId = this.getAttribute('data-id');
-            showReviewDetailModal(adviceId);
+            const id        = this.dataset.id;
+            showReviewDetailModal(id);
         });
     });
 }
@@ -452,9 +357,9 @@ function showReviewDetailModal(adviceId){
 }
 
 // 상담 상세보기 모달 표시
-function showAdviceDetailModal(adviceId, trainerName, content) {
+async function showAdviceDetailModal(adviceId, trainerName, content, status, petType, petBreed, petAge) {
 
-    const adviceData = fetchAdviceDetail(adviceId);
+    const adviceData = await fetchAdviceDetail(adviceId);
 
     // 기존 모달이 있으면 제거
     let existingModal = document.getElementById('adviceDetailModal');
@@ -497,7 +402,7 @@ function showAdviceDetailModal(adviceId, trainerName, content) {
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="user-modal-header d-flex justify-content-between align-items-center">
-                        <h5 class="modal-title" id="adviceDetailModalLabel">${adviceData.postTitle}</h5>
+                        <h5 class="modal-title" id="adviceDetailModalLabel">상담 상세내역</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -506,11 +411,21 @@ function showAdviceDetailModal(adviceId, trainerName, content) {
                                 <div class="col-md-6">
                                     <p><strong>상담 날짜:</strong> ${adviceData.createdAt}</p>
                                     <p><strong>상담 상태:</strong> 
-                                        <span class="badge ${adviceData.applyStatus === 'PENDING' ? 'bg-warning' : adviceData.applyStatus === 'APPROVED'  ? 'bg-info' : 'bg-success'}"> ${ adviceData.applyStatus === 'PENDING'   ? '답변 대기' : adviceData.applyStatus === 'APPROVED'  ? '상담 수락' : (adviceData.applyStatus || '알 수 없음')} </span>
+                                        <span class="badge ${status === 'PENDING' ? 'bg-warning'
+                                                    : status === 'APPROVED' ? 'bg-info'
+                                                        : status === 'REJECTED' ? 'bg-secondary'
+                                                            : 'bg-success'
+                                            }">
+                                             ${status === 'PENDING' ? '답변 대기'
+                                                    : status === 'APPROVED' ? '상담 수락'
+                                                        : status === 'REJECTED' ? '상담 거절'
+                                                            : status || '알 수 없음'
+                                            }
+                                        </span>
                                     </p>
                                 </div>
                                 <div class="col-md-6">
-                                    <p><strong>반려동물:</strong> ${adviceData.petType} (${adviceData.petBreed}, ${adviceData.petMonthAge})</p>
+                                    <p><strong>반려동물:</strong> ${petType} (${petBreed}, ${petAge})</p>
                                     <p><strong>훈련사:</strong> ${trainerName || '미배정'}</p>
                                 </div>
                             </div>
