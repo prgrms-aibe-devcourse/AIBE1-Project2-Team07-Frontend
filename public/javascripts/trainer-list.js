@@ -141,13 +141,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // 상담 버튼
             consultBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=video`;
+                window.location.href = `/profile?id=${trainer.id}&serviceType=video`;
             });
 
             // 방문 버튼
             visitBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=visit`;
+                window.location.href = `/profile?id=${trainer.id}&serviceType=visit`;
             });
 
             // 컨테이너에 카드 추가
@@ -255,34 +255,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=${serviceType}`;
     }
 
-    async function fetchTrainers() {
-        const response = await fetch(`/trainers/users`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-
-        if (!response.ok) {
-            console.error(`HTTP Error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const botMessage = data.message || '응답 데이터를 찾을 수 없습니다.';
-
-        removeTypingIndicator();
-        appendMessage('assistant', botMessage);
-    }
-
-    async function fetchReviews() {
-        const response = await fetch(`/trainers/reviews`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
-    }
-
     // 트레이너 데이터 로드 함수
     async function loadTrainerData() {
         try {
@@ -291,27 +263,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 백엔드 API에서 트레이너 데이터 가져오기
             // 실제 구현 시 주석 해제
-            const response = await fetch(`/trainers/users`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`API 오류: ${response.status}`);
-            }
-
-            const data = await response.json();
-            const trainers = data.trainerList || [];
+            // const response = await fetch(`${API_BASE_URL}/trainers`);
+            // if (!response.ok) {
+            //     throw new Error(`API 오류: ${response.status}`);
+            // }
+            // const data = await response.json();
+            // const trainers = data.trainers || [];
 
             // 샘플 데이터 사용 (백엔드 연동 시 제거)
-            // allTrainers = sampleTrainersData;
-            allTrainers = trainers;
+            allTrainers = sampleTrainersData;
 
             // 총 페이지 수 계산
-            // totalPages = Math.ceil(allTrainers.length / ITEMS_PER_PAGE);
-            totalPages = trainers.totalPages;
+            totalPages = Math.ceil(allTrainers.length / ITEMS_PER_PAGE);
 
             // 트레이너 카드 렌더링
             displayTrainers();

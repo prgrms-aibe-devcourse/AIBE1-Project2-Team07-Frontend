@@ -40,10 +40,18 @@ function attachAdviceEventListeners(adviceData) {
             if (item) showRejectModal(item);
         };
     });
+
+    document.querySelectorAll('.view-review-btn').forEach(btn => {
+        btn.onclick = () => {
+            const id = +btn.dataset.id;
+            viewReview(id);
+        };
+    });
 }
 
 // 1) 상세보기 모달 - 답변 등록 기능 제거
-function showDetailModal(item) {
+// 상세보기 모달에서 상담 내역 표시 부분 수정
+async function showDetailModal(item) {
     const M = document.getElementById('detailModal');
     M.dataset.adviceId = item.id;
     const badgeClass = item.status.includes('대기') ? 'status-pending'
@@ -68,19 +76,39 @@ function showDetailModal(item) {
   `;
     M.querySelector('.advice-content').textContent = item.comment;
 
+    // 로딩 메시지 표시
+    M.querySelector('.chat-messages').innerHTML = '<p class="text-center">상담 내역을 불러오는 중...</p>';
+
     let historyHTML = '';
-    if (item.chats && item.chats.length) {
-        item.chats.forEach(c => {
-            historyHTML += `
-        <div class="advice-chat-item advice-${c.type}">
-          <div>${c.message}</div>
-          <span class="chat-time">${c.time}</span>
-        </div>
-      `;
-        });
-    } else {
-        historyHTML = '<p class="text-muted">아직 상담 내역이 없습니다.</p>';
+
+    try {
+        // API에서 상담 답변 가져오기 (URL 오타 수정 - ap1 → api)
+        const historyData = await apiRequest(`https://dev.tuituiworld.store/api/v1/match/${item.id}/answer`);
+
+        // item.chats가 있으면 그것을 사용하고, 없으면 historyData를 사용
+        if (item.chats && item.chats.length) {
+            item.chats.forEach(c => {
+                historyHTML += `
+                <div class="advice-chat-item advice-${c.type}">
+                  <div>${c.message}</div>
+                  <span class="chat-time">${c.time}</span>
+                </div>
+              `;
+            });
+        } else if (historyData && historyData.content) {
+            // 백틱 내에서 템플릿 리터럴을 사용하려면 ${}를 이스케이프 처리하거나 concatenation 사용
+            historyHTML = '<p class="text-muted">' + historyData.content + '</p>';
+
+            // 또는 이렇게도 가능:
+            // historyHTML = `<p class="text-muted">${historyData.content}</p>`;
+        } else {
+            historyHTML = '<p class="text-muted">아직 상담 내역이 없습니다.</p>';
+        }
+    } catch (error) {
+        console.error('상담 내역 가져오기 오류:', error);
+        historyHTML = '<p class="text-danger">상담 내역을 불러오는 중 오류가 발생했습니다.</p>';
     }
+
     M.querySelector('.chat-messages').innerHTML = historyHTML;
 
     // 답변 폼과 버튼 숨기기 (항상 숨김 처리)
@@ -112,29 +140,45 @@ function showAcceptModal(item) {
 }
 
 // 2-1) 수락 확인 처리 함수
-function handleAcceptConfirm() {
-    const M = document.getElementById('acceptModal');
-    const id = +M.dataset.adviceId;
-    const item = adviceRequests.find(a => a.id === id);
+async function handleAcceptConfirm() {
+    try {
+        const M = document.getElementById('acceptModal');
+        const adviceId = +M.dataset.adviceId;
 
-    if (!item) {
-        alert('상담 정보를 찾을 수 없습니다.');
-        return;
+        if (!adviceId) {
+            alert('상담 정보를 찾을 수 없습니다.');
+            return;
+        }
+
+        const msg = M.querySelector('#acceptMessage').value.trim();
+        if (!msg) {
+            alert('메시지를 입력해주세요.');
+            return;
+        }
+
+        // API 호출
+        await apiRequest(
+            `https://dev.tuituiworld.store/api/v1/match/${adviceId}/status`,
+            'POST',
+            {
+                applyId: adviceId,
+                applyStatus: 'APPROVED',
+                applyReason: 'ACCEPTED',
+                content: msg
+            }
+        );
+
+        // 성공 처리
+        alert('상담이 성공적으로 수락되었습니다.');
+        bootstrap.Modal.getInstance(M).hide();
+
+        // 상담 목록 새로고침
+        await showMyAdvices();
+
+    } catch (error) {
+        console.error('상담 수락 중 오류 발생:', error);
+        alert('상담 수락 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
-
-    const msg = M.querySelector('#acceptMessage').value.trim();
-    if (!msg) {
-        alert('메시지를 입력해주세요.');
-        return;
-    }
-
-    const time = new Date().toISOString().replace('T',' ').slice(0,16);
-    item.chats = item.chats || [];
-    item.chats.push({ type: 'trainer', message: msg, time });
-    item.status = '상담 진행중';
-
-    bootstrap.Modal.getInstance(M).hide();
-    showMyAdvices();
 }
 
 // 3) 거절하기 모달
@@ -160,25 +204,200 @@ function showRejectModal(item) {
 }
 
 // 3-1) 거절 확인 처리 함수
-function handleRejectConfirm() {
-    const M = document.getElementById('rejectModal');
-    const id = +M.dataset.adviceId;
+async function handleRejectConfirm() {
+    try {
+        const M = document.getElementById('rejectModal');
+        const adviceId = +M.dataset.adviceId;
 
-    const reason = M.querySelector('#rejectReason').value;
-    const msg = M.querySelector('#rejectMessage').value.trim();
+        if (!adviceId) {
+            alert('상담 정보를 찾을 수 없습니다.');
+            return;
+        }
 
-    if (!reason) {
-        alert('사유를 선택해주세요.');
-        return;
+        const reasonSelect = M.querySelector('#rejectReason');
+        const messageElement = M.querySelector('#rejectMessage');
+
+        const reason = reasonSelect.value;
+        const msg = messageElement.value.trim();
+
+        if (!reason) {
+            alert('사유를 선택해주세요.');
+            return;
+        }
+
+        if (!msg) {
+            alert('메시지를 입력해주세요.');
+            return;
+        }
+
+        // 사유 매핑
+        const reasonMap = {
+            'specialization': 'NOT_EXPERTISE',
+            'schedule': 'SCHEDULE_UNAVAILABLE',
+            'information': 'INSUFFICIENT_INFORMATION',
+            'policy': 'POLICY_VIOLATION',
+            'other': 'OTHER'
+        };
+
+        // API 호출
+        await apiRequest(
+            `https://dev.tuituiworld.store/api/v1/match/${adviceId}/status`,
+            'POST',
+            {
+                applyId: adviceId,
+                applyStatus: 'REJECTED',
+                applyReason: reasonMap[reason],
+                content: msg
+            }
+        );
+
+        // 성공 처리
+        alert('상담이 거절되었습니다.');
+        bootstrap.Modal.getInstance(M).hide();
+
+        // 상담 목록 새로고침
+        await showMyAdvices();
+
+    } catch (error) {
+        console.error('상담 거절 중 오류 발생:', error);
+        alert('상담 거절 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
-    if (!msg) {
-        alert('메시지를 입력해주세요.');
-        return;
+}
+
+// 4) 후기 보기 기능
+async function viewReview(adviceId) {
+    try {
+        // API 호출하여 후기 데이터 가져오기
+        const reviewData = await apiRequest(`https://dev.tuituiworld.store/api/v1/reviews/applyId/${adviceId}`);
+
+        if (!reviewData) {
+            throw new Error('후기 정보를 찾을 수 없습니다.');
+        }
+
+        // 후기 모달 생성 (없으면 동적으로 생성)
+        let reviewModal = document.getElementById('reviewModal');
+        if (!reviewModal) {
+            // 모달 동적 생성
+            const modalHTML = `
+                <div class="modal fade" id="reviewModal" tabindex="-1" aria-labelledby="reviewModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="trainer-modal-header d-flex justify-content-between align-items-center">
+                                <h5 class="modal-title" id="reviewModalLabel">후기 상세</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="review-header d-flex justify-content-between align-items-center">
+                                    <div class="review-user-info d-flex align-items-center">
+                                        <img src="${reviewData.userImageUrl || 'https://placehold.co/50x50?text=프로필'}" alt="프로필" class="rounded-circle me-2" style="width: 50px; height: 50px;">
+                                        <div>
+                                            <strong>${reviewData.userNickname || '익명 사용자'}</strong>
+                                            <div class="text-muted small">${reviewData.createdAt || '날짜 정보 없음'}</div>
+                                        </div>
+                                    </div>
+                                    <div class="review-rating">
+                                        ${'★'.repeat(reviewData.rating || 0)}${'☆'.repeat(5 - (reviewData.rating || 0))}
+                                    </div>
+                                </div>
+                                <div class="review-title mt-3">
+                                    <h6>${reviewData.title || '제목 없음'}</h6>
+                                </div>
+                                <div class="review-content mt-2">
+                                    <p>${reviewData.comment || '내용 없음'}</p>
+                                </div>
+                                ${reviewData.reviewImageUrl ? `
+                                <div class="review-image mt-3">
+                                    <img src="${reviewData.reviewImageUrl}" alt="리뷰 이미지" class="img-fluid rounded">
+                                </div>` : ''}
+                                <div class="review-stats mt-3 d-flex align-items-center">
+                                    <span class="me-3">
+                                        <i class="bi bi-heart${reviewData.hasLiked ? '-fill text-danger' : ''}"></i> 
+                                        좋아요 ${reviewData.likeCount || 0}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // DOM에 모달 추가
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            reviewModal = document.getElementById('reviewModal');
+        } else {
+            // 기존 모달이 있으면 내용 업데이트
+            const userInfoSection = reviewModal.querySelector('.review-user-info');
+            if (userInfoSection) {
+                const profileImg = userInfoSection.querySelector('img');
+                if (profileImg) profileImg.src = reviewData.userImageUrl || 'https://placehold.co/50x50?text=프로필';
+
+                const nameElem = userInfoSection.querySelector('strong');
+                if (nameElem) nameElem.textContent = reviewData.userNickname || '익명 사용자';
+
+                const dateElem = userInfoSection.querySelector('.text-muted');
+                if (dateElem) dateElem.textContent = reviewData.createdAt || '날짜 정보 없음';
+            }
+
+            const ratingElem = reviewModal.querySelector('.review-rating');
+            if (ratingElem) ratingElem.innerHTML = '★'.repeat(reviewData.rating || 0) + '☆'.repeat(5 - (reviewData.rating || 0));
+
+            const titleElem = reviewModal.querySelector('.review-title h6');
+            if (titleElem) titleElem.textContent = reviewData.title || '제목 없음';
+
+            const contentElem = reviewModal.querySelector('.review-content p');
+            if (contentElem) contentElem.textContent = reviewData.comment || '내용 없음';
+
+            // 이미지 처리
+            const imageContainer = reviewModal.querySelector('.review-image');
+            if (reviewData.reviewImageUrl) {
+                if (imageContainer) {
+                    const imgElem = imageContainer.querySelector('img');
+                    if (imgElem) imgElem.src = reviewData.reviewImageUrl;
+                } else {
+                    const contentSection = reviewModal.querySelector('.review-content');
+                    if (contentSection) {
+                        const newImageContainer = document.createElement('div');
+                        newImageContainer.className = 'review-image mt-3';
+                        newImageContainer.innerHTML = `<img src="${reviewData.reviewImageUrl}" alt="리뷰 이미지" class="img-fluid rounded">`;
+                        contentSection.after(newImageContainer);
+                    }
+                }
+            } else if (imageContainer) {
+                imageContainer.remove();
+            }
+
+            // 좋아요 상태 업데이트
+            const statsSection = reviewModal.querySelector('.review-stats');
+            if (statsSection) {
+                const likeElement = statsSection.querySelector('span');
+                if (likeElement) {
+                    likeElement.innerHTML = `
+                        <i class="bi bi-heart${reviewData.hasLiked ? '-fill text-danger' : ''}"></i> 
+                        좋아요 ${reviewData.likeCount || 0}
+                    `;
+                }
+            }
+        }
+
+        // 모달 표시
+        new bootstrap.Modal(reviewModal).show();
+
+        // 닫기 버튼에 이벤트 리스너 추가
+        reviewModal.querySelector('.btn-close').addEventListener('click', () => {
+            const modal = bootstrap.Modal.getInstance(reviewModal);
+            if (modal) modal.hide();
+        });
+
+        reviewModal.querySelector('.modal-footer .btn-secondary').addEventListener('click', () => {
+            const modal = bootstrap.Modal.getInstance(reviewModal);
+            if (modal) modal.hide();
+        });
+
+    } catch (error) {
+        console.error('후기 조회 중 오류 발생:', error);
+        alert('후기 정보를 불러오는 중 오류가 발생했습니다.');
     }
-
-    const idx = adviceRequests.findIndex(a => a.id === id);
-    if (idx > -1) adviceRequests.splice(idx, 1);
-
-    bootstrap.Modal.getInstance(M).hide();
-    showMyAdvices();
 }

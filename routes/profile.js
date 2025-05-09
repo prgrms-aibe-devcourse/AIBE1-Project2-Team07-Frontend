@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
     }
 
     if (user.userRole === 'TRAINER') {
-        res.sendFile(path.join(__dirname, '../public/trainer-profile.html'));
+        res.sendFile(path.join(__dirname, '../public/trainer-mypage.html'));
         // return res.redirect(`/trainer-profile.html?id=${req.user.id}`);
     } else {
         res.sendFile(path.join(__dirname, '../public/user-mypage.html'));
