@@ -128,7 +128,10 @@ document.addEventListener('DOMContentLoaded', function () {
             cardClone.querySelector('.trainer-name').textContent = `${trainer.name}${certName ? ' · ' + certName : ''}`;
             cardClone.querySelector('.trainer-description').textContent = trainer.introduction;
             cardClone.querySelector('.rating').textContent = `평점: ${trainer.averageRating || '0'}/5점`;
-            cardClone.querySelector('.trainer-tags').textContent = Array.isArray(trainer.specializations) ? trainer.specializations.join(' ') : '';
+            cardClone.querySelector('.trainer-tags').textContent = Array.isArray(trainer.specializations)
+                ? trainer.specializations.map(tag => `#${tag}`).join(' ')
+                : '';
+
 
             // 가격 설정
             const priceElements = cardClone.querySelectorAll('.price-value');
