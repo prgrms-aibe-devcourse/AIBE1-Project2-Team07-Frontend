@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
     res.sendFile(path.join(__dirname, '../public/trainer-list.html'));
 });
 
-router.get('/profile/:trainerNickname', function(req, res, next) {
+router.get('/profile/:trainerNickname', function (req, res, next) {
     const trainerNickname = req.params.trainerNickname;
 
     res.sendFile(path.join(__dirname, '../public/trainer-profile.html'));
@@ -19,7 +19,8 @@ router.get('/profile/:trainerNickname', function(req, res, next) {
 
 router.get('/users', async (req, res, next) => {
     try {
-        req.originalUrl = `/api/v1/trainers`;
+        const page = req.query.page || 0;
+        req.originalUrl = `/api/v1/trainers?page=${page}`;
         await fetchWithAuth(req, res, async () => {
             const data = req.apiResponse;
             if (!data) {

@@ -115,6 +115,10 @@
     border-top-left-radius: 0;
 }
 
+.bot-message img {
+    width: 100%;
+}
+
 .bot-typing {
     display: flex;
     margin-bottom: 20px;
