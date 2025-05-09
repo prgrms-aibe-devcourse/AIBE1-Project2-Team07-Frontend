@@ -132,8 +132,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 가격 설정
             const priceElements = cardClone.querySelectorAll('.price-value');
-            priceElements[0].textContent = `${trainer.consultationPrice}원`;
-            priceElements[1].textContent = `${trainer.visitPrice}원`;
+            const serviceFees = trainer.serviceFees || [];
+
+            // 각 서비스 타입에 맞는 요금 찾기
+            const visitFee = serviceFees.find(fee => fee.serviceType === 'VISIT_TRAINING')?.feeAmount || 0;
+            const videoFee = serviceFees.find(fee => fee.serviceType === 'VIDEO_TRAINING')?.feeAmount || 0;
+
+            priceElements[0].textContent = `${visitFee.toLocaleString()}원`;  // 방문 훈련
+            priceElements[1].textContent = `${videoFee.toLocaleString()}원`;  // 화상 훈련
+
 
             // 버튼 이벤트 설정
             const consultBtn = cardClone.querySelector('.consultation-btn');
@@ -142,13 +149,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // 상담 버튼
             consultBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/profile?id=${trainer.id}&serviceType=video`;
+                window.location.href = `/trainers/profile/${trainer.nickname}?serviceType=video`;
             });
 
             // 방문 버튼
             visitBtn.addEventListener('click', e => {
                 e.stopPropagation();
-                window.location.href = `/profile?id=${trainer.id}&serviceType=visit`;
+                window.location.href = `/trainers/profile/${trainer.nickname}?serviceType=visit`;
             });
 
             // 컨테이너에 카드 추가
@@ -178,8 +185,8 @@ document.addEventListener('DOMContentLoaded', function () {
             prevBtn.innerHTML = '<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>';
             prevBtn.addEventListener('click', async function (e) {
                 e.preventDefault();
-                await fetchTrainers(i - 2);
-                goToPage(i - 1);
+                await fetchTrainers(currentPage - 2);
+                goToPage(currentPage - 1);
             });
             paginationContainer.appendChild(prevBtn);
         }
@@ -204,8 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
             nextBtn.innerHTML = '<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>';
             nextBtn.addEventListener('click', async function (e) {
                 e.preventDefault();
-                await fetchTrainers(i);
-                goToPage(i + 1);
+                await fetchTrainers(currentPage);
+                goToPage(currentPage + 1);
             });
             paginationContainer.appendChild(nextBtn);
         }
