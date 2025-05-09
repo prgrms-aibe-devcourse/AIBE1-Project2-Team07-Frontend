@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     ];
 
-
+    // TODO: 카드 템플릿이 좀 다름
     // 트레이너 카드 렌더링 함수
     function renderTrainerCards(trainers) {
         const container = document.querySelector('.trainer-cards-container');
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
             cardEl.style.cursor = 'pointer';
             // 클릭 시 상세 페이지로 이동
             cardEl.addEventListener('click', () => {
-                window.location.href = `/trainer-profile.html?id=${trainer.id}`;
+                window.location.href = `/trainers/profile/${trainer.nickname}`;
             });
 
             // 이미지 설정
@@ -124,10 +124,10 @@ document.addEventListener('DOMContentLoaded', function () {
             cardClone.querySelector('.profile-img').src = trainer.profileImage;
 
             // 텍스트 데이터 설정
-            cardClone.querySelector('.trainer-name').textContent = `${trainer.name} · ${trainer.certification}`;
-            cardClone.querySelector('.trainer-description').textContent = trainer.description;
-            cardClone.querySelector('.rating').textContent = `평점: ${trainer.rating}`;
-            cardClone.querySelector('.trainer-tags').textContent = trainer.tags.join(' ');
+            cardClone.querySelector('.trainer-name').textContent = `${trainer.name} · ${trainer.certifications}`;
+            cardClone.querySelector('.trainer-description').textContent = trainer.introduction;
+            cardClone.querySelector('.rating').textContent = `평점: ${trainer.averageRating || '0'}/5점`;
+            cardClone.querySelector('.trainer-tags').textContent = "태그"//trainer.tags.join(' ');
 
             // 가격 설정
             const priceElements = cardClone.querySelectorAll('.price-value');
@@ -255,6 +255,34 @@ document.addEventListener('DOMContentLoaded', function () {
         window.location.href = `/trainer-profile.html?id=${trainer.id}&serviceType=${serviceType}`;
     }
 
+    async function fetchTrainers() {
+        const response = await fetch(`/trainers/users`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            console.error(`HTTP Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const botMessage = data.message || '응답 데이터를 찾을 수 없습니다.';
+
+        removeTypingIndicator();
+        appendMessage('assistant', botMessage);
+    }
+
+    async function fetchReviews() {
+        const response = await fetch(`/trainers/reviews`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+    }
+
     // 트레이너 데이터 로드 함수
     async function loadTrainerData() {
         try {
@@ -263,18 +291,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 백엔드 API에서 트레이너 데이터 가져오기
             // 실제 구현 시 주석 해제
-            // const response = await fetch(`${API_BASE_URL}/trainers`);
-            // if (!response.ok) {
-            //     throw new Error(`API 오류: ${response.status}`);
-            // }
-            // const data = await response.json();
-            // const trainers = data.trainers || [];
+            const response = await fetch(`/trainers/users`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`API 오류: ${response.status}`);
+            }
+
+            const data = await response.json();
+            const trainers = data.trainerList || [];
 
             // 샘플 데이터 사용 (백엔드 연동 시 제거)
-            allTrainers = sampleTrainersData;
+            // allTrainers = sampleTrainersData;
+            allTrainers = trainers;
 
             // 총 페이지 수 계산
-            totalPages = Math.ceil(allTrainers.length / ITEMS_PER_PAGE);
+            // totalPages = Math.ceil(allTrainers.length / ITEMS_PER_PAGE);
+            totalPages = trainers.totalPages;
 
             // 트레이너 카드 렌더링
             displayTrainers();
