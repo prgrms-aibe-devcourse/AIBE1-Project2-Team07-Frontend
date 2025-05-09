@@ -331,8 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!token) { alert('로그인이 필요합니다.'); return; }
 
             try {
-                // 먼저 기본 데이터만 전송
-                const trainerName = document.getElementById('trainer-name')?.textContent.trim();
+                const trainerNickname = window.nickname;
                 const years = parseInt(petYearsValue, 10) || 0;
                 const months = parseInt(petMonthsValue, 10) || 0;
                 const totalMonths = years * 12 + months;
@@ -347,7 +346,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // DTO 형식에 맞게 데이터 구성
                 const requestData = {
-                    trainerNickName: trainerName || '',
+                    trainerNickName: trainerNickname || '',
                     serviceType: serviceType,
                     petType: petTypeValue,
                     petBreed: petBreedValue,
