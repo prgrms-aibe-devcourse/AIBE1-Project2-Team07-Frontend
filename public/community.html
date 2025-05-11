@@ -84,7 +84,7 @@
                 <div class="board-categories">
                     <h6 class="categories-title">게시판 목록</h6>
                     <ul class="categories-list">
-                        <li class="category-item active">
+                        <li class="category-item">
                             <a href="#" class="category-link">전체</a>
                         </li>
                         <li class="category-item">
@@ -107,8 +107,17 @@
             <div class="col-lg-8">
                 <div class="board-header">
                     <div class="sort-options">
+                        <div class="pet-filter mb-2">
+                            <span class="pet-filter-title">반려동물: </span>
+                            <ul class="pet-filter-list">
+                                <li class="pet-filter-item"><a href="#" class="pet-filter-link">전체</a></li>
+                                <li class="pet-filter-item"><a href="#" class="pet-filter-link">강아지</a></li>
+                                <li class="pet-filter-item"><a href="#" class="pet-filter-link">고양이</a></li>
+                                <li class="pet-filter-item"><a href="#" class="pet-filter-link">기타</a></li>
+                            </ul>
+                        </div>
                         <ul class="sort-list">
-                            <li class="sort-item active"><a href="#" class="sort-link">최신순</a></li>
+                            <li class="sort-item"><a href="#" class="sort-link">최신순</a></li>
                             <li class="sort-item"><a href="#" class="sort-link">오래된순</a></li>
                             <li class="sort-item"><a href="#" class="sort-link">답변많은순</a></li>
                             <li class="sort-item"><a href="#" class="sort-link">좋아요순</a></li>
@@ -153,14 +162,7 @@
             <!-- Right: Ad Space -->
             <div class="col-lg-2">
                 <div class="ad-container">
-                    <div class="ad-box mb-4">
-                        <img src="./images/ad.png" alt="dd"
-                             style="object-fit: fill; width: 100%; height: 100%;">
-                    </div>
-                    <div class="ad-box">
-                        <img src="./images/ad.png" alt="dd"
-                             style="object-fit: fill; width: 100%; height: 100%;">
-                    </div>
+                    <img id="adImage" src="./images/ads/ad1.jpg" alt="광고">
                 </div>
             </div>
         </div>

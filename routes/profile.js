@@ -4,7 +4,11 @@ const path = require("path");
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    const user = JSON.parse(req.cookies.user);
+    try {
+        user = JSON.parse(req.cookies.user);
+    } catch (e) {
+        return res.redirect('/');
+    }
 
     if (user === null) {
         return res.redirect('/');

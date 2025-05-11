@@ -351,6 +351,99 @@
     }
 }
 
+.pet-filter {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.pet-filter-title {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #555;
+    margin-right: 10px;
+}
+
+.pet-filter-list {
+    display: inline-flex;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pet-filter-item {
+    margin-right: 15px;
+    position: relative;
+}
+
+.pet-filter-link {
+    font-size: 0.9rem;
+    color: #666;
+    text-decoration: none;
+    padding: 4px 2px;
+    transition: all 0.2s ease;
+}
+
+.pet-filter-item.active .pet-filter-link {
+    color: #fd7e14;
+    font-weight: 600;
+}
+
+.pet-filter-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fd7e14;
+}
+
+.pet-filter-link:hover {
+    color: #fd7e14;
+}
+
+/* 기존 sort-list 스타일과 조화를 이루도록 조정 */
+.sort-list {
+    margin-top: 5px;
+}
+
+.pet-category-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 10px;
+    margin-left: 5px;
+    color: white;
+}
+
+.ad-container {
+    margin: 30px 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ad-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.5s ease;
+}
+
+.pet-dog {
+    background-color: #4e73df; /* 파란색 계열 - 강아지 */
+}
+
+.pet-cat {
+    background-color: #f6c23e; /* 노란색 계열 - 고양이 */
+}
+
+.pet-etc {
+    background-color: #858796; /* 회색 계열 - 기타 */
+}
+
 @media (max-width: 767px) {
     .post-item {
         padding: 15px;
