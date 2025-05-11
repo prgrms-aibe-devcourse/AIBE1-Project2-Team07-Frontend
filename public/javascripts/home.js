@@ -95,7 +95,6 @@ function initTrainerCardClicks() {
  */
 async function initReviewCarousel() {
     const reviews = await fetchReviews();
-    console.log("reviews: " + reviews);
     const cardsPerSlide = getCardsPerSlide();
     renderReviewCarousel(reviews, cardsPerSlide);
 }
@@ -233,18 +232,23 @@ function removeTypingIndicator() {
  */
 async function fetchBotResponse(userMessage) {
     try {
-        const accessToken = getAccessToken();
-        const response = await fetch(`/chat?prompt=${encodeURIComponent(userMessage)}`, {
+        const response = await fetch(`/api/v1/mcp/chat?prompt=${encodeURIComponent(userMessage)}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                // Authorization: `Bearer ${accessToken}`,
             },
         });
 
+        if (response.status === 401) {
+            displayLoginModal();
+            appendMessage('assistant', '로그인 후 사용해주세요.');
+            removeTypingIndicator();
+            waitingForResponse = false;
+            return;
+        }
+
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(`API 오류: ${response.status} ${response.statusText}. ${errorData.message || ''}`);
+            throw new Error(`서버 오류: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
@@ -259,7 +263,7 @@ async function fetchBotResponse(userMessage) {
     } catch (error) {
         console.error('봇 응답 처리 중 오류 발생:', error);
         removeTypingIndicator(); // "입력 중..." 표시 제거
-        appendMessage('assistant', `죄송합니다. 응답을 처리하는 중 오류가 발생했습니다.\n오류: ${error.message || '알 수 없는 오류'}`);
+        appendMessage('assistant', `죄송합니다. 응답을 처리하는 중 오류가 발생했습니다.`);
     } finally {
         // 응답 처리 완료 (성공/실패 무관)
         waitingForResponse = false;
@@ -285,7 +289,7 @@ function getAccessToken() {
  * TODO: API 연결할 때 코드 수정 필요
  */
 async function fetchReviews() {
-    const response = await fetch(`https://dev.tuituiworld.store/api/v1/reviews/top-liked?limit=9`, {
+    const response = await fetch(`/api/v1/reviews/top-liked?limit=9`, {
         method: "GET",
         headers: {
             Authorization: `Bearer ${getAccessToken()}`

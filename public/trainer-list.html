@@ -1,154 +1,235 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>훈련사 찾기</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="stylesheets/trainer-list.css">
-  <link rel="stylesheet" href="stylesheets/common.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>훈련사 찾기</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="stylesheets/trainer-list.css">
+    <link rel="stylesheet" href="stylesheets/common.css">
 </head>
 <body>
 <!-- Navigation Bar -->
 <nav class="navbar navbar-expand-lg bg-white">
-  <div class="container position-relative">
-    <a class="navbar-brand" href="/">
-      <img src="./images/logo.png" alt="PetTalk Logo" height="50">
-    </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
-      <ul class="navbar-nav ms-auto navbar-items">
-        <li class="nav-item">
-          <a class="nav-link nav-item-link" href="/trainers">훈련사</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
-        </li>
-        <li class="nav-item">
-          <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
-        </li>
-      </ul>
+    <div class="container position-relative">
+        <a class="navbar-brand" href="/">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
+        </a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-items">
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="/trainers">훈련사</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
+                </li>
+                <li id="myProfile" class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle nav-item-link"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <img src="./images/cat1.jpeg" alt="Profile" class="profile-img">
+                        <span class="profile-name"></span>
+                        <img src="./images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
+                        <li><a class="dropdown-item" href="/profile?tab=advice">상담 내역</a></li>
+                        <li><a class="dropdown-item logout-btn" href="/logout">로그아웃</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
+                </li>
+            </ul>
+        </div>
     </div>
-  </div>
 </nav>
 
 <main class="py-5">
-  <div class="container">
-    <h1 class="text-center mb-5 fw-bold">당신의 반려견을 위한 훈련사를 찾아보세요!</h1>
+    <div class="container">
+        <h1 class="text-center mb-5 fw-bold">당신의 반려견을 위한 훈련사를 찾아보세요!</h1>
 
-    <!-- 검색창 추가 (선택 사항) -->
-    <div class="row mb-4">
-      <div class="col-md-6 mx-auto">
-        <div class="input-group">
-          <input type="text" id="search-input" class="form-control" placeholder="훈련사 이름, 설명 또는 태그로 검색">
-          <button class="btn btn-warning" type="button">검색</button>
+        <!-- 검색창 추가 (선택 사항) -->
+        <div class="row mb-4">
+            <div class="col-md-6 mx-auto">
+                <div class="input-group">
+                    <input type="text" id="search-input" class="form-control" placeholder="훈련사 이름, 설명 또는 태그로 검색">
+                    <button class="btn btn-warning" type="button">검색</button>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <div class="trainer-cards-container">
-      <!-- 트레이너 카드는 JavaScript에서 동적으로 생성됩니다 -->
-    </div>
+        <div class="trainer-cards-container">
+            <!-- 트레이너 카드는 JavaScript에서 동적으로 생성됩니다 -->
+        </div>
 
-    <!-- 페이지네이션 컨트롤 추가 -->
-    <nav aria-label="Page navigation">
-      <ul id="pagination-container" class="pagination">
-        <!-- 페이지네이션 버튼은 JavaScript에서 동적으로 생성됩니다 -->
-      </ul>
-    </nav>
-  </div>
+        <!-- 페이지네이션 컨트롤 추가 -->
+        <nav aria-label="Page navigation">
+            <ul id="pagination-container" class="pagination">
+                <!-- 페이지네이션 버튼은 JavaScript에서 동적으로 생성됩니다 -->
+            </ul>
+        </nav>
+    </div>
 </main>
 
+<!-- Login Modal -->
+<div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="loginModalLabel"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <!-- 로고 이미지 -->
+                <div class="logo-container my-5">
+                    <img
+                            src="./images/logo_large.png"
+                            alt="PetTalk Logo"
+                            class="modal-logo"
+                    />
+                </div>
+
+                <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
+
+                <!-- 카카오 로그인 버튼 -->
+                <div class="d-grid login-buttons">
+                    <button class="btn btn-kakao">
+                        <img
+                                src="./images/kakao_login.png"
+                                alt="Kakao"
+                                class="login-img"
+                        />
+                    </button>
+
+                    <!-- 네이버 로그인 버튼 -->
+                    <button class="btn btn-naver">
+                        <img
+                                src="./images/naver_login.png"
+                                alt="Naver"
+                                class="login-img"
+                        />
+                    </button>
+                </div>
+
+                <p class="text-muted mt-4 small">
+                    로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer class="bg-dark text-white py-5 mt-5">
-  <div class="container">
-    <div class="row justify-content-center text-center">
-      <!-- 회사 정보 -->
-      <div class="col-md-4 mb-4">
-        <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
-        <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
-        <p class="mb-1">사업자등록번호: 123-45-67890</p>
-        <p class="mb-1">대표: Lucky0111</p>
-        <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
-      </div>
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <!-- 회사 정보 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+                <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+                <p class="mb-1">사업자등록번호: 123-45-67890</p>
+                <p class="mb-1">대표: Lucky0111</p>
+                <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+            </div>
 
-      <!-- 고객센터 -->
-      <div class="col-md-4 mb-4">
-        <h5 class="fw-bold mb-3">고객센터</h5>
-        <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
-        <p class="mb-1">💬 카카오톡: @펫톡상담</p>
-        <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
-        <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
-      </div>
+            <!-- 고객센터 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">고객센터</h5>
+                <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+                <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+                <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+                <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+            </div>
 
-      <!-- 펫톡 소개 -->
-      <div class="col-md-4 mb-4">
-        <h5 class="fw-bold mb-3">펫톡 소개</h5>
-        <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
-        <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
-        <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
-      </div>
+            <!-- 펫톡 소개 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">펫톡 소개</h5>
+                <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+                <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+                <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+            </div>
+        </div>
+
+        <hr class="my-4 border-light">
+
+        <div class="text-center small">
+            <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+        </div>
     </div>
-
-    <hr class="my-4 border-light">
-
-    <div class="text-center small">
-      <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
-    </div>
-  </div>
 </footer>
 
 <!-- 트레이너 카드 템플릿 -->
 <template id="trainer-card-template">
-  <div class="card trainer-card mb-4">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-10">
-          <div class="d-flex flex-column flex-md-row align-items-center">
-            <div class="trainer-image me-md-4 mb-3 mb-md-0 d-flex align-items-center">
-              <img src="" alt="훈련사 이미지" class="rounded align-self-center">
+    <div class="card trainer-card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="d-flex flex-column flex-md-row align-items-center">
+                        <div class="trainer-image me-md-4 mb-3 mb-md-0 d-flex align-items-center">
+                            <img src="" alt="훈련사 이미지" class="rounded align-self-center">
+                        </div>
+                        <div class="trainer-details">
+                            <div class="trainer-header">
+                                <p class="fw-bold fs-4 mb-2 trainer-name"></p>
+                            </div>
+                            <div class="trainer-desc mb-2">
+                                <p class="trainer-description"></p>
+                            </div>
+                            <div class="trainer-schedule text-muted">
+                                <p class="rating mb-1"></p>
+                                <p class="schedule-tag trainer-tags"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="trainer-contact d-flex flex-row flex-md-column align-items-center justify-content-between justify-content-md-center h-100">
+                        <div class="trainer-profile-image text-center mb-md-3">
+                            <img src="" alt="프로필 이미지" class="profile-img rounded-circle">
+                        </div>
+                        <div class="price-buttons d-flex flex-column">
+                            <div class="price-button d-flex align-items-center mb-2">
+                                <span class="price-value me-2 text-end"></span>
+                                <button class="btn btn-warning btn-sm consultation-btn">영상</button>
+                            </div>
+                            <div class="price-button d-flex align-items-center">
+                                <span class="price-value me-2 text-end"></span>
+                                <button class="btn btn-warning btn-sm visit-btn">방문</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="trainer-details">
-              <div class="trainer-header">
-                <p class="fw-bold fs-4 mb-2 trainer-name"></p>
-              </div>
-              <div class="trainer-desc mb-2">
-                <p class="trainer-description"></p>
-              </div>
-              <div class="trainer-schedule text-muted">
-                <p class="rating mb-1"></p>
-                <p class="schedule-tag trainer-tags"></p>
-              </div>
-            </div>
-          </div>
         </div>
-        <div class="col-md-2">
-          <div class="trainer-contact d-flex flex-row flex-md-column align-items-center justify-content-between justify-content-md-center h-100">
-            <div class="trainer-profile-image text-center mb-md-3">
-              <img src="" alt="프로필 이미지" class="profile-img rounded-circle">
-            </div>
-            <div class="price-buttons d-flex flex-column">
-              <div class="price-button d-flex align-items-center mb-2">
-                <span class="price-value me-2 text-end"></span>
-                <button class="btn btn-warning btn-sm consultation-btn">영상</button>
-              </div>
-              <div class="price-button d-flex align-items-center">
-                <span class="price-value me-2 text-end"></span>
-                <button class="btn btn-warning btn-sm visit-btn">방문</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </div>
 </template>
 
 <!-- Bootstrap & JavaScript -->

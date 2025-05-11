@@ -14,8 +14,10 @@
 
         if (accessToken || refreshToken) {
             const url = new URL(window.location.href);
+
             url.searchParams.delete("accessToken");
             url.searchParams.delete("refreshToken");
+
             window.history.replaceState(
                 {},
                 document.title,
@@ -25,16 +27,21 @@
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
 
-            const response = await fetch("/auth/my", {
+            const response = await fetch("/api/v1/users/me", {
                 method: "GET",
                 headers: {
-                    Authorization: `Bearer ${accessToken}`,
                     "Content-Type": "application/json",
                 },
             });
 
-            const user = await response.json();
+            if (!response.ok) {
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+                window.location.href = "/?error";
+                return;
+            }
 
+            const user = await response.json();
             localStorage.setItem("user", JSON.stringify(user));
 
             window.location.href = "/";

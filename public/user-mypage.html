@@ -16,10 +16,17 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container position-relative">
         <a class="navbar-brand" href="/">
-            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
@@ -30,11 +37,28 @@
                 <li class="nav-item">
                     <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="/profile">내 프로필</a>
+                <li id="myProfile" class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle nav-item-link"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <img src="./images/cat1.jpeg" alt="Profile" class="profile-img">
+                        <span class="profile-name"></span>
+                        <img src="./images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
+                        <li><a class="dropdown-item" href="/profile?tab=advice">상담 내역</a></li>
+                        <li><a class="dropdown-item logout-btn" href="/logout">로그아웃</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
                 </li>
             </ul>
         </div>
@@ -79,7 +103,8 @@
 </div>
 
 <!-- 훈련사 신청 모달 -->
-<div class="modal fade" id="trainerApplicationModal" tabindex="-1" aria-labelledby="trainerApplicationModalLabel" aria-hidden="true">
+<div class="modal fade" id="trainerApplicationModal" tabindex="-1" aria-labelledby="trainerApplicationModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="user-modal-header d-flex justify-content-between align-items-center">
@@ -110,7 +135,8 @@
                                 <button type="button" class="btn btn-outline-secondary upload-btn">
                                     사진 업로드
                                 </button>
-                                <input type="file" id="certificateImage" accept="image/*" class="certificate-upload-input" required>
+                                <input type="file" id="certificateImage" accept="image/*"
+                                       class="certificate-upload-input" required>
                             </div>
                         </div>
                     </div>
@@ -119,6 +145,63 @@
             <div class="modal-footer">
                 <button type="button" class="btn certificate-btn-secondary" data-bs-dismiss="modal">취소</button>
                 <button type="button" class="btn certificate-btn-primary" id="submitTrainerApplication">제출하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="loginModalLabel"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <!-- 로고 이미지 -->
+                <div class="logo-container my-5">
+                    <img
+                            src="./images/logo_large.png"
+                            alt="PetTalk Logo"
+                            class="modal-logo"
+                    />
+                </div>
+
+                <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
+
+                <!-- 카카오 로그인 버튼 -->
+                <div class="d-grid login-buttons">
+                    <button class="btn btn-kakao">
+                        <img
+                                src="./images/kakao_login.png"
+                                alt="Kakao"
+                                class="login-img"
+                        />
+                    </button>
+
+                    <!-- 네이버 로그인 버튼 -->
+                    <button class="btn btn-naver">
+                        <img
+                                src="./images/naver_login.png"
+                                alt="Naver"
+                                class="login-img"
+                        />
+                    </button>
+                </div>
+
+                <p class="text-muted mt-4 small">
+                    로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.
+                </p>
             </div>
         </div>
     </div>
