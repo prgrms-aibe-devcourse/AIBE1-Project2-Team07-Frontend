@@ -72,66 +72,83 @@ function renderCertifications(certifications) {
     const container = document.getElementById('certificationList');
     container.innerHTML = '';
 
-    if (certifications.length === 0) {
+    if (!certifications.length) {
         document.getElementById('noCertificationsMessage').classList.remove('hidden');
         return;
-    } else {
-        document.getElementById('noCertificationsMessage').classList.add('hidden');
     }
+    document.getElementById('noCertificationsMessage').classList.add('hidden');
 
-    certifications.forEach(function(cert) {
+    certifications.forEach(cert => {
+        const isApproved = cert.approved === true;
+        const isRejected = cert.rejected === true;
+
+        // 상태 텍스트·스타일 결정
+        let statusText, statusClass;
+        if (isRejected) {
+            statusText  = '거절됨';
+            statusClass = 'bg-red-100 text-red-800';
+        } else if (isApproved) {
+            statusText  = '승인됨';
+            statusClass = 'bg-green-100 text-green-800';
+        } else {
+            statusText  = '대기중';
+            statusClass = 'bg-yellow-100 text-yellow-800';
+        }
+
+        // 버튼 비활성화 여부 (승인·거절 후 둘 다 비활성화)
+        const disabledAttr = (isApproved || isRejected)
+            ? 'disabled style="opacity:0.5;cursor:not-allowed;"'
+            : '';
+
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-200 hover:bg-gray-100';
         row.innerHTML = `
-            <td class="py-4 px-6">
-              <div class="font-medium">${cert.trainerName || '이름 없음'} (${cert.trainerNickname || '닉네임 없음'})</div>
-              <div class="text-xs text-gray-500">${cert.trainerId || 'ID 없음'}</div>
-            </td>
-            <td class="py-4 px-6">
-              <div class="font-medium">${cert.certName || '자격증명 없음'}</div>
-            </td>
-            <td class="py-4 px-6">
-              <div>${cert.issuingBody || '발급기관 없음'}</div>
-              <div class="text-xs text-gray-500">발급일: ${cert.issueDate || '날짜 없음'}</div>
-            </td>
-            <td class="py-4 px-6">
-              ${cert.fileUrl ?
-            `<button
-                  class="bg-blue-100 text-blue-800 py-1 px-3 rounded hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                  onclick="showImagePreview('${cert.fileUrl.replace(/'/g, "\\'")}', '${(cert.certName || '').replace(/'/g, "\\'")}')"
-                >
-                  파일 보기
-                </button>` :
-            '<span class="text-gray-400">파일 없음</span>'
+      <td class="py-4 px-6">
+        <div class="font-medium">${cert.trainerName} (${cert.trainerNickname})</div>
+        <div class="text-xs text-gray-500">${cert.trainerId}</div>
+      </td>
+      <td class="py-4 px-6">
+        <div class="font-medium">${cert.certName}</div>
+      </td>
+      <td class="py-4 px-6">
+        <div>${cert.issuingBody}</div>
+        <div class="text-xs text-gray-500">발급일: ${cert.issueDate}</div>
+      </td>
+      <td class="py-4 px-6">
+        ${cert.fileUrl
+            ? `<button
+              class="bg-blue-100 text-blue-800 py-1 px-3 rounded hover:bg-blue-200 focus:ring-2 focus:ring-blue-300"
+              onclick="showImagePreview('${cert.fileUrl}','${cert.certName}')"
+              >
+                파일 보기
+            </button>`
+            : '<span class="text-gray-400">파일 없음</span>'
         }
-            </td>
-            <td class="py-4 px-6 text-center">
-              <span class="${cert.approved ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'} py-1 px-3 rounded-full text-xs">
-                ${cert.approved ? '승인됨' : '대기중'}
-              </span>
-            </td>
-            <td class="py-4 px-6 text-center">
-              <div class="flex justify-center space-x-2">
-                <button
-                  class="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
-                  onclick="approveCertification(${cert.certId})"
-                  ${cert.approved ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}
-                >
-                  승인
-                </button>
-                <button
-                  class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
-                  onclick="rejectCertification(${cert.certId})"
-                  ${cert.approved ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}
-                >
-                  거절
-                </button>
-              </div>
-            </td>
-        `;
+      </td>
+      <td class="py-4 px-6 text-center">
+        <span class="${statusClass} py-1 px-3 rounded-full text-xs">
+          ${statusText}
+        </span>
+      </td>
+      <td class="py-4 px-6 text-center">
+        <div class="flex justify-center space-x-2">
+          <button
+            class="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600 focus:ring-2 focus:ring-green-300"
+            onclick="approveCertification(${cert.certId})"
+            ${disabledAttr}
+          >승인</button>
+          <button
+            class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 focus:ring-2 focus:ring-red-300"
+            onclick="rejectCertification(${cert.certId})"
+            ${disabledAttr}
+          >거절</button>
+        </div>
+      </td>
+    `;
         container.appendChild(row);
     });
 }
+
 
 function showImagePreview(imageUrl, certName) {
     if (!imageUrl) {
@@ -175,11 +192,8 @@ function rejectCertification(certId) {
 }
 
 function processCertification(certId, action, actionText) {
-    if (!confirm(`정말 이 인증 요청을 ${actionText}하시겠습니까?`)) {
-        return;
-    }
+    if (!confirm(`정말 이 인증 요청을 ${actionText}하시겠습니까?`)) return;
 
-    // Show loading
     showStatus(`${actionText} 처리 중...`, 'loading');
 
     fetch(`${API_BASE_URL}/api/v1/admin/certifications/${action}/${certId}`, {
@@ -189,15 +203,24 @@ function processCertification(certId, action, actionText) {
             'Content-Type': 'application/json'
         }
     })
-        .then(response => {
+        .then(async response => {
             if (!response.ok) {
-                return response.json().then(err => {
-                    throw new Error(`${response.status}: ${err.message || response.statusText}`);
-                });
+                // 에러 바디가 있으면 파싱, 없으면 상태 텍스트 사용
+                let msg = response.statusText;
+                try {
+                    const errJson = await response.json();
+                    msg = errJson.message || msg;
+                } catch {}
+                throw new Error(msg);
             }
-            return response.json();
+            // 성공 시 빈 바디라도 에러 안 나게 처리
+            try {
+                return await response.json();
+            } catch {
+                return {};
+            }
         })
-        .then(data => {
+        .then(() => {
             showStatus(`인증 요청이 성공적으로 ${actionText}되었습니다.`, 'success');
             fetchCertifications();
         })
