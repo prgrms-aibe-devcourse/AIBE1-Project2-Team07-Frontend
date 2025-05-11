@@ -9,7 +9,7 @@ const isProduction = process.env.PROFILES === "prod";
 const cookieOptions = {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? "Lax" : "None",
+    sameSite: !isProduction ? "Lax" : "Strict",
     path: "/"
 };
 

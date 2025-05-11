@@ -96,7 +96,7 @@ function initLogout() {
 }
 
 async function logout() {
-    await fetch("/api/v1/auth/logout", {
+    await fetch("/auth/logout", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
