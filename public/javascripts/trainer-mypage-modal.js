@@ -106,7 +106,7 @@ async function showDetailModal(item) {
         }
     } catch (error) {
         console.error('상담 내역 가져오기 오류:', error);
-        historyHTML = '<p class="text-danger">상담 내역을 불러오는 중 오류가 발생했습니다.</p>';
+        historyHTML = '<p class="">아직 상담 내역이 없습니다.</p>';
     }
 
     M.querySelector('.chat-messages').innerHTML = historyHTML;

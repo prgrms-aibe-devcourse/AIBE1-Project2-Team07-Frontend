@@ -92,7 +92,18 @@ document.addEventListener('DOMContentLoaded', async function () {
     try {
         // 토큰 확인
         const token = localStorage.getItem('accessToken');
-        console.log('저장된 토큰:', token ? '토큰 있음' : '토큰 없음');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const tabParam = urlParams.get('tab');
+        if (tabParam && ['profile', 'mypost', 'review', 'liked', 'advice'].includes(tabParam)) {
+            currentTab = tabParam;
+        }
+
+        // 탭 이벤트 리스너 설정
+        document.getElementById('tab-profile')?.addEventListener('click', async function (e) {
+            e.preventDefault();
+            await switchTab('profile');
+        });
 
         // 탭 이벤트 리스너 설정
         document.getElementById('tab-profile')?.addEventListener('click', async function (e) {
@@ -140,7 +151,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         // 초기 탭 로딩
-        await switchTab('profile');
+        await switchTab(currentTab || 'profile');
+
+        window.addEventListener('popstate', async function(event) {
+            if (event.state && event.state.tab) {
+                await switchTab(event.state.tab, false); // URL 업데이트 없이 탭 전환
+            } else {
+                await switchTab('profile', false);
+            }
+        });
     } catch (error) {
         console.error('초기화 중 오류 발생:', error);
         alert('페이지 초기화 중 오류가 발생했습니다. 페이지를 새로고침해 주세요.');
@@ -148,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 
 // 탭 전환 함수
-async function switchTab(tabName) {
+async function switchTab(tabName, updateUrl = true) {
     try {
         // 현재 탭과 새 탭이 같은 경우, 페이지만 유지하기
         if (tabName !== currentTab) {
@@ -160,6 +179,12 @@ async function switchTab(tabName) {
 
         // 현재 탭 업데이트
         currentTab = tabName;
+
+        if (updateUrl) {
+            const url = new URL(window.location);
+            url.searchParams.set('tab', tabName);
+            window.history.pushState({tab: tabName}, '', url);
+        }
 
         // 검색창 및 UI 관리
         const searchContainer = document.querySelector('.search-bar');
@@ -436,7 +461,7 @@ async function showMyPosts(filteredPosts = null) {
                     : '';
 
                 return `
-                <div class="post-item">
+                <div class="post-item" onclick="window.location.href='/community/post/${post.postId}';" style="cursor: pointer;">
                     <div class="post-info">
                         <div class="post-categories">
                             <span class="post-category">${postCategory}</span>
@@ -632,7 +657,7 @@ async function showLikedPosts(filteredLikes = null) {
                     : '';
 
                 return `
-                <div class="post-item">
+                <div class="post-item" onclick="window.location.href='/community/post/${post.postId}';" style="cursor: pointer;">
                     <div class="post-info">
                         <div class="post-categories">
                             <span class="post-category">${postCategory}</span>
@@ -1223,7 +1248,7 @@ async function updateProfileImage() {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const uploadResponse = await fetch('http://dev.tuituiworld.store/api/v1/users/updateImage', {
+                const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/users/updateImage', {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`
@@ -1232,7 +1257,7 @@ async function updateProfileImage() {
                 });
 
                 if (!uploadResponse.ok) {
-                    console.log('프로필 이미지가 성공적으로 업데이트되었습니다.');
+
                 }
 
             } catch (error) {
