@@ -10,7 +10,7 @@ window.currentUserId = 1;   // 나중에 로그인 한 사람으로 바꿔야 �
 const baseUrl = "https://dev.tuituiworld.store/api/v1/";
 const accessToken = localStorage.getItem('accessToken');
 // 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', function() {
     const path = window.location.pathname;
     let trainerNickname = null;
 
@@ -25,11 +25,6 @@ document.addEventListener('DOMContentLoaded', async function() {
     } else {
         showError('유효한 트레이너 정보가 전달되지 않았습니다.');
     }
-
-
-
-
-
 });
 
 // 트레이너 리뷰 데이터 로드 함수
@@ -53,8 +48,6 @@ async function loadTrainerReviewByNickname(trainerNickname) {
         // API 리뷰 데이터를 사이트 형식으로 변환
         allReviews = convertApiReviewsToSiteFormat(apiReviews);
 
-        // 초기 리뷰 로드 - 첫 페이지만 표시
-        loadReviews(1);
     } catch (error) {
         console.error('리뷰 데이터 로드 오류:', error);
         showError('리뷰 정보를 불러오는 데 문제가 발생했습니다.');
@@ -93,9 +86,9 @@ function convertApiReviewsToSiteFormat(apiReviews) {
 function renderReviews(reviews, append = false) {
     const reviewsContainer = document.getElementById('reviews-container');
 
-    // append가 false이면 기존 리뷰를 지움
-    if (!append) {
-        reviewsContainer.innerHTML = '';
+    if(!reviewsContainer) {
+        console.log("없습니다")
+        return;
     }
 
     // 리뷰가 없을 경우 메시지 표시

@@ -31,7 +31,17 @@
     transition: all 0.3s ease-in-out !important;
 }
 
+.delete-btn {
+    font-size: 1.25rem;
+    color: #888;
+    transition: all 0.3s ease-in-out !important;
+}
+
 .edit-btn:hover {
+    transform: scale(1.1);
+}
+
+.delete-btn:hover {
     transform: scale(1.1);
 }
 
@@ -96,6 +106,25 @@
 .circle-button img.like-btn {
     width: 32px;
     height: 32px;
+}
+
+.like-btn.active .circle-button,
+.circle-button.active {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+}
+
+/* 좋아요 아이콘 색상 변경 (선택사항) */
+.like-btn.active img {
+    filter: brightness(0.8); /* 아이콘 색상 약간 어둡게 처리 */
+}
+
+/* 좋아요 카운트 활성화 스타일 (선택사항) */
+.like-btn.active .like-count {
+    color: var(--dark-color);
+    font-weight: bold;
 }
 
 .like-count {
@@ -211,4 +240,70 @@
     background-color: #d7d7d7;
     border-color: #d7d7d7;
     color: #1e1e1e;
+}
+
+/* 펫 카테고리 스타일 */
+.pet-category {
+    background-color: #FFECB3; /* 포스트 카테고리보다 약간 연한 노란색 */
+    color: #1e1e1e;
+    font-size: 18px;
+    font-weight: 500;
+    margin-left: 8px; /* 포스트 카테고리와의 간격 */
+}
+
+/* 펫 카테고리별 색상 */
+.pet-category.dog {
+    background-color: #BBDEFB; /* 강아지: 연한 파란색 */
+}
+
+.pet-category.cat {
+    background-color: #D1C4E9; /* 고양이: 연한 보라색 */
+}
+
+.pet-category.other {
+    background-color: #CFD8DC; /* 기타: 연한 회색 */
+}
+
+/* 카테고리 컨테이너 스타일 */
+.categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.ad-container {
+    margin: 30px 0;
+    position: sticky;
+    top: 100px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ad-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.5s ease;
+}
+
+/* 태그 스타일 */
+.post-tag {
+    background-color: #f0f0f0;
+    color: #495057;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.post-tag:hover {
+    background-color: #e0e0e0;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }

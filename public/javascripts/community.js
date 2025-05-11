@@ -1,121 +1,375 @@
 // --- 전역 변수 ---
-let currentPage = 1;
+let currentPage = 0;
 const postsPerPage = 5;
-let currentCategory = '전체';
-let currentSort = '최신순';
+let currentCategory = '';
+let currentPetCategory = '';
+let currentSort = 'LATEST';
 let currentSearch = '';
-let currentSearchCategory = '전체';
+let totalPages = 0;
 
 const PostCategory = {
-    ALL: '전체',
-    FREE: '자유게시판',
-    REVIEW: '펫 도구 후기',
-    QUESTION: '질문하기',
-    MYPET: '자랑하기'
+    ALL: '',
+    FREE: 'FREE',
+    REVIEW: 'TOOL',
+    QNA: 'QNA',
+    MYPET: 'MYPET'
 };
 
-// --- 더미 데이터 생성 ---
-const posts = generateDummyPosts(30);
+const PetCategory = {
+    ALL: '',
+    DOG: 'DOG',
+    CAT: 'CAT',
+    ETC: 'ETC'
+};
+
+const SortType = {
+    LATEST: 'LATEST',
+    OLDEST: 'OLDEST',
+    COMMENTS: "COMMENTS",
+    LIKES: "LIKES"
+}
+
+const API_BASE_URL = 'https://dev.tuituiworld.store//api/v1';
 
 document.addEventListener('DOMContentLoaded', function () {
+    // URL에서 파라미터 읽어오기
+    loadStateFromURL();
+
     // --- 페이지 초기화 ---
     initBackToTopButton();
     initCategoryItems();
+    initPetCategoryFilter();
     initSortItems();
     initSearchFunctionality();
     initWriteButton();
     initPostInteractions();
-    renderPosts();
-    renderPagination();
+    initRandomAd();
+    fetchAndRenderPosts();
 });
 
-/**
- * 더미 게시글 데이터를 생성하는 함수
- * @param {number} count - 생성할 게시글 수
- * @returns {Array} - PostResponseDTO 형식의 게시글 배열
- */
-function generateDummyPosts(count) {
-    const posts = [];
-    const categories = [
-        PostCategory.FREE,
-        PostCategory.REVIEW,
-        PostCategory.QUESTION,
-        PostCategory.MYPET
-    ];
-    const userNames = ['강형욱', '이경규', '정형돈', '유재석', '박명수', '김종국'];
-    const profileImages = ['./images/temp.jpg'];
-    const tags = [
-        ['#강아지', '#훈련', '#산책'],
-        ['#고양이', '#장난감', '#사료'],
-        ['#햄스터', '#케이지', '#휠'],
-        ['#새', '#앵무새', '#모이'],
-        ['#토끼', '#당근', '#토끼장'],
-        ['#강아지', '#고양이', '#반려동물'],
-        ['#귀여운', '#애완동물', '#펫스타그램'],
-        ['#펫', '#꿀팁', '#육아'],
-        ['#동물', '#사진', '#일상'],
-        ['#펫톡', '#커뮤니티', '#질문']
-    ];
+// URL에서 상태 파라미터 로드하는 함수
+function loadStateFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
 
-    const contents = [
-        '요즘 우리 집 강아지가 새로 산 인형을 너무 좋아하네요! 🐶✨ 매일 품고 잘 정도니까요 진짜야 벌써 낡아가네요ㅋㅋ 어디서 반려동물용 어떤 장난감을 제일 추천하시나요? 잘하면 추천요!',
-        '고양이 사료 추천 부탁드려요. 제가 사료를 몇 개 사봤는데, 우리 고양이가 잘 안 먹네요. 이런 까다로운 애들을 위한 맛있는 사료 있을까요?',
-        '햄스터 케이지를 새로 바꿀까 생각중인데요. 어떤 케이지가 햄스터 건강에 좋을까요? 추천 부탁드립니다.',
-        '반려견 교육 방법 공유합니다! 제가 3달 동안 훈련을 시켜봤는데, 앉아, 기다려, 죽은척 이렇게 3가지를 가르쳤어요. 어떻게 했는지 궁금하신 분들 댓글 달아주세요.',
-        '고양이 화장실 냄새 해결 꿀팁! 제가 이것저것 다 써봤는데 이 방법이 제일 좋더라고요. 다른 분들도 한번 시도해보세요!',
-        '강아지 목욕 주기는 어떻게 되시나요? 저는 보통 2주에 한 번 씻기는데, 너무 자주 하는 건가 싶어서요. 다른 분들은 어떻게 하시나요?',
-        '새로 입양한 고양이가 계속 집안을 어지럽히네요 ㅠㅠ 어떻게 해야 할까요? 다른 분들은 어떻게 고양이 훈련을 시키시나요?',
-        '이번에 구매한 애견 장난감 리뷰입니다. 확실히 내구성이 좋고 우리 강아지가 너무 좋아해요! 사진도 첨부해봅니다.',
-        '반려동물 외출 시 필수품 공유합니다. 이것만 챙기면 어디든 문제없이 다녀올 수 있어요!',
-        '다른 고양이 집사님들, 츄르 중독 어떻게 해결하시나요? 우리 고양이가 츄르만 찾아서 걱정이에요.'
-    ];
-
-    const titles = [
-        '반려견 장난감 추천해주세요',
-        '고양이 사료 추천받아요',
-        '햄스터 케이지 어떤게 좋을까요?',
-        '강아지 훈련 방법 공유합니다',
-        '고양이 화장실 냄새 해결 꿀팁',
-        '강아지 목욕 주기 질문드려요',
-        '새로 입양한 고양이 적응 문제',
-        '[리뷰] 이 애견 장난감 강추합니다!',
-        '반려동물 외출 필수품 공유',
-        '고양이 츄르 중독 해결법 구합니다'
-    ];
-
-    // 오늘 날짜 기준으로 최대 30일 이내의 랜덤한 날짜 생성
-    function getRandomDate() {
-        const now = new Date();
-        const daysPast = Math.floor(Math.random() * 30);
-        const randomDate = new Date(now.getTime() - daysPast * 24 * 60 * 60 * 1000);
-        return randomDate.toISOString();
+    // 카테고리 파라미터 로드
+    if (urlParams.has('category')) {
+        currentCategory = urlParams.get('category');
     }
 
-    for (let i = 0; i < count; i++) {
-        const createdAt = getRandomDate();
-        const randomTitleIndex = Math.floor(Math.random() * titles.length);
-        const randomContentIndex = Math.floor(Math.random() * contents.length);
-        const randomTagIndex = Math.floor(Math.random() * tags.length);
+    // 반려동물 카테고리 파라미터 로드
+    if (urlParams.has('petCategory')) {
+        currentPetCategory = urlParams.get('petCategory');
+    }
 
-        posts.push({
-            postId: i + 1,
-            userName: `user${i + 1}`,
-            userNickname: userNames[i % userNames.length],
-            profileImageUrl: profileImages[0],
-            postCategory: categories[i % categories.length],
-            title: titles[randomTitleIndex],
-            content: contents[randomContentIndex],
-            likeCount: Math.floor(Math.random() * 50),
-            commentCount: Math.floor(Math.random() * 20),
-            hasLiked: false,
-            tags: tags[randomTagIndex],
-            createdAt: createdAt,
-            updatedAt: createdAt
+    // 정렬 방식 파라미터 로드
+    if (urlParams.has('sort')) {
+        currentSort = urlParams.get('sort');
+    }
+
+    // 검색어 파라미터 로드
+    if (urlParams.has('search')) {
+        currentSearch = urlParams.get('search');
+        // 검색창에 검색어 설정
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.value = currentSearch;
+        }
+    }
+
+    // 페이지 번호 파라미터 로드
+    if (urlParams.has('page')) {
+        currentPage = parseInt(urlParams.get('page')) || 0;
+    }
+
+    // UI 업데이트
+    updateUIFromState();
+}
+
+// 현재 상태를 URL에 업데이트하는 함수
+function updateURLFromState(pushState = true) {
+    const urlParams = new URLSearchParams();
+
+    // 상태 파라미터 추가
+    if (currentCategory !== '' && currentCategory !== '') {
+        urlParams.set('category', currentCategory);
+    }
+
+    if (currentPetCategory !== '' && currentPetCategory !== '') {
+        urlParams.set('petCategory', currentPetCategory);
+    }
+
+    if (currentSort !== 'LATEST') {
+        urlParams.set('sort', currentSort);
+    }
+
+    if (currentSearch) {
+        urlParams.set('search', currentSearch);
+    }
+
+    if (currentPage > 0) {
+        urlParams.set('page', currentPage);
+    }
+
+    // URL 업데이트
+    const newURL = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+
+    if (pushState) {
+        // 브라우저 히스토리에 상태 추가
+        window.history.pushState({
+            category: currentCategory,
+            petCategory: currentPetCategory,
+            sort: currentSort,
+            search: currentSearch,
+            page: currentPage
+        }, '', newURL);
+    } else {
+        // 히스토리 상태 수정 (페이지네이션 등에서 사용)
+        window.history.replaceState({
+            category: currentCategory,
+            petCategory: currentPetCategory,
+            sort: currentSort,
+            search: currentSearch,
+            page: currentPage
+        }, '', newURL);
+    }
+}
+
+// 브라우저 뒤로가기/앞으로가기 처리
+window.addEventListener('popstate', function(event) {
+    if (event.state) {
+        // 상태 복원
+        currentCategory = event.state.category || '';
+        currentPetCategory = event.state.petCategory || '';
+        currentSort = event.state.sort || 'LATEST';
+        currentSearch = event.state.search || '';
+        currentPage = event.state.page || 0;
+
+        // UI 업데이트
+        updateUIFromState();
+
+        // 게시글 다시 가져오기
+        fetchAndRenderPosts();
+    } else {
+        // 초기 상태로 복원
+        loadStateFromURL();
+        fetchAndRenderPosts();
+    }
+});
+
+// 현재 상태에 따라 UI 업데이트
+function updateUIFromState() {
+    // 카테고리 UI 업데이트
+    const categoryItems = document.querySelectorAll('.category-item');
+    categoryItems.forEach(item => {
+        const categoryLink = item.querySelector('.category-link');
+        let categoryValue = '';
+
+        switch (categoryLink.textContent.trim()) {
+            case '자유게시판':
+                categoryValue = PostCategory.FREE;
+                break;
+            case '펫 도구 후기':
+                categoryValue = PostCategory.REVIEW;
+                break;
+            case '질문하기':
+                categoryValue = PostCategory.QNA;
+                break;
+            case '자랑하기':
+                categoryValue = PostCategory.MYPET;
+                break;
+            default:
+                categoryValue = PostCategory.ALL;
+        }
+
+        if (categoryValue === currentCategory) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    // 반려동물 카테고리 UI 업데이트
+    const petFilterItems = document.querySelectorAll('.pet-filter-item');
+    petFilterItems.forEach(item => {
+        const petFilterLink = item.querySelector('.pet-filter-link');
+        let petCategoryValue = '';
+
+        switch (petFilterLink.textContent.trim()) {
+            case '강아지':
+                petCategoryValue = PetCategory.DOG;
+                break;
+            case '고양이':
+                petCategoryValue = PetCategory.CAT;
+                break;
+            case '기타':
+                petCategoryValue = PetCategory.ETC;
+                break;
+            default:
+                petCategoryValue = PetCategory.ALL;
+        }
+
+        if (petCategoryValue === currentPetCategory) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    // 정렬 UI 업데이트
+    const sortItems = document.querySelectorAll('.sort-item');
+    sortItems.forEach(item => {
+        const sortLink = item.querySelector('.sort-link');
+        let sortValue = '';
+
+        switch (sortLink.textContent.trim()) {
+            case '오래된순':
+                sortValue = SortType.OLDEST;
+                break;
+            case '답변많은순':
+                sortValue = SortType.COMMENTS;
+                break;
+            case '좋아요순':
+                sortValue = SortType.LIKES;
+                break;
+            default:
+                sortValue = SortType.LATEST;
+        }
+
+        if (sortValue === currentSort) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+
+    // 검색어 UI 업데이트
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput && currentSearch) {
+        searchInput.value = currentSearch;
+    }
+}
+
+function initRandomAd() {
+    const adImage = document.getElementById('adImage');
+    if (!adImage) return;
+
+    // 광고 이미지 목록
+    const adImages = [
+        './images/ad.png',
+        './images/ad2.jfif',
+        './images/ad3.jfif',
+        './images/ad4.jfif',
+        './images/ad5.jfif'
+    ];
+
+    // 랜덤으로 이미지 선택
+    const randomIndex = Math.floor(Math.random() * adImages.length);
+    adImage.src = adImages[randomIndex];
+}
+
+function initPetCategoryFilter() {
+    const petFilterItems = document.querySelectorAll('.pet-filter-item');
+
+    petFilterItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            // 활성화 클래스 제거
+            petFilterItems.forEach(i => i.classList.remove('active'));
+
+            // 클릭한 아이템 활성화
+            this.classList.add('active');
+
+            // 선택한 펫 카테고리 이름 가져오기
+            const petCategoryText = this.querySelector('.pet-filter-link').textContent.trim();
+
+            // 펫 카테고리 매핑 (UI 표시용 텍스트 -> API 값)
+            switch (petCategoryText) {
+                case '강아지':
+                    currentPetCategory = PetCategory.DOG;
+                    break;
+                case '고양이':
+                    currentPetCategory = PetCategory.CAT;
+                    break;
+                case '기타':
+                    currentPetCategory = PetCategory.ETC;
+                    break;
+                default:
+                    currentPetCategory = PetCategory.ALL;
+            }
+
+
+            // 페이지 초기화 및 URL 업데이트
+            currentPage = 0;
+            updateURLFromState();
+            fetchAndRenderPosts();
         });
+    });
+}
+
+async function fetchAndRenderPosts() {
+    try {
+        const posts = await fetchPosts();
+        renderPosts(posts.postList);
+        renderPagination(posts.pageNo, posts.totalPages);
+    } catch (error) {
+        console.error('게시글을 가져오는 중 오류 발생:', error);
+        showErrorMessage('게시글을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+    }
+}
+
+async function fetchPosts() {
+    // API 요청 URL 구성
+    let url = `${API_BASE_URL}/posts/open?page=${currentPage}`;
+
+    // 검색어가 있으면 추가
+    if (currentSearch) {
+        url += `&keyword=${encodeURIComponent(currentSearch)}`;
     }
 
-    // 최신순으로 정렬
-    return posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    // 카테고리 필터링
+    if (currentCategory !== '') {
+        url += `&postCategory=${encodeURIComponent(currentCategory)}`;
+    }
+
+    // 반려동물 카테고리 필터링
+    if (currentPetCategory !== '') {
+        url += `&petCategory=${encodeURIComponent(currentPetCategory)}`;
+    }
+
+    // 정렬 타입
+    url += `&sortType=${encodeURIComponent(currentSort)}`;
+
+    // API 호출
+    const response = await fetch(url, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization" : `Bearer ${getAuthToken()}`
+        }
+    });
+
+
+    if (!response.ok) {
+        throw new Error('API 요청 실패: ' + response.status);
+    }
+
+    return await response.json();
+}
+
+/**
+ * 오류 메시지를 표시하는 함수
+ * @param {string} message - 표시할 오류 메시지
+ */
+function showErrorMessage(message) {
+    const postContainer = document.querySelector('.post-container');
+    if (!postContainer) return;
+
+    postContainer.innerHTML = `
+        <div class="error-message">
+            <p>${message}</p>
+        </div>
+    `;
 }
 
 /**
@@ -163,13 +417,31 @@ function initCategoryItems() {
             this.classList.add('active');
 
             // 선택한 카테고리 이름 가져오기
-            currentCategory = this.querySelector('.category-link').textContent.trim();
-            console.log('선택한 카테고리:', currentCategory);
+            const categoryText = this.querySelector('.category-link').textContent.trim();
 
-            // 페이지 초기화 및 게시글 렌더링
-            currentPage = 1;
-            renderPosts();
-            renderPagination();
+            // 카테고리 매핑 (UI 표시용 텍스트 -> API 값)
+            switch (categoryText) {
+                case '자유게시판':
+                    currentCategory = PostCategory.FREE;
+                    break;
+                case '펫 도구 후기':
+                    currentCategory = PostCategory.REVIEW;
+                    break;
+                case '질문하기':
+                    currentCategory = PostCategory.QNA;
+                    break;
+                case '자랑하기':
+                    currentCategory = PostCategory.MYPET;
+                    break;
+                default:
+                    currentCategory = PostCategory.ALL;
+            }
+
+
+            // 페이지 초기화 및 URL 업데이트
+            currentPage = 0;
+            updateURLFromState();
+            fetchAndRenderPosts();
         });
     });
 }
@@ -191,13 +463,28 @@ function initSortItems() {
             this.classList.add('active');
 
             // 선택한 정렬 타입 가져오기
-            currentSort = this.querySelector('.sort-link').textContent.trim();
-            console.log('선택한 정렬:', currentSort);
+            const sortText = this.querySelector('.sort-link').textContent.trim();
 
-            // 페이지 초기화 및 게시글 렌더링
-            currentPage = 1;
-            renderPosts();
-            renderPagination();
+            // 정렬 타입 매핑 (UI 표시용 텍스트 -> API 값)
+            switch (sortText) {
+                case '오래된순':
+                    currentSort = SortType.OLDEST;
+                    break;
+                case '답변많은순':
+                    currentSort = SortType.COMMENTS;
+                    break;
+                case '좋아요순':
+                    currentSort = SortType.LIKES;
+                    break;
+                default:
+                    currentSort = SortType.LATEST;
+            }
+
+
+            // 페이지 초기화 및 URL 업데이트
+            currentPage = 0;
+            updateURLFromState();
+            fetchAndRenderPosts();
         });
     });
 }
@@ -208,9 +495,8 @@ function initSortItems() {
 function initSearchFunctionality() {
     const searchBtn = document.getElementById('searchBtn');
     const searchInput = document.getElementById('searchInput');
-    // const searchCategory = document.getElementById('searchCategory');
 
-    // if (!searchBtn || !searchInput || !searchCategory) return;
+    if (!searchBtn || !searchInput) return;
 
     searchBtn.addEventListener('click', function () {
         performSearch();
@@ -225,17 +511,14 @@ function initSearchFunctionality() {
 
     function performSearch() {
         const searchTerm = searchInput.value.trim();
-        // const category = searchCategory.value;
 
         if (searchTerm) {
-            // console.log('검색어:', searchTerm, '카테고리:', category);
             currentSearch = searchTerm;
-            // currentSearchCategory = category;
 
-            // 페이지 초기화 및 게시글 렌더링
-            currentPage = 1;
-            renderPosts();
-            renderPagination();
+            // 페이지 초기화 및 URL 업데이트
+            currentPage = 0;
+            updateURLFromState();
+            fetchAndRenderPosts();
         }
     }
 }
@@ -254,8 +537,6 @@ function initWriteButton() {
         const isLoggedIn = checkUserLoggedIn();
 
         if (isLoggedIn) {
-            // 글쓰기 페이지로 이동
-            console.log('글쓰기 페이지로 이동...');
             window.location.href = '/community/write';
         } else {
             // 로그인 모달 표시
@@ -270,19 +551,33 @@ function initWriteButton() {
  */
 function initPostInteractions() {
     // 이 함수는 게시글이 렌더링된 후에 호출됨
-    // 게시글 클릭 이벤트
-    document.querySelectorAll('.post-item').forEach(post => {
-        post.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
+        // 게시글 클릭 처리
+        const postItem = e.target.closest('.post-item');
+        if (postItem) {
             // 좋아요나 댓글 버튼 클릭 시에는 이벤트 무시
             if (e.target.closest('.like-count') || e.target.closest('.comment-count')) {
                 return;
             }
 
             // 게시글 상세 페이지로 이동
-            const postId = this.dataset.postId;
+            const postId = postItem.dataset.postId;
             navigateToPostDetail(postId);
-        });
+        }
+
+        // 좋아요 버튼 클릭 처리
+        const likeBtn = e.target.closest('.like-count');
+        if (likeBtn) {
+            e.preventDefault();
+            const postId = likeBtn.closest('.post-item').dataset.postId;
+            toggleLike(postId, likeBtn);
+        }
     });
+}
+
+function getAuthToken() {
+    // 실제 구현에서는 로컬 스토리지나 쿠키에서 토큰을 가져옴
+    return localStorage.getItem('accessToken') || '';
 }
 
 /**
@@ -290,109 +585,91 @@ function initPostInteractions() {
  * @param {string} postId - 게시글 ID
  */
 function navigateToPostDetail(postId) {
-    console.log(`게시글 상세 보기: ${postId}`);
 
     // 실제 애플리케이션에서는 해당 게시글의 상세 페이지로 이동
     const url = `/community/post/${postId}`;
 
-    // 데모용 알림
-    alert(`게시글 ${postId}번의 상세 페이지로 이동합니다.`);
-
-    // 실제 구현 시 활성화
-    // window.location.href = url;
+    window.location.href = url;
 }
 
 /**
- * 게시글 필터링 함수
- * @returns {Array} - 필터링된 게시글 배열
+ * 좋아요 토글 함수
+ * @param {string} postId - 게시글 ID
+ * @param {HTMLElement} likeBtn - 좋아요 버튼 요소
  */
-function filterPosts() {
-    let filteredPosts = [...posts];
+async function toggleLike(postId, likeBtn) {
+    try {
+        // 로그인 상태 확인
+        if (!checkUserLoggedIn()) {
+            const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+            loginModal.show();
+            return;
+        }
 
-    // 카테고리 필터링
-    console.log("currentCategory: ", currentCategory);
-    if (currentCategory !== PostCategory.ALL) {
-        console.log("filterPosts: ", filteredPosts.filter(post => post.postCategory === currentCategory))
-        filteredPosts = filteredPosts.filter(post => post.postCategory === currentCategory);
-    }
+        // API 호출 (실제 구현 시 수정 필요)
+        const isLiked = likeBtn.classList.contains('liked');
+        const method = isLiked ? 'DELETE' : 'POST';
+        const url = `${API_BASE_URL}/posts/${postId}/likes/toggle`;
 
-    // 검색어 필터링
-    // if (currentSearch) {
-    filteredPosts = filteredPosts.filter(post => {
-        return post.content.includes(currentSearch) ||
-            post.tags.some(tag => tag.includes(currentSearch));
-    });
-    console.log("filteredPosts: ", filteredPosts);
-    // }
+        const response = await fetch(url, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getAuthToken()}` // 실제 인증 토큰 가져오기
+            }
+        });
 
-    // 정렬
-    filteredPosts = sortPosts(filteredPosts, currentSort);
+        if (!response.ok) {
+            throw new Error('좋아요 처리 실패');
+        }
 
-    return filteredPosts;
-}
+        // UI 업데이트
+        let likeCount = parseInt(likeBtn.textContent);
+        if (isLiked) {
+            likeCount--;
+            likeBtn.classList.remove('liked');
+        } else {
+            likeCount++;
+            likeBtn.classList.add('liked');
+        }
+        likeBtn.textContent = likeCount;
 
-
-/**
- * 게시글 정렬 함수
- * @param {Array} posts - 정렬할 게시글 배열
- * @param {string} sortType - 정렬 타입
- * @returns {Array} - 정렬된 게시글 배열
- */
-function sortPosts(posts, sortType) {
-    switch (sortType) {
-        case '최신순':
-            return posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-        case '오래된순':
-            return posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
-        case '답변많은순':
-            return posts.sort((a, b) => b.commentCount - a.commentCount);
-        case '좋아요순':
-            return posts.sort((a, b) => b.likeCount - a.likeCount);
-        default:
-            return posts;
+    } catch (error) {
+        console.error('좋아요 처리 중 오류 발생:', error);
+        alert('좋아요 처리에 실패했습니다. 다시 시도해주세요.');
     }
 }
 
 /**
  * 게시글 렌더링 함수
  */
-function renderPosts() {
+function renderPosts(posts) {
     const postContainer = document.querySelector('.post-container');
     if (!postContainer) return;
-
-    // 필터링된 게시글 가져오기
-    const filteredPosts = filterPosts();
-
-    // 페이징 처리
-    const startIndex = (currentPage - 1) * postsPerPage;
-    const paginatedPosts = filteredPosts.slice(startIndex, startIndex + postsPerPage);
 
     // 컨테이너 비우기
     postContainer.innerHTML = '';
 
-    if (paginatedPosts.length === 0) {
+    if (!posts || posts.length === 0) {
         // 게시글이 없을 경우 메시지 표시
         postContainer.innerHTML = `
-                <div class="no-posts-message">
-                    <p>게시글이 없습니다.</p>
-                </div>
-            `;
+            <div class="no-posts-message">
+                <p>게시글이 없습니다.</p>
+            </div>
+        `;
         return;
     }
 
     // 게시글 렌더링
-    paginatedPosts.forEach(post => {
+    posts.forEach(post => {
         const postElement = createPostElement(post);
         postContainer.appendChild(postElement);
     });
-
-    // 게시글 상호작용 초기화
-    initPostInteractions();
 }
 
 /**
  * 게시글 요소 생성 함수
- * @param {Object} post - 게시글 객체
+ * @param {Object} post - 게시글 객체f
  * @returns {HTMLElement} - 게시글 HTML 요소
  */
 function createPostElement(post) {
@@ -403,29 +680,100 @@ function createPostElement(post) {
     // 게시글 작성 시간 포맷팅
     const postDate = formatDate(post.createdAt);
 
-    postElement.innerHTML = `
-            <div class="post-header">
-                <div class="user-info">
-                    <img src="${post.profileImageUrl}" alt="${post.userNickname}" class="user-avatar">
-                    <div class="post-meta">
-                        <div class="user-name">${post.userNickname} <span class="board-tag">${post.postCategory}</span></div>
-                        <div class="post-date">${postDate}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="post-content">
-                <p>${post.content}</p>
-            </div>
-            <div class="post-footer">
-                <div class="post-tag-list">
-                    ${post.tags.map(tag => `<span class="board-tag">${tag}</span>`).join('')}
-                </div>
-                <div class="reaction-count">
-                    <span class="like-count ${post.hasLiked ? 'liked' : ''}">${post.likeCount}</span>
-                    <span class="comment-count">${post.commentCount}</span>
-                </div>
+    // 게시글 카테고리 변환
+    let postCategoryText = '';
+    switch (post.postCategory) {
+        case 'FREE':
+            postCategoryText = '자유게시판';
+            break;
+        case 'REVIEW':
+            postCategoryText = '펫 도구 후기';
+            break;
+        case 'QNA':
+            postCategoryText = '질문하기';
+            break;
+        case 'MYPET':
+            postCategoryText = '자랑하기';
+            break;
+        default:
+            postCategoryText = post.postCategory;
+    }
+
+    // 펫 카테고리 변환
+    let petCategoryText = '';
+    let petCategoryClass = '';
+    switch (post.petCategory) {
+        case 'DOG':
+            petCategoryText = '강아지';
+            petCategoryClass = 'pet-dog';
+            break;
+        case 'CAT':
+            petCategoryText = '고양이';
+            petCategoryClass = 'pet-cat';
+            break;
+        case 'ETC':
+            petCategoryText = '기타';
+            petCategoryClass = 'pet-etc';
+            break;
+        default:
+            petCategoryText = '';
+            petCategoryClass = '';
+    }
+
+    // 펫 카테고리 태그 HTML (카테고리가 있을 경우에만 표시)
+    let petCategoryHTML = '';
+    if (petCategoryText) {
+        petCategoryHTML = `<span class="pet-category-tag ${petCategoryClass}">${petCategoryText}</span>`;
+    }
+
+    let imagesHTML = '';
+    if (post.imageUrls && post.imageUrls.length > 0) {
+        imagesHTML = `
+            <div class="post-images">
+                ${post.imageUrls.map(url => `<img src="${url}" alt="게시글 이미지" class="post-image">`).join('')}
             </div>
         `;
+    }
+
+    let videoHTML = '';
+    if (post.videoUrl) {
+        videoHTML = `
+            <div class="post-video">
+                <video src="${post.videoUrl}" controls class="post-video-player"></video>
+            </div>
+        `;
+    }
+
+    postElement.innerHTML = `
+        <div class="post-header">
+            <div class="user-info">
+                <img src="${post.profileImageUrl || './images/default-avatar.jpg'}" alt="${post.userNickname}" class="user-avatar">
+                <div class="post-meta">
+                    <div class="user-name">
+                        ${post.userNickname} 
+                        <span class="board-tag">${postCategoryText}</span>
+                        ${petCategoryHTML}
+                    </div>
+                    <div class="post-date">${postDate}</div>
+                </div>
+            </div>
+        </div>
+        <div class="post-title">
+            <h3>${post.title}</h3>
+        </div>
+        <div class="post-content">
+            <p>${post.content}</p>
+        </div>
+        <div class="post-footer">
+            <div class="post-tag-list">
+                ${(post.tags || []).map(tag => `<span class="board-tag">#${tag}</span>`).join('')}
+            </div>
+            <div class="reaction-count">
+                <span class="like-count ${post.hasLiked ? 'liked' : ''}">${post.likeCount}</span>
+                <span class="comment-count">${post.commentCount}</span>
+            </div>
+        </div>
+    `;
 
     return postElement;
 }
@@ -461,23 +809,21 @@ function formatDate(dateString) {
 
 /**
  * 페이지네이션 렌더링 함수
+ * @param {number} totalPages - 총 페이지 수
  */
-function renderPagination() {
+function renderPagination(page, totalPages) {
     const paginationContainer = document.querySelector('.pagination');
     if (!paginationContainer) return;
-
-    // 필터링된 게시글 가져오기
-    const filteredPosts = filterPosts();
-
-    // 총 페이지 수 계산
-    const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
 
     // 컨테이너 비우기
     paginationContainer.innerHTML = '';
 
+    // API는 0부터 시작하는 페이지 번호를 사용하지만, UI는 1부터 시작하는 페이지 번호를 표시
+    const displayPageNo = page + 1;
+
     // 이전 페이지 버튼
     const prevLi = document.createElement('li');
-    prevLi.className = 'page-item' + (currentPage === 1 ? ' disabled' : '');
+    prevLi.className = 'page-item' + (page === 0 ? ' disabled' : '');
     prevLi.innerHTML = `
         <a class="page-link" href="#" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
@@ -486,55 +832,12 @@ function renderPagination() {
     paginationContainer.appendChild(prevLi);
 
     // 이전 페이지 버튼 이벤트
-    if (currentPage > 1) {
+    if (page > 0) {
         prevLi.addEventListener('click', function (e) {
             e.preventDefault();
             currentPage--;
-            renderPosts();
-            renderPagination();
-            window.scrollTo(0, 0);
-        });
-    }
-
-    // 페이지 번호
-    const maxVisiblePages = 5; // 한 번에 보이는 페이지 수
-    const startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    for (let i = startPage; i <= endPage; i++) {
-        const pageLi = document.createElement('li');
-        pageLi.className = 'page-item' + (i === currentPage ? ' active' : '');
-        pageLi.innerHTML = `<a class="page-link" href="#">${i}</a>`;
-
-        // 페이지 번호 클릭 이벤트
-        pageLi.addEventListener('click', function (e) {
-            e.preventDefault();
-            currentPage = i;
-            renderPosts();
-            renderPagination();
-            window.scrollTo(0, 0);
-        });
-
-        paginationContainer.appendChild(pageLi);
-    }
-
-    // 다음 페이지 버튼
-    const nextLi = document.createElement('li');
-    nextLi.className = 'page-item' + (currentPage === totalPages || totalPages === 0 ? ' disabled' : '');
-    nextLi.innerHTML = `
-        <a class="page-link" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-        </a>
-    `;
-    paginationContainer.appendChild(nextLi);
-
-    // 다음 페이지 버튼 이벤트
-    if (currentPage < totalPages) {
-        nextLi.addEventListener('click', function (e) {
-            e.preventDefault();
-            currentPage++;
-            renderPosts();
-            renderPagination();
+            updateURLFromState(false); // replaceState 사용
+            fetchAndRenderPosts();
             window.scrollTo(0, 0);
         });
     }
@@ -545,5 +848,6 @@ function renderPagination() {
  * @returns {boolean} - 로그인 여부
  */
 function checkUserLoggedIn() {
-    return true;
+    // 실제 구현에서는 토큰이나 세션을 확인
+    return localStorage.getItem('accessToken') !== null;
 }

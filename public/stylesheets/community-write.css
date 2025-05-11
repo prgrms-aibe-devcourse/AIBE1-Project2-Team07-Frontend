@@ -1,5 +1,137 @@
 /* Community Write Page Styles */
 
+/* 버튼 공통 스타일 */
+.btn-custom {
+    border-radius: 24px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+}
+
+/* 사진 첨부 버튼 */
+.btn-photo-upload {
+    background-color: #f0f2f5;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.btn-photo-upload:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-photo-upload i {
+    color: #FF6600;
+    font-size: 16px;
+}
+
+/* 비디오 첨부 버튼 */
+.btn-video-upload {
+    background-color: #f0f2f5;
+    color: #495057;
+    border: 1px solid #dee2e6;
+}
+
+.btn-video-upload:hover {
+    background-color: #e9ecef;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-video-upload i {
+    color: #4A6FA5;
+    font-size: 16px;
+}
+
+/* 글 등록 버튼 */
+.btn-submit-post {
+    background-color: #FF6600;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.btn-submit-post:hover {
+    background-color: #e55c00;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+.btn-submit-post i {
+    font-size: 18px;
+}
+
+/* 파일 업로드 정보 텍스트 */
+.upload-info {
+    font-size: 13px;
+    color: #6c757d;
+    margin-left: 8px;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* 업로드 영역 컨테이너 개선 */
+.upload-container {
+    background-color: #f8f9fa;
+    border: 1px dashed #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.upload-container:hover {
+    border-color: #FF6600;
+    background-color: #fff9f5;
+}
+
+/* 업로드 영역 제목 */
+.upload-title {
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 12px;
+    color: #343a40;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.upload-title i {
+    color: #FF6600;
+}
+
+/* 미리보기 영역 개선 */
+.preview-area {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+    min-height: 60px;
+}
+
+/* 반응형 조정 */
+@media (max-width: 768px) {
+    .btn-custom {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .upload-info {
+        display: block;
+        margin-left: 0;
+        margin-top: 5px;
+    }
+}
+
 .write-section {
     max-width: 1100px;
     margin: 0 auto;
@@ -23,8 +155,8 @@
 }
 
 .required {
-    color: #FF6600;
-    margin-left: 3px;
+    color: #ff6b6b;
+    margin-left: 2px;
 }
 
 .form-control {
@@ -128,6 +260,328 @@
     align-items: center;
     flex-wrap: wrap;
     gap: 10px;
+}
+
+:root {
+    --primary-color: #FF6600;       /* 주 색상 - 주황색 */
+    --primary-light: #FFE2D1;       /* 연한 주황색 */
+    --secondary-color: #4A6FA5;     /* 보조 색상 - 파란색 */
+    --secondary-light: #E4EBF7;     /* 연한 파란색 */
+    --border-color: #DEE2E6;        /* 테두리 색상 */
+}
+
+/* Pet Category Styles */
+.pet-category-container {
+    margin-top: 10px;
+}
+
+.pet-category-buttons {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-check:checked + .btn-outline-pet {
+    background-color: #FF6600;
+    color: #fff;
+    border-color: #FF6600;
+}
+
+.btn-outline-pet {
+    flex: 1;
+    background-color: #fff;
+    color: #555;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.btn-outline-pet:hover {
+    background-color: #fff9f5;
+    color: #FF6600;
+    border-color: #FF6600;
+    transform: translateY(-2px);
+}
+
+.btn-outline-pet i {
+    font-size: 1.2em;
+}
+
+/* 반응형 스타일 */
+@media (max-width: 576px) {
+    .pet-category-buttons {
+        flex-direction: column;
+    }
+
+    .btn-outline-pet {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+.category-container, .pet-category-container {
+    margin-top: 10px;
+}
+
+.category-buttons, .pet-category-buttons {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* 게시판 카테고리 버튼 스타일 */
+.btn-check:checked + .btn-outline-category {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 3px 10px rgba(255, 102, 0, 0.3);
+}
+
+/* 펫 카테고리 버튼 스타일 */
+.btn-check:checked + .btn-outline-pet {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+    box-shadow: 0 3px 10px rgba(74, 111, 165, 0.3);
+}
+
+/* 버튼 기본 스타일 */
+.btn-outline-category, .btn-outline-pet {
+    flex: 1;
+    min-width: 120px;
+    background-color: white;
+    color: #555;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+/* 게시판 카테고리 호버 효과 */
+.btn-outline-category:hover {
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 102, 0, 0.15);
+}
+
+/* 펫 카테고리 호버 효과 */
+.btn-outline-pet:hover {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    background-color: var(--secondary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(74, 111, 165, 0.15);
+}
+
+/* 아이콘 스타일 */
+.btn-outline-category i,
+.btn-outline-pet i {
+    font-size: 1.2em;
+}
+
+/* 게시판 카테고리 아이콘 색상 */
+.btn-outline-category i {
+    color: var(--primary-color);
+}
+
+/* 펫 카테고리 아이콘 색상 */
+.btn-outline-pet i {
+    color: var(--secondary-color);
+}
+
+/* 선택된 버튼의 아이콘 색상 */
+.btn-check:checked + .btn-outline-category i,
+.btn-check:checked + .btn-outline-pet i {
+    color: white;
+}
+
+/* 태그 입력 관련 스타일 */
+.tag-input-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    min-height: 48px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+    padding: 6px 12px;
+}
+
+.tag-input-container:focus-within {
+    border-color: #FF6600;
+    box-shadow: 0 0 0 0.25rem rgba(255, 102, 0, 0.25);
+}
+
+.tag-input {
+    outline: none;
+    padding: 4px 0;
+    font-size: 14px;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.selected-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-right: 8px;
+}
+
+.selected-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e9ecef;
+    color: #495057;
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 13px;
+    margin-bottom: 4px;
+    transition: all 0.2s ease;
+}
+
+.selected-tag:hover {
+    background-color: #dee2e6;
+}
+
+.selected-tag span:first-child {
+    margin-right: 2px;
+}
+
+.selected-tag span:last-child {
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    transition: all 0.2s ease;
+}
+
+.selected-tag span:last-child:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-dropdown {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 4px;
+    z-index: 1050;
+}
+
+.autocomplete-dropdown .dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #495057;
+    transition: all 0.2s ease;
+}
+
+.autocomplete-dropdown .dropdown-item:hover {
+    background-color: #f8f9fa;
+    color: #FF6600;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+/* 태그 라벨 스타일 */
+.tag-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+
+
+/* 반응형 스타일 */
+@media (max-width: 768px) {
+    .category-buttons {
+        flex-wrap: wrap;
+    }
+
+    .btn-outline-category {
+        flex: 0 0 calc(50% - 5px);
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .pet-category-buttons {
+        flex-direction: column;
+    }
+
+    .btn-outline-pet,
+    .btn-outline-category {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+}
+
+/* 활성 항목 스타일 */
+.autocomplete-dropdown .dropdown-item.active {
+    background-color: #ffeee3;
+    color: #FF6600;
+    font-weight: 500;
+}
+
+/* 자동완성 드롭다운 추가 스타일 */
+.autocomplete-dropdown {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 4px;
+    z-index: 1050;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+/* 스크롤바 스타일 (웹킷 브라우저용) */
+.autocomplete-dropdown::-webkit-scrollbar {
+    width: 6px;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+.autocomplete-dropdown::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+.ad-container {
+    margin: 30px 0;
+    position: sticky;
+    top: 100px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ad-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: opacity 0.5s ease;
 }
 
 /* Responsive styles */

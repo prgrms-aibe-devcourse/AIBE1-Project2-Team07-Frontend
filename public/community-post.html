@@ -52,39 +52,43 @@
 <section class="community-post-section py-5">
     <div class="container">
         <div class="row justify-content-center">
+            <div class="col-lg-2">
+                <div class="ad-container">
+                    <img id="adImage1" src="./images/ads/ad1.jpg" alt="광고">
+                </div>
+            </div>
+
             <div class="col-lg-8">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="fw-bold mb-0"></h2>
+                    <a href="/community" class="btn btn-outline-secondary rounded-pill">
+                        <i class="fa-solid fa-arrow-left me-1"></i> 커뮤니티로 돌아가기
+                    </a>
+                </div>
                 <section class="post-detail position-relative">
                     <header class="post-header">
-                        <div class="post-category badge mb-2 px-3 py-2 rounded-pill">
-                            자유 게시판
+                        <div class="d-flex mb-2">
+                            <div class="post-category badge me-2 px-3 py-2 rounded-pill"></div>
+                            <div class="pet-category badge px-3 py-2 rounded-pill"></div>
                         </div>
                         <div class="d-flex justify-content-between align-items-start">
-                            <h1 class="post-title mb-0">강조되고 반복되는 말은 강아지를 불안하게 해요 .</h1>
-                            <button class="edit-btn border-0 bg-transparent ms-3">
-                                <img src="./images/icons/pencil-fill.svg" alt="Edit" class="edit-btn-img" width="24">
-                            </button>
+                            <h1 class="post-title mb-0"></h1>
+                            <div class="d-flex align-items-center">
+                                <div class="text-muted small me-3">2023-10-26</div>
+                                <div class="post-actions" style="display: none;">
+                                    <button class="edit-btn border-0 bg-transparent me-2">
+                                        <img src="./images/icons/pencil-fill.svg" alt="Edit" class="edit-btn-img" width="24">
+                                    </button>
+                                    <button class="delete-btn border-0 bg-transparent me-2">
+                                        <img src="./images/icons/trash-fill.svg" alt="Delete" width="24">
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </header>
 
                     <div class="post-content">
-                        <p>강조되고 반복되는 소리는 강아지를 불안하게 해요. <br>
-                            괜찮아요. 괜찮아요!! 괜! 찮아요!!!! 딩딩딩딩딩..
-                            너 왜 우리 집에 왔어!!
-                            내가 그렇게 좋아? 그런데 왜 그렇게 했어!
-                            거지들..
-                            말려요!! 말려야지 지금 뭐 하는 거야!! 뭐 하시는 거예요? 말려야죠.</p>
-
-                        <img src="https://placehold.co/400x400?text=Post+Image+1" alt="Post Image 1"
-                             class="img-fluid my-3">
-
-                        <img src="https://placehold.co/400x300?text=Post+Image+2" alt="Post Image 2"
-                             class="img-fluid my-3">
-
-                        <img src="https://placehold.co/200x400?text=Post+Image+2" alt="Post Image 2"
-                             class="img-fluid my-3">
-
-                        <img src="https://placehold.co/400x400?text=Post+Image+2" alt="Post Image 2"
-                             class="img-fluid my-3">
+                    <p></p>
                     </div>
 
                     <div class="d-flex pb-3">
@@ -92,20 +96,19 @@
                              class="rounded-circle me-3 author-avatar">
                         <div class="author-details">
                             <div class="author-name fw-bold">강형욱</div>
-                            <div class="text-muted small">2023-10-26</div>
                         </div>
                     </div>
 
                     <footer class="post-footer d-flex justify-content-center align-items-center">
-                        <div class="circle-button text-center">
-                            <img src="./images/icons/hand-thumbs-up-fill.svg" alt="Like" class="like-btn mb-1">
-                            <div class="like-count">14</div>
+                        <div class="circle-button text-center like-btn">
+                            <img src="./images/icons/hand-thumbs-up-fill.svg" alt="Like" class="mb-1">
+                            <div class="like-count"></div>
                         </div>
                     </footer>
                 </section>
 
                 <section class="comments-section p-4 border-top">
-                    <h3 class="comments-title">댓글 15</h3>
+                    <h3 class="comments-title"></h3>
                     <div class="comment-form mt-3 mb-4 d-flex flex-column">
                         <textarea class="form-control mb-2" rows="3" placeholder="댓글을 입력해주세요."></textarea>
                         <div class="text-end">
@@ -118,26 +121,8 @@
                             <div class="d-flex mb-3 pb-3 border-bottom">
                                 <img src="https://placehold.co/40x40?text=Avatar" alt="Commenter Avatar"
                                      class="rounded-circle me-3 comment-avatar">
-                                <div class="comment-content-wrapper flex-grow-1">
-                                    <div class="comment-meta d-flex justify-content-between align-items-center">
-                                        <span class="comment-author fw-bold">김형욱</span>
-                                        <span class="comment-date text-muted small">2023-10-26</span>
-                                    </div>
-                                    <div class="comment-text mt-1">
-                                        <p class="mb-1">저희 강아지도 그런 적 있는데, 분리 불안 때문에 그런 것 같았어요. 켄넬 훈련이나 노즈워크 같은 거 해주니 좀
-                                            나아졌어요.</p>
-                                    </div>
-                                    <div class="d-flex gap-3 mt-1">
-                                        <button class="btn btn-sm btn-warning btn-reply px-3 py-1 rounded-pill">답글
-                                        </button>
-                                        <button class="btn btn-sm btn-warning btn-like px-3 py-1 rounded-pill">좋아요 15
-                                        </button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
-                        <!-- 나머지 댓글 동일 구조 반복 -->
-                        <!-- 대댓글 -->
                         <div class="reply d-flex mt-3 ps-5 ">
                             <img src="./images/temp.jpg" alt="Replyer Avatar"
                                  class="rounded-circle me-3 comment-avatar">
@@ -147,18 +132,17 @@
                                     <span class="reply-date text-muted small">2023-10-26</span>
                                 </div>
                                 <div class="reply-text mt-1">
-                                    <p class="mb-1">저도 같은 문제 있었는데, 하울링 방지기는 안 쓰는 게 좋대요.</p>
-                                </div>
-                                <div class="d-flex gap-3 mt-1">
-                                    <button class="btn btn-sm btn-warning btn-reply px-3 py-1 rounded-pill">답글
-                                    </button>
-                                    <button class="btn btn-sm btn-warning btn-like px-3 py-1 rounded-pill">좋아요 15
-                                    </button>
+                                    <p class="mb-1"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
+            </div>
+            <div class="col-lg-2">
+                <div class="ad-container">
+                    <img id="adImage2" src="./images/ads/ad1.jpg" alt="광고">
+                </div>
             </div>
         </div>
     </div>
