@@ -73,7 +73,19 @@
             </svg>
           </button>
         </div>
-        <div class="mt-4">
+
+        <!-- Image loading state -->
+        <div id="previewImageLoading" class="flex justify-center my-8">
+          <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
+        </div>
+
+        <!-- Image error state -->
+        <div id="previewImageError" class="hidden text-center py-8 text-red-500">
+          이미지를 불러오는데 실패했습니다.
+        </div>
+
+        <!-- Image container -->
+        <div id="previewImageContainer" class="mt-4 hidden">
           <img id="previewImage" src="" alt="자격증 이미지" class="max-w-full">
         </div>
       </div>
