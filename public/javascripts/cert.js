@@ -69,6 +69,14 @@ async function fetchCertifications() {
 }
 
 function renderCertifications(certifications) {
+    certifications.sort((a, b) => {
+        const aPending = !a.approved && !a.rejected;
+        const bPending = !b.approved && !b.rejected;
+        if (aPending && !bPending) return -1;
+        if (!aPending && bPending) return 1;
+        return 0;
+    });
+
     const container = document.getElementById('certificationList');
     container.innerHTML = '';
 
@@ -95,7 +103,7 @@ function renderCertifications(certifications) {
             statusClass = 'bg-yellow-100 text-yellow-800';
         }
 
-        // 버튼 비활성화 여부 (승인·거절 후 둘 다 비활성화)
+        // 버튼 비활성화 여부
         const disabledAttr = (isApproved || isRejected)
             ? 'disabled style="opacity:0.5;cursor:not-allowed;"'
             : '';
@@ -103,48 +111,33 @@ function renderCertifications(certifications) {
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-200 hover:bg-gray-100';
         row.innerHTML = `
-      <td class="py-4 px-6">
-        <div class="font-medium">${cert.trainerName} (${cert.trainerNickname})</div>
-        <div class="text-xs text-gray-500">${cert.trainerId}</div>
-      </td>
-      <td class="py-4 px-6">
-        <div class="font-medium">${cert.certName}</div>
-      </td>
-      <td class="py-4 px-6">
-        <div>${cert.issuingBody}</div>
-        <div class="text-xs text-gray-500">발급일: ${cert.issueDate}</div>
-      </td>
-      <td class="py-4 px-6">
-        ${cert.fileUrl
-            ? `<button
-              class="bg-blue-100 text-blue-800 py-1 px-3 rounded hover:bg-blue-200 focus:ring-2 focus:ring-blue-300"
-              onclick="showImagePreview('${cert.fileUrl}','${cert.certName}')"
-              >
-                파일 보기
-            </button>`
-            : '<span class="text-gray-400">파일 없음</span>'
-        }
-      </td>
-      <td class="py-4 px-6 text-center">
-        <span class="${statusClass} py-1 px-3 rounded-full text-xs">
-          ${statusText}
-        </span>
-      </td>
-      <td class="py-4 px-6 text-center">
-        <div class="flex justify-center space-x-2">
-          <button
-            class="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600 focus:ring-2 focus:ring-green-300"
-            onclick="approveCertification(${cert.certId})"
-            ${disabledAttr}
-          >승인</button>
-          <button
-            class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 focus:ring-2 focus:ring-red-300"
-            onclick="rejectCertification(${cert.certId})"
-            ${disabledAttr}
-          >거절</button>
-        </div>
-      </td>
-    `;
+          <td class="py-4 px-6">
+            <div class="font-medium">${cert.trainerName} (${cert.trainerNickname})</div>
+            <div class="text-xs text-gray-500">${cert.trainerId}</div>
+          </td>
+          <td class="py-4 px-6"><div class="font-medium">${cert.certName}</div></td>
+          <td class="py-4 px-6">
+            <div>${cert.issuingBody}</div>
+            <div class="text-xs text-gray-500">발급일: ${cert.issueDate}</div>
+          </td>
+          <td class="py-4 px-6">
+            ${cert.fileUrl
+            ? `<button class="bg-blue-100 text-blue-800 py-1 px-3 rounded hover:bg-blue-200 focus:ring-2 focus:ring-blue-300"
+                        onclick="showImagePreview('${cert.fileUrl}','${cert.certName}')">파일 보기</button>`
+            : '<span class="text-gray-400">파일 없음</span>'}
+          </td>
+          <td class="py-4 px-6 text-center">
+            <span class="${statusClass} py-1 px-3 rounded-full text-xs">${statusText}</span>
+          </td>
+          <td class="py-4 px-6 text-center">
+            <div class="flex justify-center space-x-2">
+              <button class="bg-green-500 text-white py-1 px-4 rounded hover:bg-green-600 focus:ring-2 focus:ring-green-300"
+                      onclick="approveCertification('${cert.certId}')" ${disabledAttr}>승인</button>
+              <button class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 focus:ring-2 focus:ring-red-300"
+                      onclick="rejectCertification('${cert.certId}')" ${disabledAttr}>거절</button>
+            </div>
+          </td>
+        `;
         container.appendChild(row);
     });
 }
