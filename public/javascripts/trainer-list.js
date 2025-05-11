@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchTrainers(pageNo) {
         console.log(`pageNo: ${pageNo}`);
-        const response = await fetch(`/trainers/users?page=${pageNo}`);
+        const response = await fetch(`/api/v1/trainers?page=${pageNo}`);
         if (!response.ok) {
             throw new Error(`API 오류: ${response.status}`);
         }

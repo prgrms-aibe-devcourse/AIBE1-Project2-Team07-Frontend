@@ -16,10 +16,17 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container position-relative">
         <a class="navbar-brand" href="/">
-            <img src="./images/logo.png" alt="PetTalk Logo" height="50">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
@@ -30,11 +37,28 @@
                 <li class="nav-item">
                     <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link nav-item-link" href="/profile" id="myProfile">내 프로필</a>
+                <li id="myProfile" class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle nav-item-link"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <img src="./images/cat1.jpeg" alt="Profile" class="profile-img">
+                        <span class="profile-name"></span>
+                        <img src="./images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
+                        <li><a class="dropdown-item" href="/profile?tab=advice">상담 내역</a></li>
+                        <li><a class="dropdown-item logout-btn" href="/logout">로그아웃</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn">로그인</a>
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
                 </li>
             </ul>
         </div>
