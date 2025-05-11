@@ -292,7 +292,7 @@ async function fetchReviews() {
     const response = await fetch(`/api/v1/reviews/top-liked?limit=9`, {
         method: "GET",
         headers: {
-            Authorization: `Bearer ${getAccessToken()}`
+            "Content-Type": "application/json",
         }
     });
 
