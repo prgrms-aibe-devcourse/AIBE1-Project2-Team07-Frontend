@@ -256,77 +256,77 @@ function updatePagination(totalPosts, totalPages) {
     paginationContainer.appendChild(nextButton);
 }
 
-// async function viewPostDetail(postId) {
-//     try {
-//         showStatus('게시물 상세 정보를 불러오는 중...', 'loading');
-//
-//         const res = await fetch(`/api/v1/admin/posts/${postId}`, {
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             }
-//         });
-//
-//         if (!res.ok) {
-//             const errorData = await res.json().catch(() => ({}));
-//             throw new Error(`게시물 상세 조회 실패 (${res.status}): ${errorData.message || res.statusText}`);
-//         }
-//
-//         const post = await res.json();
-//
-//         // 카테고리 표시 텍스트
-//         let categoryText;
-//         switch(post.category) {
-//             case 'question': categoryText = '질문'; break;
-//             case 'story': categoryText = '일상'; break;
-//             case 'info': categoryText = '정보공유'; break;
-//             default: categoryText = '기타';
-//         }
-//
-//         // 날짜 포맷팅
-//         const createdAt = new Date(post.createdAt);
-//         const formattedDate = `${createdAt.getFullYear()}-${(createdAt.getMonth()+1).toString().padStart(2, '0')}-${createdAt.getDate().toString().padStart(2, '0')} ${createdAt.getHours().toString().padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
-//
-//         document.getElementById('postDetailContent').innerHTML = `
-//             <div class="border-b pb-4 mb-4">
-//                 <div class="flex justify-between items-center mb-2">
-//                     <div>
-//                         <span class="bg-gray-100 text-gray-800 text-xs py-1 px-2 rounded-full mr-2">${categoryText}</span>
-//                         <span class="text-gray-500 text-sm">${formattedDate}</span>
-//                     </div>
-//                     <div class="flex items-center space-x-4 text-sm text-gray-500">
-//                         <span>조회수 ${post.viewCount || 0}</span>
-//                         <span>좋아요 ${post.likeCount || 0}</span>
-//                         <span>댓글 ${post.commentCount || 0}</span>
-//                     </div>
-//                 </div>
-//                 <h2 class="text-xl font-bold mb-2">${post.title}</h2>
-//                 <div class="flex items-center">
-//                     ${post.authorProfileImage ?
-//             `<img src="${post.authorProfileImage}" alt="프로필" class="w-8 h-8 rounded-full mr-2">` :
-//             '<div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>'}
-//                     <span class="font-medium">${post.authorNickname}</span>
-//                 </div>
-//             </div>
-//             <div class="mt-4 whitespace-pre-wrap">${post.content}</div>
-//
-//             ${post.images && post.images.length > 0 ? `
-//                 <div class="mt-4 grid grid-cols-2 gap-2">
-//                     ${post.images.map(img => `
-//                         <div class="border rounded overflow-hidden">
-//                             <img src="${img}" alt="게시물 이미지" class="w-full h-auto">
-//                         </div>
-//                     `).join('')}
-//                 </div>
-//             ` : ''}
-//         `;
-//
-//         document.getElementById('postDetailModal').classList.remove('hidden');
-//         document.getElementById('statusMessage').classList.add('hidden');
-//     } catch (err) {
-//         console.error('게시물 상세 조회 오류:', err);
-//         showStatus(`게시물 상세 조회 실패: ${err.message}`, 'error');
-//     }
-// }
+async function viewPostDetail(postId) {
+    try {
+        showStatus('게시물 상세 정보를 불러오는 중...', 'loading');
+
+        const res = await fetch(`/api/v1/admin/posts`, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!res.ok) {
+            const errorData = await res.json().catch(() => ({}));
+            throw new Error(`게시물 상세 조회 실패 (${res.status}): ${errorData.message || res.statusText}`);
+        }
+
+        const post = await res.json();
+
+        // 카테고리 표시 텍스트
+        let categoryText;
+        switch(post.category) {
+            case 'question': categoryText = '질문'; break;
+            case 'story': categoryText = '일상'; break;
+            case 'info': categoryText = '정보공유'; break;
+            default: categoryText = '기타';
+        }
+
+        // 날짜 포맷팅
+        const createdAt = new Date(post.createdAt);
+        const formattedDate = `${createdAt.getFullYear()}-${(createdAt.getMonth()+1).toString().padStart(2, '0')}-${createdAt.getDate().toString().padStart(2, '0')} ${createdAt.getHours().toString().padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
+
+        document.getElementById('postDetailContent').innerHTML = `
+            <div class="border-b pb-4 mb-4">
+                <div class="flex justify-between items-center mb-2">
+                    <div>
+                        <span class="bg-gray-100 text-gray-800 text-xs py-1 px-2 rounded-full mr-2">${categoryText}</span>
+                        <span class="text-gray-500 text-sm">${formattedDate}</span>
+                    </div>
+                    <div class="flex items-center space-x-4 text-sm text-gray-500">
+                        <span>조회수 ${post.viewCount || 0}</span>
+                        <span>좋아요 ${post.likeCount || 0}</span>
+                        <span>댓글 ${post.commentCount || 0}</span>
+                    </div>
+                </div>
+                <h2 class="text-xl font-bold mb-2">${post.title}</h2>
+                <div class="flex items-center">
+                    ${post.authorProfileImage ?
+            `<img src="${post.authorProfileImage}" alt="프로필" class="w-8 h-8 rounded-full mr-2">` :
+            '<div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>'}
+                    <span class="font-medium">${post.authorNickname}</span>
+                </div>
+            </div>
+            <div class="mt-4 whitespace-pre-wrap">${post.content}</div>
+
+            ${post.images && post.images.length > 0 ? `
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    ${post.images.map(img => `
+                        <div class="border rounded overflow-hidden">
+                            <img src="${img}" alt="게시물 이미지" class="w-full h-auto">
+                        </div>
+                    `).join('')}
+                </div>
+            ` : ''}
+        `;
+
+        document.getElementById('postDetailModal').classList.remove('hidden');
+        document.getElementById('statusMessage').classList.add('hidden');
+    } catch (err) {
+        console.error('게시물 상세 조회 오류:', err);
+        showStatus(`게시물 상세 조회 실패: ${err.message}`, 'error');
+    }
+}
 
 async function deletePost(postId) {
     if (!confirm('정말 이 게시물을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) return;
