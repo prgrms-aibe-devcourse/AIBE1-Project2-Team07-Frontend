@@ -257,7 +257,7 @@
 
 .trainer-img {
     width: 100%;
-    height: auto;
+    aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 10px;
 }
@@ -335,23 +335,17 @@
 
 .review-cards-wrapper {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     gap: 20px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    width: 100%;
 }
 
 .review-card {
-    display: flex;
-    flex-direction: column;
-    background-color: var(--white-color);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    height: auto;
-    min-height: 400px;
-    width: 100%;
-    max-width: 350px;
-    transition: all 0.3s ease;
+    flex: 0 0 calc(33.333% - 14px); /* 3등분에 갭 고려 */
+    min-width: calc(33.333% - 14px);
+    max-width: calc(33.333% - 14px);
+    margin: 0;
 }
 
 .review-card p {
@@ -362,6 +356,10 @@
     text-overflow: ellipsis;
     line-height: 1.4em;
     max-height: calc(1.4em * 3);
+}
+
+.carousel-item {
+    transition: transform 0.6s ease-in-out;
 }
 
 .review-img-container {
@@ -567,5 +565,28 @@
         width: 30px;
         height: 30px;
         right: -20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .review-card {
+        flex: 0 0 calc(33.333% - 14px);
+        min-width: calc(33.333% - 14px);
+        max-width: calc(33.333% - 14px);
+        min-height: auto;
+        padding: 10px;
+    }
+
+    .review-img-container {
+        height: 150px;
+    }
+
+    .review-card h5 {
+        font-size: 0.9rem;
+    }
+
+    .review-card p {
+        font-size: 0.8rem;
+        -webkit-line-clamp: 2;
     }
 }

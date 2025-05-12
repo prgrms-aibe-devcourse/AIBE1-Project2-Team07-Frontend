@@ -11,6 +11,18 @@ const baseUrl = "https://dev.tuituiworld.store/api/v1/";
 const accessToken = localStorage.getItem('accessToken');
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('toggle-description-btn');
+    const desc = document.getElementById('trainer-description');
+
+    if (btn && desc) {
+        btn.addEventListener('click', toggleDescription);
+
+        // 초기 길이에 따라 버튼 표시 여부 결정
+        if (desc.textContent.length < 200) {
+            btn.style.display = 'none';
+        }
+    }
+
     const path = window.location.pathname;
     let trainerNickname = null;
 
@@ -21,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (trainerNickname) {
         loadTrainerDataByNickname(trainerNickname);
-        loadTrainerReviewByNickname(trainerNickname);
     } else {
         showError('유효한 트레이너 정보가 전달되지 않았습니다.');
     }
@@ -30,11 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // 트레이너 리뷰 데이터 로드 함수
 async function loadTrainerReviewByNickname(trainerNickname) {
     try {
-        const apiUrl = baseUrl + 'reviews/trainers/' + trainerNickname;
+        const apiUrl = `/api/v1/reviews/trainers/${trainerNickname}/open`;
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -47,6 +57,9 @@ async function loadTrainerReviewByNickname(trainerNickname) {
 
         // API 리뷰 데이터를 사이트 형식으로 변환
         allReviews = convertApiReviewsToSiteFormat(apiReviews);
+
+        loadReviews(1);
+
 
     } catch (error) {
         console.error('리뷰 데이터 로드 오류:', error);
@@ -73,8 +86,8 @@ function convertApiReviewsToSiteFormat(apiReviews) {
             name: nameWithMask,
             rating: validRating,
             content: review.comment || "",
-            title: review.title || "",
             profileImage: review.userImageUrl || "https://placedog.net/100/100?random=" + review.reviewId,
+            reviewImageUrl: review.reviewImageUrl,
             createdAt: review.createdAt,
             likeCount: review.likeCount || 0,
             hasLiked: review.hasLiked || false
@@ -87,7 +100,6 @@ function renderReviews(reviews, append = false) {
     const reviewsContainer = document.getElementById('reviews-container');
 
     if(!reviewsContainer) {
-        console.log("없습니다")
         return;
     }
 
@@ -99,7 +111,6 @@ function renderReviews(reviews, append = false) {
         reviewsContainer.appendChild(noReviewDiv);
         return;
     }
-
     // 리뷰 추가
     reviews.forEach(review => {
         const reviewDiv = document.createElement('div');
@@ -133,7 +144,6 @@ function renderReviews(reviews, append = false) {
   </div>
 </div>
 <div class="review-content">
-  ${review.title ? `<h6 class="review-title">${review.title}</h6>` : ''}
   <p>${review.content}</p>
 </div>
 <div class="review-actions mt-2">
@@ -159,26 +169,22 @@ function setupLikeButtonEvents() {
         button.addEventListener('click', async function(event) {
             event.preventDefault();
 
+            if (!checkUserLoggedIn()) {
+                // 로그인되어 있지 않으면 로그인 모달 표시
+                new bootstrap.Modal(document.getElementById('loginModal')).show();
+                return;
+            }
+
             const reviewId = this.dataset.reviewId;
             const isCurrentlyLiked = this.classList.contains('active');
             const likeCountEl = this.querySelector('.like-count');
             let likeCount = parseInt(likeCountEl.textContent);
 
             try {
-                // 토큰이 없는 경우 로그인 필요 알림
-                if (!accessToken) {
-                    alert('로그인이 필요한 기능입니다.');
-                    return;
-                }
-
                 // API 호출 (실제 API 엔드포인트로 수정 필요)
-                const apiUrl = baseUrl + `reviews/${reviewId}/likes/toggle`;
+                const apiUrl = `/api/v1/reviews/${reviewId}/likes/toggle`;
                 const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${accessToken}`,
-                        'Content-Type': 'application/json'
-                    }
+                    method: 'POST'
                 });
 
                 if (!response.ok) {
@@ -206,26 +212,6 @@ function setupLikeButtonEvents() {
     });
 }
 
-// 페이지 로드 시 실행 함수 업데이트
-document.addEventListener('DOMContentLoaded', async function() {
-    const path = window.location.pathname;
-    let trainerNickname = null;
-
-    const match = path.match(/\/trainers\/profile\/(.+)/);
-    if (match && match[1]) {
-        trainerNickname = decodeURIComponent(match[1]);
-    }
-
-    if (trainerNickname) {
-        // 트레이너 프로필 데이터 로드
-        loadTrainerDataByNickname(trainerNickname);
-
-        // 트레이너 리뷰 데이터 로드
-        loadTrainerReviewByNickname(trainerNickname);
-    } else {
-        showError('유효한 트레이너 정보가 전달되지 않았습니다.');
-    }
-});
 // 트레이너 데이터 로드 함수
 async function loadTrainerDataByNickname(trainerNickname) {
     try {
@@ -234,7 +220,7 @@ async function loadTrainerDataByNickname(trainerNickname) {
 
         // API에서 받아온 데이터를 사용
         // 실제 데이터 구조에 맞춰 아래 변환 로직 적용
-        const apiUrl = baseUrl + 'trainers/' + trainerNickname;
+        const apiUrl = `/api/v1/trainers/${trainerNickname}/open`;
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
@@ -255,10 +241,12 @@ async function loadTrainerDataByNickname(trainerNickname) {
         // UI 렌더링
         renderTrainerProfile(trainerData);
 
-        loadReviews(1);
+
 
         // 이벤트 리스너 설정
         setupEventListeners();
+
+        await loadTrainerReviewByNickname(trainerNickname);
 
     } catch (error) {
         console.error('트레이너 데이터 로드 오류:', error);
@@ -351,7 +339,8 @@ function convertApiDataToSiteFormat(apiData) {
     return {
         id: apiData.trainerId,
         title: apiData.title || "반려동물 행동 전문가", // 제목이 없으면 기본값 사용
-        name: apiData.nickname + " 훈련사",
+        name: apiData.name,
+        nickname: apiData.nickname,
         profileImage: apiData.profileImageUrl && apiData.profileImageUrl !== "string"
             ? apiData.profileImageUrl
             : defaultProfileImage,
@@ -382,21 +371,29 @@ function renderTrainerProfile(data) {
     const titleEl = template.querySelector('#trainer-title');
     titleEl.textContent = data.title;
 
+
     // 로그인 사용자 ID와 트레이너 ID가 같으면 “수정” 버튼 추가
-    if (window.currentUserId === data.id) {
-        const editBtn = document.createElement('button');
-        editBtn.type      = 'button';
-        editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
-        editBtn.textContent = '수정';
-        editBtn.addEventListener('click', () => {
-            openEditTrainerModal(data);
-        });
-        titleContainer.appendChild(editBtn);
+    try{
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user.name === data.name) {
+            const editBtn = document.createElement('button');
+            editBtn.type      = 'button';
+            editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
+            editBtn.textContent = '수정';
+            editBtn.addEventListener('click', () => {
+                openEditTrainerModal(data);
+            });
+            titleContainer.appendChild(editBtn);
+        }
+    }catch(e){
+
     }
+
+
 
     // 기본 정보 설정
     template.querySelector('#trainer-title').textContent = data.title;
-    template.querySelector('#trainer-name').textContent = data.name;
+    template.querySelector('#trainer-name').textContent = data.nickname + ` (${data.name} 훈련사)`;
     template.querySelector('#trainer-rating').textContent = data.rating.toFixed(1);
     template.querySelector('#review-count').textContent = `(${data.reviewCount}개의 리뷰)`;
     template.querySelector('#reviews-title').textContent = `고객 후기 ${data.reviewCount}개`;
@@ -522,7 +519,14 @@ function renderTrainerProfile(data) {
         const radio = document.querySelector(`input[name="serviceType"][value="${serviceType}"]`);
         if (radio) radio.checked = true;
 
-        new bootstrap.Modal(document.getElementById('inquiryModal')).show();
+        if (checkUserLoggedIn()){
+            new bootstrap.Modal(document.getElementById('inquiryModal')).show();
+        }
+        else{
+            new bootstrap.Modal(document.getElementById('loginModal')).show();
+        }
+
+
     }
 }
 
@@ -539,19 +543,6 @@ function toggleDescription() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const btn = document.getElementById('toggle-description-btn');
-    const desc = document.getElementById('trainer-description');
-
-    if (btn && desc) {
-        btn.addEventListener('click', toggleDescription);
-
-        // 초기 길이에 따라 버튼 표시 여부 결정
-        if (desc.textContent.length < 200) {
-            btn.style.display = 'none';
-        }
-    }
-});
 
 // 리뷰 로드 함수 - 페이징 처리 개선
 function loadReviews(page, append = false) {
@@ -560,7 +551,7 @@ function loadReviews(page, append = false) {
         const startIndex = (page - 1) * reviewsPerPage;
         const endIndex = Math.min(startIndex + reviewsPerPage, allReviews.length);
 
-        // 현재 페이지의 리뷰만 가져오기
+
         const pageReviews = allReviews.slice(startIndex, endIndex);
 
         // 리뷰 렌더링
@@ -617,4 +608,9 @@ function showError(message) {
 // 숫자 포맷팅 (천 단위 콤마)
 function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function checkUserLoggedIn() {
+    // 실제 구현에서는 토큰이나 세션을 확인
+    return localStorage.getItem('accessToken') !== null;
 }
