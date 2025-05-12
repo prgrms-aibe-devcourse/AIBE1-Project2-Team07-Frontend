@@ -1,28 +1,30 @@
 var express = require('express');
 var path = require('path');
 var router = express.Router();
-const fetchWithAuth = require("../middlewares/authMiddleware");
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.sendFile(path.join(__dirname, '../public/home.html'));
+    let user;
+    try {
+        user = JSON.parse(req.cookies.user);
+    } catch (e) {
+        console.error('사용자 쿠키 파싱 오류:', e);
+        return res.sendFile(path.join(__dirname, '../public/home.html'));
+    }
+
+    // 사용자 역할에 따라 다른 페이지 제공
+    if (user.userRole === 'ADMIN') {
+        return res.sendFile(path.join(__dirname, '../public/cert.html'));
+    } else {
+        return res.sendFile(path.join(__dirname, '../public/home.html'));
+    }
 });
 
-router.get("/chat", async (req, res, next) => {
-    try {
-        const prompt = req.query.prompt;
-        req.originalUrl = `/api/v1/mcp/chat?prompt=${prompt}`;
-        await fetchWithAuth(req, res, async () => {
-            const aiResponse = req.apiResponse;
-            if (!aiResponse) {
-                return res.status(500).json({message: "응답 데이터가 없습니다."});
-            }
-            res.json(aiResponse);
-        });
-    } catch (error) {
-        console.error("AI 요청 처리 중 오류 발생:", error);
-        res.status(500).json({message: "서버 오류"});
-    }
+// 오류 처리를 위한 추가 미들웨어
+router.use(function(err, req, res, next) {
+    console.error('라우터 오류:', err);
+    res.status(err.status || 500);
+    res.send('오류가 발생했습니다. 관리자에게 문의하세요.');
 });
 
 module.exports = router;
