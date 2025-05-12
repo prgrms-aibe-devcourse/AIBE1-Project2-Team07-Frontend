@@ -75,12 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
     updatePostBtn.addEventListener('click', handlePostUpdate);
 
-    cancelBtn.addEventListener('click', function() {
+    cancelBtn.addEventListener('click', function () {
         // 변경 사항이 있는지 확인
         if (hasChanges()) {
             showConfirmModal(
                 '작성 중인 내용이 있습니다. 정말 취소하시겠습니까?',
-                function() {
+                function () {
                     window.location.href = `/community/post/${postId}`;
                 }
             );
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 게시글 데이터 가져오기 함수
     async function fetchPostData() {
         try {
-            const response = await fetch(API_BASE_URL + 'posts/' + postId + '/open', {
+            const response = await fetch('/api/v1/posts/' + postId + '/open', {
                 method: 'GET',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
@@ -385,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // 태그 데이터 가져오기
     async function fetchTags() {
         try {
-            const response = await fetch(API_BASE_URL + 'tags/open', {
+            const response = await fetch('/api/v1/tags/open', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -485,7 +485,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!hasChanges()) {
             showConfirmModal(
                 '변경사항이 없습니다. 커뮤니티로 돌아가시겠습니까?',
-                function() {
+                function () {
                     window.location.href = '/community';
                 }
             );
@@ -522,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         try {
-            const response = await fetch(API_BASE_URL + 'posts/' + postId, {
+            const response = await fetch('/api/v1/posts/' + postId, {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
@@ -585,7 +585,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentFocus = -1;
 
         // 태그 입력 이벤트 처리
-        tagInput.addEventListener('input', function() {
+        tagInput.addEventListener('input', function () {
             const inputValue = this.value.trim();
             currentFocus = -1;
 
@@ -621,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // 키보드 방향키 및 엔터키 처리
-        tagInput.addEventListener('keydown', function(e) {
+        tagInput.addEventListener('keydown', function (e) {
             const items = autocompleteDropdown.querySelectorAll('.dropdown-item');
 
             if (!items.length) return;
@@ -743,7 +743,7 @@ document.addEventListener('DOMContentLoaded', function () {
         confirmActionBtn.parentNode.replaceChild(newConfirmBtn, confirmActionBtn);
 
         // 새 이벤트 리스너 추가
-        newConfirmBtn.addEventListener('click', function() {
+        newConfirmBtn.addEventListener('click', function () {
             confirmModal.hide();
             if (typeof callback === 'function') {
                 callback();

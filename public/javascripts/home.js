@@ -311,16 +311,11 @@ async function fetchReviews() {
  * @returns {Array} 훈련사 객체 배열
  */
 async function fetchTrainers() {
-    const response = await fetch(`http://localhost:8444/api/v1/trainers/random/open`, {
+    const response = await fetch(`/api/v1/trainers/random/open`, {
         method: "GET",
-        headers: {
-            Authorization: `Bearer ${getAccessToken()}`
-        }
     });
 
     const data = await response.json();
-
-    console.log(data);
 
     return data.map(trainer => ({
         name: trainer.name + " 훈련사",
@@ -331,7 +326,6 @@ async function fetchTrainers() {
         location: trainer.visitingAreas,
         features: trainer.title
     }));
-
 }
 
 /**

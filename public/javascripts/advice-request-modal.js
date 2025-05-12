@@ -4,19 +4,19 @@ let selectedFile = null; // 선택된 단일 파일을 저장할 변수
 let isFileHandlerInitialized = false; // 파일 핸들러 초기화 여부 확인 플래그
 
 // 교육문의하기 모달 기능
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // 프로필 컨테이너가 로드된 후에 이벤트 리스너 추가
     const profileContainer = document.getElementById('trainer-profile-container');
-    const config = { attributes: true, childList: true, subtree: true };
+    const config = {attributes: true, childList: true, subtree: true};
 
     // 프로필 컨테이너의 변화를 관찰하는 MutationObserver
     const observer = new MutationObserver((mutationsList, observer) => {
-        for(const mutation of mutationsList) {
+        for (const mutation of mutationsList) {
             if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
                 // 프로필이 로드되면 교육문의 버튼에 이벤트 리스너 추가
                 const inquiryButton = document.getElementById('inquiry-button');
                 if (inquiryButton) {
-                    inquiryButton.addEventListener('click', function() {
+                    inquiryButton.addEventListener('click', function () {
                         // 현재 로드된 트레이너 이름을 모달 제목에 설정
                         const trainerNameElement = document.getElementById('trainer-name');
                         const modalTitle = document.getElementById('inquiryModalLabel');
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 또는 직접 버튼에 이벤트 리스너 추가 시도
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         if (e.target && e.target.id === 'inquiry-button') {
             // 현재 로드된 트레이너 이름을 모달 제목에 설정
             const trainerNameElement = document.getElementById('trainer-name');
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const charCount = document.getElementById('charCount');
 
     if (textarea && charCount) {
-        textarea.addEventListener('input', function() {
+        textarea.addEventListener('input', function () {
             const count = this.value.length;
             charCount.textContent = count;
 
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const petAgeMonths = document.getElementById('petAgeMonths');
 
     if (petAgeYears) {
-        petAgeYears.addEventListener('input', function() {
+        petAgeYears.addEventListener('input', function () {
             // 숫자만 허용
             this.value = this.value.replace(/[^0-9]/g, '');
             // 두 자리까지만 허용
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (petAgeMonths) {
-        petAgeMonths.addEventListener('input', function() {
+        petAgeMonths.addEventListener('input', function () {
             // 숫자만 허용
             this.value = this.value.replace(/[^0-9]/g, '');
             // 두 자리까지만 허용
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fileList.appendChild(div);
 
         // 파일 삭제 버튼 이벤트
-        removeBtn.addEventListener('click', function() {
+        removeBtn.addEventListener('click', function () {
             selectedFile = null;
             updateFileListDisplay();
             // 파일 입력 초기화
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 모달이 열릴 때마다 파일 첨부 기능 설정 (이전 리스너 제거 후 새로 설정)
-    document.addEventListener('shown.bs.modal', function(e) {
+    document.addEventListener('shown.bs.modal', function (e) {
         if (e.target && e.target.id === 'inquiryModal') {
             console.log('모달 표시됨');
             // 파일 목록 초기화
@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 문의하기 버튼 기능 - 파일과 데이터를 분리해서 전송
     const submitInquiry = document.getElementById('submitInquiry');
     if (submitInquiry) {
-        submitInquiry.addEventListener('click', async function() {
+        submitInquiry.addEventListener('click', async function () {
             // 1) 유효성 재검사
             const messageText = document.getElementById('inquiryMessage')?.value.trim();
             const petTypeValue = document.getElementById('petType')?.value.trim();
@@ -315,20 +315,33 @@ document.addEventListener('DOMContentLoaded', function() {
             const petMonthsValue = document.getElementById('petAgeMonths')?.value.trim() || '0';
             const serviceTypeEl = document.querySelector('input[name="serviceType"]:checked');
 
-            if (!serviceTypeEl) { alert('서비스 종류를 선택해주세요.'); return; }
+            if (!serviceTypeEl) {
+                alert('서비스 종류를 선택해주세요.');
+                return;
+            }
             if (!messageText || messageText.length < 20) {
                 alert('내용은 최소 20자 이상 입력해주세요.');
                 return;
             }
-            if (!petTypeValue) { alert('반려동물 종을 입력해주세요.'); return; }
-            if (!petBreedValue) { alert('반려동물 품종을 입력해주세요.'); return; }
+            if (!petTypeValue) {
+                alert('반려동물 종을 입력해주세요.');
+                return;
+            }
+            if (!petBreedValue) {
+                alert('반려동물 품종을 입력해주세요.');
+                return;
+            }
             if (petYearsValue === '0' && petMonthsValue === '0') {
-                alert('반려동물 나이를 입력해주세요.'); return;
+                alert('반려동물 나이를 입력해주세요.');
+                return;
             }
 
             // JWT 토큰 확인
             const token = localStorage.getItem('accessToken');
-            if (!token) { alert('로그인이 필요합니다.'); return; }
+            if (!token) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
 
             try {
                 const trainerNickname = window.nickname;
@@ -358,10 +371,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // 1단계: 기본 데이터 전송 (파일 없이)
                 // 컨트롤러 코드 확인 결과 정확한 API 엔드포인트는 '/api/v1/match'
-                const res = await fetch(`${window.API_BASE_URL}/api/v1/match`, {
+                const res = await fetch(`/api/v1/match`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(requestData)
@@ -433,11 +445,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // 참고: 컨트롤러에 파일 업로드 엔드포인트가 명시되어 있지 않으므로
             // 서버 로그를 확인하거나 백엔드 개발자에게 정확한 엔드포인트 확인 필요
-            const uploadRes = await fetch(`${window.API_BASE_URL}/api/v1/match/upload-file`, {
+            const uploadRes = await fetch(`/api/v1/match/upload-file`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
                 body: fileFormData
             });
 
@@ -504,11 +513,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // 모달이 닫힐 때 배경을 함께 제거하기 위한 이벤트 리스너
     const modalElement = document.getElementById('inquiryModal');
     if (modalElement) {
-        modalElement.addEventListener('hidden.bs.modal', function() {
+        modalElement.addEventListener('hidden.bs.modal', function () {
             // 모달 배경 요소 찾기
             const modalBackdrops = document.getElementsByClassName('modal-backdrop');
             // 모든 모달 배경 요소 제거
-            while(modalBackdrops.length > 0) {
+            while (modalBackdrops.length > 0) {
                 modalBackdrops[0].parentNode.removeChild(modalBackdrops[0]);
             }
             // body에서 modal-open 클래스 제거

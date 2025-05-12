@@ -1,7 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // API 기본 URL (실제 백엔드 URL로 변경 필요)
-    const API_BASE_URL = 'https://dev.tuituiworld.store/api/v1/';
-
     // 페이지네이션 설정
     const ITEMS_PER_PAGE = 5;
     let currentPage = 1;
@@ -299,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     async function fetchTrainers(pageNo) {
         console.log(`pageNo: ${pageNo}`);
-        const response = await fetch(`/api/v1/trainers?page=${pageNo}`);
+        const response = await fetch(`/api/v1/trainers/open?page=${pageNo}`);
         if (!response.ok) {
             throw new Error(`API 오류: ${response.status}`);
         }
