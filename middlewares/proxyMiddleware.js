@@ -16,6 +16,15 @@ const cookieOptions = {
 const excludedPaths = ["/kakao", "/naver", "/oauth2/callback", "/login", "/logout"];
 
 /**
+ * URI가 "/open"으로 끝나는지 확인
+ * @param {string} url 요청 URI
+ * @returns {boolean} "/open"으로 끝나면 true
+ */
+function isOpenEndpoint(url) {
+    return url.endsWith("/open");
+}
+
+/**
  * 리프레시 토큰으로 새 액세스 토큰 발급
  * @param {string} refreshToken 리프레시 토큰
  * @returns {Promise<Object>} 새 토큰 객체
@@ -85,9 +94,35 @@ function createRequestOptions(method, body, token) {
  * 인증 미들웨어
  */
 async function fetchWithAuth(req, res, next) {
-    // 인증 제외 경로
-    if (excludedPaths.some(path => req.path.includes(path))) {
-        return next();
+    const originalUrl = req.originalUrl.replace(/^\/api\/v1/, "");
+    const apiUrl = `${BACKEND_URL}/api/v1${originalUrl}`;
+
+    // 인증 제외 경로이거나 "/open"으로 끝나는 엔드포인트인 경우
+    if (excludedPaths.some(path => req.path.includes(path)) || isOpenEndpoint(req.path)) {
+        // 토큰 없이 백엔드 호출
+        try {
+            const options = createRequestOptions(req.method, req.body);
+            const response = await fetch(apiUrl, options);
+
+            // 응답 처리
+            const ct = response.headers.get("content-type") || "";
+            let data;
+            if (ct.includes("application/json")) {
+                data = await response.json();
+            } else {
+                const text = await response.text();
+                try {
+                    data = JSON.parse(text);
+                } catch {
+                    data = text;
+                }
+            }
+
+            return res.status(response.status).json(data);
+        } catch (err) {
+            console.error("프록시 처리 오류:", err);
+            return res.status(500).json({message: "프록시 서버 오류"});
+        }
     }
 
     const {accessToken, refreshToken} = req.cookies || {};
@@ -99,8 +134,6 @@ async function fetchWithAuth(req, res, next) {
     }
 
     let token = accessToken;
-    const originalUrl = req.originalUrl.replace(/^\/api\/v1/, "");
-    const apiUrl = `${BACKEND_URL}/api/v1${originalUrl}`;
 
     // 액세스 토큰 없고 리프레시만 있으면 재발급
     if (!token && refreshToken) {
