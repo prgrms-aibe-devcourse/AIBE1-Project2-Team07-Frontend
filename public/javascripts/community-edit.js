@@ -1,7 +1,7 @@
 const API_BASE_URL = 'https://dev.tuituiworld.store/api/v1/';
 let selectedTagNames = [];
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     // 기본 요소 설정
     const postIdInput = document.getElementById('postId');
     const photoUploadInput = document.getElementById('photoUploadInput');
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     videoUploadInput.addEventListener('change', handleVideoUpload);
 
-    updatePostBtn.addEventListener('click', handlePostUpdate);
+    updatePostBtn.addEventListener('click', await handlePostUpdate);
 
     cancelBtn.addEventListener('click', function () {
         // 변경 사항이 있는지 확인
@@ -524,9 +524,6 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const response = await fetch('/api/v1/posts/' + postId, {
                 method: 'PUT',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-                },
                 body: formData
             });
 
