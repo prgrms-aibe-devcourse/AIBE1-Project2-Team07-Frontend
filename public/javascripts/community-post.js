@@ -710,7 +710,8 @@ async function renderPostDetail(post) {
         // 기존 내용 초기화 (이미지는 제외)
         const paragraphElement = contentElement.querySelector('p');
         if (paragraphElement) {
-            paragraphElement.innerHTML = post.content || '';
+            const contentWithLineBreaks = (post.content || '').replace(/\n/g, '<br>');
+            paragraphElement.innerHTML = contentWithLineBreaks || '';
         }
 
         // 이미지 처리

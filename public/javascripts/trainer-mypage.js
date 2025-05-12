@@ -1310,6 +1310,12 @@ async function updateProfileData() {
             throw new Error(`프로필 업데이트 실패: ${response.status}`);
         }
 
+        const userData = JSON.parse(localStorage.getItem('user')) || {};
+        userData.name = name;
+        userData.nickname = nickname;
+        localStorage.setItem('user', JSON.stringify(userData));
+
+
         alert('프로필이 성공적으로 업데이트되었습니다.');
         // 업데이트 후 프로필 다시 로드
         await showProfile();
