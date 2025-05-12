@@ -75,7 +75,7 @@ async function updateUserProfile() {
     // 입력 필드에서 값 가져오기
     const nameInput = document.querySelector('.profile-input[name="name"]');
     const nicknameInput = document.querySelector('.profile-input[name="nickname"]');
-    const fileInput     = document.querySelector('.profile-input[name="profileImage"]');
+    const fileInput = document.querySelector('.profile-input[name="profileImage"]');
 
     if (!nameInput || !nicknameInput) {
         throw new Error('프로필 입력 필드를 찾을 수 없습니다.');
@@ -291,10 +291,10 @@ function showReviewModal(adviceId, trainerName) {
     const reviewImageInput = document.getElementById('reviewImage');
     const reviewPreview = document.getElementById('reviewPreview');
 
-    reviewImageInput.addEventListener('change', function() {
+    reviewImageInput.addEventListener('change', function () {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 reviewPreview.src = e.target.result;
             };
             reader.readAsDataURL(this.files[0]);
@@ -431,10 +431,10 @@ function showReviewEditModal(applyId, reviewData) {
     const reviewImageInput = document.getElementById('reviewImage');
     const reviewPreview = document.getElementById('reviewPreview');
 
-    reviewImageInput.addEventListener('change', function() {
+    reviewImageInput.addEventListener('change', function () {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 reviewPreview.src = e.target.result;
             };
             reader.readAsDataURL(this.files[0]);
@@ -571,7 +571,7 @@ async function showReviewDetailModal(applyId) {
     reviewDetailModal.show();
 
     // 수정하기 버튼 클릭 이벤트
-    document.getElementById('editReview').addEventListener('click', function() {
+    document.getElementById('editReview').addEventListener('click', function () {
         reviewDetailModal.hide();
         // 수정 모달 표시 (기존 리뷰 작성 모달을 재사용하고 기존 데이터로 채워넣음)
         showReviewEditModal(applyId, review);
@@ -646,15 +646,15 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
                                     <p><strong>상담 날짜:</strong> ${adviceData.createdAt || '정보 없음'}</p>
                                     <p><strong>상담 상태:</strong> 
                                         <span class="badge ${status === 'PENDING' ? 'bg-warning'
-                                                : status === 'APPROVED' ? 'bg-info'
-                                                    : status === 'REJECTED' ? 'bg-secondary'
-                                                        : 'bg-success'
-                                            }">
+        : status === 'APPROVED' ? 'bg-info'
+            : status === 'REJECTED' ? 'bg-secondary'
+                : 'bg-success'
+    }">
                                                                                      ${status === 'PENDING' ? '답변 대기'
-                                                : status === 'APPROVED' ? '상담 수락'
-                                                    : status === 'REJECTED' ? '상담 거절'
-                                                        : status || '알 수 없음'
-                                            }
+        : status === 'APPROVED' ? '상담 수락'
+            : status === 'REJECTED' ? '상담 거절'
+                : status || '알 수 없음'
+    }
                                         </span>
                                     </p>
                                 </div>
@@ -669,15 +669,15 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
                           <h6 class="section-title">상담 요청 내용</h6>
                           <div class="advice-question p-3 bg-light rounded">
                             ${content || '내용 없음'}${
-                                imageUrl
-                                    ? `<br><img
+        imageUrl
+            ? `<br><img
                                      src="${imageUrl}"
                                      alt="첨부 이미지"
                                      class="img-fluid mt-2 rounded"
                                      style="width:300px; height:auto;"
                                    />`
-                                    : ''
-                            }
+            : ''
+    }
                           </div>
                         </div>
 
@@ -705,7 +705,7 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
 
     // 추가 질문 보내기 이벤트 - API 응답에 특정 상태가 있을 때만 추가
     if (adviceData && adviceData.status === "답변 완료" && document.getElementById('sendAdditionalQuestion')) {
-        document.getElementById('sendAdditionalQuestion').addEventListener('click', function() {
+        document.getElementById('sendAdditionalQuestion').addEventListener('click', function () {
             const additionalQuestion = document.getElementById('additionalQuestion').value.trim();
 
             if (!additionalQuestion) {
@@ -724,13 +724,13 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
 function attachUserAdviceEventListeners() {
     // 상세보기 버튼
     document.querySelectorAll('.view-detail-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id        = this.dataset.id;
-            const trainer   = this.dataset.trainer;
-            const content   = this.dataset.content;
-            const status    = this.dataset.status;
-            const petType   = this.dataset.petType;
-            const petBreed  = this.dataset.petBreed;
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
+            const trainer = this.dataset.trainer;
+            const content = this.dataset.content;
+            const status = this.dataset.status;
+            const petType = this.dataset.petType;
+            const petBreed = this.dataset.petBreed;
             const rawMonth = parseInt(this.dataset.petMonthAge, 10);
             const petAge = rawMonth
                 ? `${Math.floor(rawMonth / 12)}년 ${rawMonth % 12}개월`
@@ -748,7 +748,7 @@ function attachUserAdviceEventListeners() {
 
     // 리뷰 작성 버튼
     document.querySelectorAll('.write-review-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function () {
             const id = this.dataset.id;
             const trainerName = this.dataset.trainer;
             showReviewModal(id, trainerName);
@@ -757,8 +757,8 @@ function attachUserAdviceEventListeners() {
 
     // 작성한 리뷰 보기 버튼
     document.querySelectorAll('.view-review-btn').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id        = this.dataset.id;
+        btn.addEventListener('click', function () {
+            const id = this.dataset.id;
             showReviewDetailModal(id);
         });
     });
@@ -802,17 +802,17 @@ function showUserAdvices(filteredAdvices = null) {
                 <div class="advice-title-section">
                     <h5 class="advice-title">${advice.trainerName || '배정 대기중'} 훈련사</h5>
                     <span class="advice-status ${
-                                advice.applyStatus === 'PENDING'  ? 'status-pending'
-                                    : advice.applyStatus === 'APPROVED' ? 'status-progress'
-                                        : advice.applyStatus === 'REJECTED' ? 'status-completed'
-                                            : 'status-completed'
-                            }">
+            advice.applyStatus === 'PENDING' ? 'status-pending'
+                : advice.applyStatus === 'APPROVED' ? 'status-progress'
+                    : advice.applyStatus === 'REJECTED' ? 'status-completed'
+                        : 'status-completed'
+        }">
                       ${
-                                advice.applyStatus === 'PENDING'  ? '상담 대기'
-                                    : advice.applyStatus === 'APPROVED' ? '상담 수락'
-                                        : advice.applyStatus === 'REJECTED' ? '상담 거절'
-                                            : advice.applyStatus || '알 수 없음'
-                            }
+            advice.applyStatus === 'PENDING' ? '상담 대기'
+                : advice.applyStatus === 'APPROVED' ? '상담 수락'
+                    : advice.applyStatus === 'REJECTED' ? '상담 거절'
+                        : advice.applyStatus || '알 수 없음'
+        }
                     </span>
                 </div>
                 <div class="advice-meta">
@@ -823,7 +823,7 @@ function showUserAdvices(filteredAdvices = null) {
                 <div class="pet-info">
                     <span class="pet-type">${advice.petType || '반려동물 종류 없음'}</span>
                     <span class="pet-breed">${advice.petBreed || '품종 정보 없음'}</span>
-                    <span class="pet-age">${advice.petMonthAge ? `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 정보 없음'}</span>
+                    <span class="pet-age">${advice.petMonthAge ? `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 정보 없음'}</span>
                 </div>
             </div>
             <div class="advice-body">
@@ -842,7 +842,8 @@ function showUserAdvices(filteredAdvices = null) {
         }
             </div>
         </div>
-    `}).join('');
+    `
+    }).join('');
 
     document.getElementById('post-container').innerHTML = advicesHTML;
 
@@ -1169,9 +1170,6 @@ async function uploadProfileImage(file) {
     // API 호출
     const response = await fetch(`/api/v1/users/updateImage`, {
         method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
         body: formData
     });
 
@@ -1192,7 +1190,7 @@ async function uploadProfileImage(file) {
 
 // 프로필 이미지 변경 이벤트 설정 - 백엔드 연동 추가
 function setupProfileImage() {
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
         // 이미지나 오버레이를 클릭했을 때만 작동하도록
         if (e.target.classList.contains('profile-image') ||
             e.target.classList.contains('profile-image-overlay') ||
