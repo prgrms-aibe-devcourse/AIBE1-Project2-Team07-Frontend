@@ -10,9 +10,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     // 프롬프트 창 초기화
     initChatInput();
 
-    // 트레이너 카드 클릭 등 다른 기능 초기화
-    initTrainerCardClicks();
-
     // 후기 캐러셀 초기화
     await initReviewCarousel();
 
@@ -71,33 +68,39 @@ function initChatInput() {
 }
 
 /**
- * 트레이너 카드 클릭 이벤트를 초기화하는 함수
- */
-function initTrainerCardClicks() {
-    document.querySelectorAll('.trainer-card button').forEach(button => {
-        button.addEventListener('click', function () {
-            const trainerName = this.closest('.trainer-card')?.querySelector('h4')?.textContent;
-            if (trainerName) {
-                // 실제 상세 페이지 이동 로직 (주석 처리)
-                // window.location.href = `/trainer/${trainerName.replace(/\s+/g, '-').toLowerCase()}`;
-
-                // 데모용 알림창
-                alert(`${trainerName} 상세 페이지로 이동합니다.`);
-            } else {
-                console.warn('트레이너 카드를 찾거나 이름을 추출할 수 없습니다.');
-            }
-        });
-    });
-}
-
-/**
  * 리뷰 캐러셀 초기화
  */
 async function initReviewCarousel() {
     const reviews = await fetchReviews();
-    const cardsPerSlide = getCardsPerSlide();
+
+    // 항상 3개씩 보여주도록 고정
+    const cardsPerSlide = 3;
+
     renderReviewCarousel(reviews, cardsPerSlide);
+    setupCarouselAnimation();
+
+    // 디버깅 코드 추가
+    console.log('리뷰 데이터:', reviews);
+    console.log('리뷰 슬라이드 수:', Math.ceil(reviews.length / cardsPerSlide));
+    console.log('캐러셀 아이템 수:', document.querySelectorAll('#reviewCarousel .carousel-item').length);
+
+    // 이벤트 리스너 추가로 문제 확인
+    const nextButton = document.querySelector('#reviewCarousel .carousel-control-next');
+    const prevButton = document.querySelector('#reviewCarousel .carousel-control-prev');
+
+    if (nextButton) {
+        nextButton.addEventListener('click', function() {
+            console.log('다음 버튼 클릭됨');
+        });
+    }
+
+    if (prevButton) {
+        prevButton.addEventListener('click', function() {
+            console.log('이전 버튼 클릭됨');
+        });
+    }
 }
+
 
 /**
  * 훈련사 섹션 초기화 및 데이터 렌더링
@@ -105,7 +108,6 @@ async function initReviewCarousel() {
 async function initTrainerSection() {
     const trainers = await fetchTrainers();
     renderTrainerCards(trainers);
-    initTrainerCardClicks();
 }
 
 /**
@@ -289,14 +291,15 @@ function getAccessToken() {
  * TODO: API 연결할 때 코드 수정 필요
  */
 async function fetchReviews() {
-    const response = await fetch(`/api/v1/reviews/top-liked?limit=9`, {
+    const response = await fetch(`/api/v1/reviews/top-liked/open`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
         }
     });
-
     const data = await response.json();
+
+    console.log(data);
 
     return data.map(review => ({
         trainer: review.trainerName,
@@ -313,9 +316,13 @@ async function fetchReviews() {
 async function fetchTrainers() {
     const response = await fetch(`/api/v1/trainers/random/open`, {
         method: "GET",
+        headers: {
+            Authorization: `Bearer ${getAccessToken()}`
+        }
     });
 
     const data = await response.json();
+
 
     return data.map(trainer => ({
         name: trainer.name + " 훈련사",
@@ -324,7 +331,7 @@ async function fetchTrainers() {
         experience: trainer.representativeCareer,
         specialties: trainer.specializationText.split(","),
         location: trainer.visitingAreas,
-        features: trainer.title
+        features: trainer.introduction
     }));
 }
 
@@ -385,6 +392,7 @@ function renderReviewCarousel(reviews, cardsPerSlide) {
     const carouselInner = document.querySelector("#reviewCarousel .carousel-inner");
     carouselInner.innerHTML = ""; // 초기화
 
+    // 3개씩 분할
     const chunked = chunkReviews(reviews, cardsPerSlide);
 
     chunked.forEach((chunk, index) => {
@@ -392,6 +400,39 @@ function renderReviewCarousel(reviews, cardsPerSlide) {
         carouselInner.appendChild(carouselItem);
     });
 }
+
+function setupCarouselAnimation() {
+    const carousel = document.getElementById('reviewCarousel');
+    if (carousel) {
+        // 기존 이벤트 리스너 제거
+        carousel.removeEventListener('slide.bs.carousel', () => {});
+
+        // 부드러운 슬라이드 효과 설정
+        if (typeof bootstrap !== 'undefined') {
+            // 기존 인스턴스 제거
+            const oldInstance = bootstrap.Carousel.getInstance(carousel);
+            if (oldInstance) {
+                oldInstance.dispose();
+            }
+
+            // 새 인스턴스 생성
+            const carouselInstance = new bootstrap.Carousel(carousel, {
+                interval: 5000,  // 자동 슬라이드 간격 (밀리초)
+                ride: 'carousel',
+                wrap: true,
+                touch: true     // 터치 스와이프 활성화
+            });
+
+            // 디버깅용 로그
+            console.log('캐러셀 초기화 완료:', carouselInstance);
+        } else {
+            console.error('bootstrap 객체를 찾을 수 없습니다.');
+        }
+    } else {
+        console.error('reviewCarousel 요소를 찾을 수 없습니다.');
+    }
+}
+
 
 /**
  * 리뷰 배열을 슬라이드 단위로 분할
@@ -487,13 +528,18 @@ function createTrainerCard(trainer) {
                 <span>${trainer.experience}</span>
                 ${specialtySpans}
             </div>
-            <p class="trainer-location">${trainer.location}</p>
+            <p class="trainer-location">방문 지역 : ${trainer.location}</p>
             <ul class="trainer-features">
                 ${featureItems}
             </ul>
-            <button class="btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
+            <button class="detail-btn btn btn-warning w-50 mx-auto d-block"'>자세히 보기</button>
         </div>
     `;
+
+    const button = col.querySelector('.detail-btn');
+    button.addEventListener('click', () => {
+        window.location.href = `/trainers/profile/${encodeURIComponent(trainer.nickname)}`;
+    });
 
     return col;
 }
