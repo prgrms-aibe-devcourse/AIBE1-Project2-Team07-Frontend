@@ -32,12 +32,12 @@ function showEditCommentForm(commentId, commentElement) {
     const saveBtn = editForm.querySelector('.btn-save-edit');
     const textarea = editForm.querySelector('textarea');
 
-    cancelBtn.addEventListener('click', function() {
+    cancelBtn.addEventListener('click', function () {
         contentElement.style.display = 'block';
         editForm.remove();
     });
 
-    saveBtn.addEventListener('click', function() {
+    saveBtn.addEventListener('click', function () {
         const newContent = textarea.value.trim();
         if (!newContent) {
             alert('댓글 내용을 입력해주세요.');
@@ -56,9 +56,9 @@ function showEditCommentForm(commentId, commentElement) {
  * @param {string} commentId - 댓글 ID
  * @param {string} content - 새 댓글 내용
  */
-async function submitComment(content, parentCommentId=null) {
+async function submitComment(content, parentCommentId = null) {
     try {
-        const url = `${API_BASE_URL}/posts/${postId}/comments`;
+        const url = `/api/v1/posts/${postId}/comments`;
 
         const commentData = {
             content: content,
@@ -69,7 +69,6 @@ async function submitComment(content, parentCommentId=null) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             },
             body: JSON.stringify(commentData)
         });
@@ -135,7 +134,7 @@ async function submitComment(content, parentCommentId=null) {
  */
 async function updateComment(commentId, content, contentElement, editForm) {
     try {
-        const url = `${API_BASE_URL}/comments/${commentId}`;
+        const url = `/api/v1/comments/${commentId}`;
 
         const commentData = {
             content: content
@@ -145,7 +144,6 @@ async function updateComment(commentId, content, contentElement, editForm) {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             },
             body: JSON.stringify(commentData)
         });
@@ -180,13 +178,12 @@ async function updateComment(commentId, content, contentElement, editForm) {
  */
 async function deleteComment(commentId) {
     try {
-        const url = `${API_BASE_URL}/comments/${commentId}`;
+        const url = `/api/v1/comments/${commentId}`;
 
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -224,18 +221,20 @@ async function deleteComment(commentId) {
         console.error('댓글 삭제 중 오류 발생:', error);
         alert('댓글 삭제에 실패했습니다. 다시 시도해주세요.');
     }
-}/**
+}
+
+/**
  * 댓글 관련 이벤트 초기화 함수
  */
 function initCommentEvents() {
     // 이벤트 위임을 사용하여 동적으로 생성되는 요소에 이벤트 연결
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', async function (e) {
         // 댓글 답글 버튼 클릭
         if (e.target.closest('.btn-reply')) {
             e.preventDefault();
 
             // 로그인 확인
-            if (!checkUserLoggedIn()) {
+            if (!await checkUserLoggedIn()) {
                 showLoginModal();
                 return;
             }
@@ -254,7 +253,7 @@ function initCommentEvents() {
             e.preventDefault();
 
             // 로그인 확인
-            if (!checkUserLoggedIn()) {
+            if (!await checkUserLoggedIn()) {
                 showLoginModal();
                 return;
             }
@@ -379,7 +378,7 @@ function initButtons() {
     // 좋아요 버튼 이벤트
     const likeBtn = document.querySelector('.like-btn');
     if (likeBtn) {
-        likeBtn.addEventListener('click', function() {
+        likeBtn.addEventListener('click', function () {
             toggleLike();
         });
     }
@@ -387,11 +386,11 @@ function initButtons() {
     // 수정 버튼 이벤트
     const editBtn = document.querySelector('.edit-btn');
     if (editBtn) {
-        editBtn.addEventListener('click', function(e) {
+        editBtn.addEventListener('click', async function (e) {
             e.preventDefault();
 
             // 로그인 확인
-            if (!checkUserLoggedIn()) {
+            if (!await checkUserLoggedIn()) {
                 showLoginModal();
                 return;
             }
@@ -404,11 +403,11 @@ function initButtons() {
     // 삭제 버튼 이벤트
     const deleteBtn = document.querySelector('.delete-btn');
     if (deleteBtn) {
-        deleteBtn.addEventListener('click', function(e) {
+        deleteBtn.addEventListener('click', async function (e) {
             e.preventDefault();
 
             // 로그인 확인
-            if (!checkUserLoggedIn()) {
+            if (!await checkUserLoggedIn()) {
                 showLoginModal();
                 return;
             }
@@ -423,13 +422,12 @@ function initButtons() {
 
 async function deletePost() {
     try {
-        const url = `${API_BASE_URL}/posts/${postId}`;
+        const url = `/api/v1/posts/${postId}`;
 
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -456,9 +454,9 @@ function initCommentForm() {
     const textarea = commentForm?.querySelector('textarea');
 
     if (submitBtn && textarea) {
-        submitBtn.addEventListener('click', function() {
+        submitBtn.addEventListener('click', async function () {
             // 로그인 확인
-            if (!checkUserLoggedIn()) {
+            if (!await checkUserLoggedIn()) {
                 showLoginModal();
                 return;
             }
@@ -479,13 +477,12 @@ function initCommentForm() {
  */
 async function fetchPostDetail() {
     try {
-        const url = `${API_BASE_URL}/posts/${postId}/open`;
+        const url = `/api/v1/posts/${postId}/open`;
 
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -495,8 +492,8 @@ async function fetchPostDetail() {
 
         const post = await response.json();
 
-        renderPostDetail(post);
-        fetchComments();
+        await renderPostDetail(post);
+        await fetchComments();
 
     } catch (error) {
         console.error('게시글 상세 정보를 가져오는 중 오류 발생:', error);
@@ -513,7 +510,7 @@ async function fetchComments(loadMore = false) {
         if (loadingComments) return;
         loadingComments = true;
 
-        let url = `${API_BASE_URL}/posts/${postId}/comments/open`;
+        let url = `/api/v1/posts/${postId}/comments/open`;
 
         // 더 불러오기인 경우 커서 추가
         if (loadMore && commentNextCursor) {
@@ -524,7 +521,6 @@ async function fetchComments(loadMore = false) {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -563,13 +559,12 @@ async function fetchMoreReplies(commentId, commentElement, cursor) {
             loadMoreBtn.textContent = '로딩 중...';
         }
 
-        const url = `${API_BASE_URL}/comments/${commentId}/replies/open${cursor ? `?cursor=${cursor}` : ''}`;
+        const url = `/api/v1/comments/${commentId}/replies/open${cursor ? `?cursor=${cursor}` : ''}`;
 
         const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -651,7 +646,7 @@ async function fetchMoreReplies(commentId, commentElement, cursor) {
  * 게시글 상세 정보를 렌더링하는 함수
  * @param {Object} post - 게시글 객체
  */
-function renderPostDetail(post) {
+async function renderPostDetail(post) {
     // 제목 업데이트
     const titleElement = document.querySelector('.post-title');
     if (titleElement) {
@@ -707,7 +702,6 @@ function renderPostDetail(post) {
         // 펫 카테고리가 없는 경우 숨김
         petCategoryElement.style.display = 'none';
     }
-
 
 
     // 내용 업데이트
@@ -797,7 +791,7 @@ function renderPostDetail(post) {
         authorNameElement.textContent = post.userNickname || '익명';
     }
 
-    checkPostOwnership(post.userName);
+    await checkPostOwnership(post.userName);
 
     // 작성일 업데이트
     const dateElement = document.querySelector('.post-header .text-muted');
@@ -895,7 +889,7 @@ function renderComments(comments, loadMore = false) {
 
         // 더보기 버튼 이벤트 리스너
         const loadMoreBtn = loadMoreContainer.querySelector('.load-more-comments');
-        loadMoreBtn.addEventListener('click', function() {
+        loadMoreBtn.addEventListener('click', function () {
             fetchComments(true);
         });
     }
@@ -946,12 +940,12 @@ function createCommentElement(comment) {
  * 게시글 작성자 확인 함수
  * @param {string} postAuthor - 게시글 작성자 이름 또는 식별자
  */
-function checkPostOwnership(postAuthor) {
+async function checkPostOwnership(postAuthor) {
     const currentUser = getUserName(); // 현재 로그인한 사용자
     const postActionsElement = document.querySelector('.post-actions');
 
     // 로그인 상태이고 게시글 작성자와 현재 사용자가 일치하는 경우
-    if (checkUserLoggedIn() && currentUser === postAuthor) {
+    if (await checkUserLoggedIn() && currentUser === postAuthor) {
         if (postActionsElement) {
             postActionsElement.style.display = 'flex';
         }
@@ -1020,18 +1014,17 @@ function updateLikeButtonState() {
 async function toggleLike() {
     try {
         // 로그인 확인
-        if (!checkUserLoggedIn()) {
+        if (!await checkUserLoggedIn()) {
             showLoginModal();
             return;
         }
 
-        const url = `${API_BASE_URL}/posts/${postId}/likes/toggle`;
+        const url = `/api/v1/posts/${postId}/likes/toggle`;
 
         const response = await fetch(url, {
-            method:'POST',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${getAuthToken()}`
             }
         });
 
@@ -1096,11 +1089,11 @@ function showReplyForm(commentId) {
     const submitBtn = replyFormElement.querySelector('.btn-submit-reply');
     const textarea = replyFormElement.querySelector('textarea');
 
-    cancelBtn.addEventListener('click', function() {
+    cancelBtn.addEventListener('click', function () {
         removeReplyForm();
     });
 
-    submitBtn.addEventListener('click', function() {
+    submitBtn.addEventListener('click', function () {
         const content = textarea.value.trim();
         if (!content) {
             alert('답글 내용을 입력해주세요.');
@@ -1152,8 +1145,7 @@ function getUserName() {
  * 로그인 모달 표시 함수
  */
 function showLoginModal() {
-    const loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
-    loginModal.show();
+    displayLoginModal();
 }
 
 /**
@@ -1175,20 +1167,29 @@ function showErrorMessage(message) {
 }
 
 /**
- * 인증 토큰 가져오기 함수
- * @returns {string} - 인증 토큰
- */
-function getAuthToken() {
-    return localStorage.getItem('accessToken') || '';
-}
-
-/**
  * 사용자 로그인 상태 확인 함수
  * @returns {boolean} - 로그인 여부
  */
-function checkUserLoggedIn() {
-    return localStorage.getItem('accessToken') !== null;
+async function checkUserLoggedIn() {
+    try {
+        const response = await fetch('/auth/status', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('로그인 상태 확인 실패');
+        }
+
+        return true;
+    } catch (error) {
+        console.error('로그인 상태 확인 중 오류 발생:', error);
+        return false;
+    }
 }
+
 
 /**
  * 날짜 포맷팅 함수

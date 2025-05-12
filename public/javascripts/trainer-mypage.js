@@ -36,12 +36,10 @@ function validateToken() {
 // API 요청 함수 (공통 함수로 추출)
 async function apiRequest(url, method = 'GET', body = null, isFormData = false) {
     try {
-        const token = validateToken();
         const options = {
             method: method,
             headers: {
                 'accept': '*/*',
-                'Authorization': `Bearer ${token}`
             }
         };
 
@@ -153,7 +151,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // 초기 탭 로딩
         await switchTab(currentTab || 'profile');
 
-        window.addEventListener('popstate', async function(event) {
+        window.addEventListener('popstate', async function (event) {
             if (event.state && event.state.tab) {
                 await switchTab(event.state.tab, false); // URL 업데이트 없이 탭 전환
             } else {
@@ -269,7 +267,7 @@ async function showProfile() {
         let certifications = [];
 
         try {
-            userData = await apiRequest('https://dev.tuituiworld.store/api/v1/users/me');
+            userData = await apiRequest('/api/v1/users/me');
             // certifications = await apiRequest('https://dev.tuituiworld.store/api/v1/certifications/users/me');
         } catch (error) {
             if (error.message.includes('로그인이 필요한 서비스입니다')) {
@@ -371,7 +369,7 @@ function attachProfileEventListeners() {
     // 자격증 추가 버튼 이벤트 연결
     const addCertBtn = document.getElementById('add-cert-btn');
     if (addCertBtn) {
-        addCertBtn.addEventListener('click', function() {
+        addCertBtn.addEventListener('click', function () {
             try {
                 const modalElement = document.getElementById('trainerApplicationModal');
                 if (!modalElement) {
@@ -389,7 +387,7 @@ function attachProfileEventListeners() {
     // 프로필 수정 버튼 이벤트 연결
     const editProfileBtn = document.getElementById('profile-edit-btn');
     if (editProfileBtn) {
-        editProfileBtn.addEventListener('click', async function() {
+        editProfileBtn.addEventListener('click', async function () {
             try {
                 await updateProfileData();
             } catch (error) {
@@ -420,7 +418,7 @@ async function showMyPosts(filteredPosts = null) {
             postData = filteredPosts;
         } else {
             try {
-                postData = await apiRequest('https://dev.tuituiworld.store/api/v1/posts/users/me');
+                postData = await apiRequest('/api/v1/posts/users/me');
             } catch (error) {
                 if (error.message.includes('로그인이 필요한 서비스입니다')) {
                     document.getElementById('post-container').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
@@ -518,7 +516,7 @@ async function showMyReviews(filteredReviews = null) {
             reviewData = filteredReviews;
         } else {
             try {
-                reviewData = await apiRequest('https://dev.tuituiworld.store/api/v1/reviews/users/trainer');
+                reviewData = await apiRequest('/api/v1/reviews/users/trainer');
             } catch (error) {
                 if (error.message.includes('로그인이 필요한 서비스입니다')) {
                     document.getElementById('review-section').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
@@ -614,7 +612,7 @@ async function showLikedPosts(filteredLikes = null) {
             postData = filteredLikes;
         } else {
             try {
-                postData = await apiRequest('https://dev.tuituiworld.store/api/v1/posts/users/liked');
+                postData = await apiRequest('/api/v1/posts/users/liked');
             } catch (error) {
                 if (error.message.includes('로그인이 필요한 서비스입니다')) {
                     document.getElementById('post-container').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
@@ -720,7 +718,7 @@ async function showMyAdvices(filteredAdvices = null) {
             adviceData = filteredAdvices;
         } else {
             try {
-                const response = await apiRequest('https://dev.tuituiworld.store/api/v1/match/trainer');
+                const response = await apiRequest('/api/v1/match/trainer');
                 adviceData = response.data || [];
 
                 // API 응답 데이터를 모달에서 사용하는 형식으로 변환
@@ -731,7 +729,7 @@ async function showMyAdvices(filteredAdvices = null) {
                     postTitle: item.serviceType || '상담 유형 미상',
                     petType: item.petType || '반려동물 종류 미상',
                     petBreed: item.petBreed || '품종 미상',
-                    petAge: item.petMonthAge ? `${Math.floor(item.petMonthAge/12)}년 ${item.petMonthAge%12}개월` : '나이 미상',
+                    petAge: item.petMonthAge ? `${Math.floor(item.petMonthAge / 12)}년 ${item.petMonthAge % 12}개월` : '나이 미상',
                     comment: item.content || '내용 미상',
                     status: item.applyStatus === 'PENDING' ? '상담 대기중' :
                         item.applyStatus === 'APPROVED' ? '상담 진행중' : '상담 완료',
@@ -861,7 +859,7 @@ function showAdviceDetail(adviceId, adviceData) {
         modalElement.querySelector('.pet-type').textContent = advice.petType || '반려동물 종류 미상';
         modalElement.querySelector('.pet-breed').textContent = advice.petBreed || '품종 미상';
         modalElement.querySelector('.pet-age').textContent = advice.petMonthAge ?
-            `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 미상';
+            `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
         modalElement.querySelector('.advice-content').textContent = advice.content || '내용 미상';
 
         // 상담 내역 표시
@@ -875,7 +873,7 @@ function showAdviceDetail(adviceId, adviceData) {
         // 답변 등록 버튼 이벤트
         const replyBtn = modalElement.querySelector('.reply-btn');
         if (replyBtn) {
-            replyBtn.onclick = async function() {
+            replyBtn.onclick = async function () {
                 const messageElement = modalElement.querySelector('#replyMessage');
                 if (!messageElement) return;
 
@@ -922,7 +920,7 @@ function showAcceptModal(adviceId, adviceData) {
         modalElement.querySelector('.pet-type').textContent = advice.petType || '반려동물 종류 미상';
         modalElement.querySelector('.pet-breed').textContent = advice.petBreed || '품종 미상';
         modalElement.querySelector('.pet-age').textContent = advice.petMonthAge ?
-            `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 미상';
+            `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
         modalElement.querySelector('.advice-content').textContent = advice.content || '내용 미상';
 
         // 모달 표시
@@ -932,7 +930,7 @@ function showAcceptModal(adviceId, adviceData) {
         // 수락 버튼 이벤트
         const acceptBtn = modalElement.querySelector('.accept-confirm-btn');
         if (acceptBtn) {
-            acceptBtn.onclick = async function() {
+            acceptBtn.onclick = async function () {
                 const messageElement = modalElement.querySelector('#acceptMessage');
                 if (!messageElement) return;
 
@@ -979,7 +977,7 @@ function showRejectModal(adviceId, adviceData) {
         modalElement.querySelector('.pet-type').textContent = advice.petType || '반려동물 종류 미상';
         modalElement.querySelector('.pet-breed').textContent = advice.petBreed || '품종 미상';
         modalElement.querySelector('.pet-age').textContent = advice.petMonthAge ?
-            `${Math.floor(advice.petMonthAge/12)}년 ${advice.petMonthAge%12}개월` : '나이 미상';
+            `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
         modalElement.querySelector('.advice-content').textContent = advice.content || '내용 미상';
 
         // 모달 표시
@@ -989,7 +987,7 @@ function showRejectModal(adviceId, adviceData) {
         // 거절 버튼 이벤트
         const rejectBtn = modalElement.querySelector('.reject-confirm-btn');
         if (rejectBtn) {
-            rejectBtn.onclick = async function() {
+            rejectBtn.onclick = async function () {
                 const reasonSelect = modalElement.querySelector('#rejectReason');
                 const messageElement = modalElement.querySelector('#rejectMessage');
                 if (!reasonSelect || !messageElement) return;
@@ -1028,7 +1026,7 @@ function showRejectModal(adviceId, adviceData) {
 async function viewAdviceReview(adviceId) {
     try {
         // 후기 정보 API 호출
-        const reviewData = await apiRequest(`https://dev.tuituiworld.store/api/v1/reviews/advice/${adviceId}`);
+        const reviewData = await apiRequest(`/api/v1/reviews/advice/${adviceId}`);
 
         // 후기 정보 알림 (실제로는 모달로 표시하는 것이 좋음)
         alert(`별점: ${reviewData.rating}점\n내용: ${reviewData.content}`);
@@ -1041,20 +1039,20 @@ async function viewAdviceReview(adviceId) {
 
 // API 함수들
 async function acceptAdvice(adviceId, message) {
-    return await apiRequest(`https://dev.tuituiworld.store/api/v1/match/trainer/${adviceId}/accept`, 'POST', {
+    return await apiRequest(`/api/v1/match/trainer/${adviceId}/accept`, 'POST', {
         message: message
     });
 }
 
 async function rejectAdvice(adviceId, reason, message) {
-    return await apiRequest(`https://dev.tuituiworld.store/api/v1/match/trainer/${adviceId}/reject`, 'POST', {
+    return await apiRequest(`/api/v1/match/trainer/${adviceId}/reject`, 'POST', {
         reason: reason,
         message: message
     });
 }
 
 async function sendAdviceReply(adviceId, message) {
-    return await apiRequest(`https://dev.tuituiworld.store/api/v1/match/trainer/${adviceId}/message`, 'POST', {
+    return await apiRequest(`/api/v1/match/trainer/${adviceId}/message`, 'POST', {
         content: message
     });
 }
@@ -1131,7 +1129,7 @@ function searchContent(searchTerm) {
             case 'mypost':
                 // API로부터 데이터를 다시 로드하고 클라이언트 측에서 필터링
                 // 실제 구현에서는 API에 검색 파라미터를 전달하는 것이 더 효율적
-                apiRequest('https://dev.tuituiworld.store/api/v1/posts/users/me')
+                apiRequest('/api/v1/posts/users/me')
                     .then(posts => {
                         const filteredPosts = posts.filter(post =>
                             (post.title && post.title.toLowerCase().includes(searchTerm)) ||
@@ -1149,7 +1147,7 @@ function searchContent(searchTerm) {
                 break;
 
             case 'review':
-                apiRequest('https://dev.tuituiworld.store/api/v1/reviews/users/me')
+                apiRequest('/api/v1/reviews/users/me')
                     .then(reviews => {
                         const filteredReviews = reviews.filter(review =>
                             (review.content && review.content.toLowerCase().includes(searchTerm)) ||
@@ -1166,7 +1164,7 @@ function searchContent(searchTerm) {
                 break;
 
             case 'liked':
-                apiRequest('https://dev.tuituiworld.store/api/v1/posts/users/liked')
+                apiRequest('/api/v1/posts/users/liked')
                     .then(posts => {
                         const filteredLikes = posts.filter(post =>
                             (post.title && post.title.toLowerCase().includes(searchTerm)) ||
@@ -1184,7 +1182,7 @@ function searchContent(searchTerm) {
                 break;
 
             case 'advice':
-                apiRequest('https://dev.tuituiworld.store/api/v1/consultations/trainers/me')
+                apiRequest('/api/v1/consultations/trainers/me')
                     .then(advices => {
                         const filteredAdvices = advices.filter(advice =>
                             (advice.serviceType && advice.serviceType.toLowerCase().includes(searchTerm)) ||
@@ -1224,7 +1222,7 @@ async function updateProfileImage() {
         document.body.appendChild(fileInput);
         fileInput.click();
 
-        fileInput.addEventListener('change', async function() {
+        fileInput.addEventListener('change', async function () {
             try {
                 const file = fileInput.files[0];
                 if (!file) {
@@ -1236,7 +1234,7 @@ async function updateProfileImage() {
 
                 // 이미지 미리보기 설정
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     const profileImage = document.querySelector('.profile-image');
                     if (profileImage) {
                         profileImage.src = e.target.result;
@@ -1248,11 +1246,8 @@ async function updateProfileImage() {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/users/updateImage', {
+                const uploadResponse = await fetch('/api/v1/users/updateImage', {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    },
                     body: formData
                 });
 
@@ -1299,12 +1294,11 @@ async function updateProfileData() {
         }
 
         // 프로필 업데이트 API 호출
-        const response = await fetch('https://dev.tuituiworld.store/api/v1/users/update', {
+        const response = await fetch('/api/v1/users/update', {
             method: 'PUT',
             headers: {
                 'accept': '*/*',
                 'content-type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 name: name,
@@ -1345,11 +1339,8 @@ async function submitCertification() {
         const formData = new FormData();
         formData.append('file', certFile);
 
-        const uploadResponse = await fetch('https://dev.tuituiworld.store/api/v1/files/upload', {
+        const uploadResponse = await fetch('/api/v1/files/upload', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
             body: formData
         });
 
@@ -1368,12 +1359,11 @@ async function submitCertification() {
             imageUrl: imageUrl
         };
 
-        const certResponse = await fetch('https://dev.tuituiworld.store/api/v1/certifications', {
+        const certResponse = await fetch('/api/v1/certifications', {
             method: 'POST',
             headers: {
                 'accept': '*/*',
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(certData)
         });
@@ -1405,7 +1395,7 @@ function attachAdviceEventListeners(adviceData) {
     try {
         // 상세보기 버튼 이벤트
         document.querySelectorAll('.view-detail-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 try {
                     const adviceId = this.getAttribute('data-id');
                     if (!adviceId) {
@@ -1421,7 +1411,7 @@ function attachAdviceEventListeners(adviceData) {
 
         // 수락하기 버튼 이벤트
         document.querySelectorAll('.accept-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 try {
                     const adviceId = this.getAttribute('data-id');
                     if (!adviceId) {
@@ -1437,7 +1427,7 @@ function attachAdviceEventListeners(adviceData) {
 
         // 거절하기 버튼 이벤트
         document.querySelectorAll('.reject-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
+            btn.addEventListener('click', function () {
                 try {
                     const adviceId = this.getAttribute('data-id');
                     if (!adviceId) {

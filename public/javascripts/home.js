@@ -333,7 +333,6 @@ async function fetchTrainers() {
         location: trainer.visitingAreas,
         features: trainer.introduction
     }));
-
 }
 
 /**

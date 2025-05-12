@@ -4,7 +4,6 @@ const fetch = (...args) => import("node-fetch").then(({default: fetch}) => fetch
 const BACKEND_URL = process.env.BACKEND_URL;
 const isProduction = process.env.PROFILES === "prod";
 
-// 쿠키 설정을 위한 공통 옵션
 const cookieOptions = {
     httpOnly: true,
     secure: isProduction,
@@ -12,27 +11,14 @@ const cookieOptions = {
     path: "/"
 };
 
-// 인증이 필요 없는 경로 목록
 const excludedPaths = ["/kakao", "/naver", "/oauth2/callback", "/login", "/logout"];
 
-/**
- * URI가 "/open"으로 끝나는지 확인
- * @param {string} url 요청 URI
- * @returns {boolean} "/open"으로 끝나면 true
- */
 function isOpenEndpoint(url) {
     return url.endsWith("/open");
 }
 
-/**
- * 리프레시 토큰으로 새 액세스 토큰 발급
- * @param {string} refreshToken 리프레시 토큰
- * @returns {Promise<Object>} 새 토큰 객체
- */
 async function reissueAccessToken(refreshToken) {
-    if (!refreshToken) {
-        throw new Error("리프레시 토큰이 없습니다.");
-    }
+    if (!refreshToken) throw new Error("리프레시 토큰이 없습니다.");
 
     const res = await fetch(`${BACKEND_URL}/api/v1/auth/reissue`, {
         method: "POST",
@@ -48,19 +34,12 @@ async function reissueAccessToken(refreshToken) {
     return res.json();
 }
 
-/**
- * 인증 쿠키 제거
- * @param {Object} res Express 응답 객체
- */
 function clearAuthCookies(res) {
     ["accessToken", "refreshToken", "expiresIn"].forEach(name => {
         res.clearCookie(name, cookieOptions);
     });
 }
 
-/**
- * 토큰 쿠키 설정
- */
 function setTokenCookies(res, tokens) {
     res.cookie("accessToken", tokens.accessToken, {
         ...cookieOptions,
@@ -77,34 +56,31 @@ function setTokenCookies(res, tokens) {
     return tokens.accessToken;
 }
 
-/**
- * API 요청 옵션 생성
- */
-function createRequestOptions(method, body, token) {
-    const headers = {"Content-Type": "application/json"};
-    if (token) headers.Authorization = `Bearer ${token}`;
+function createRequestOptions(method, body, token, headers = {}) {
+    const isMultipart = headers['content-type']?.startsWith('multipart/form-data');
+
+    const requestHeaders = {...headers};
+    if (token) requestHeaders.Authorization = `Bearer ${token}`;
+    if (!isMultipart && !requestHeaders["Content-Type"]) {
+        requestHeaders["Content-Type"] = "application/json";
+    }
+
     return {
         method,
-        headers,
-        body: ["POST", "PUT", "PATCH"].includes(method) && body ? JSON.stringify(body) : undefined
+        headers: requestHeaders,
+        body: ["POST", "PUT", "PATCH"].includes(method) && body ? body : undefined
     };
 }
 
-/**
- * 인증 미들웨어
- */
 async function fetchWithAuth(req, res, next) {
     const originalUrl = req.originalUrl.replace(/^\/api\/v1/, "");
     const apiUrl = `${BACKEND_URL}/api/v1${originalUrl}`;
 
-    // 인증 제외 경로이거나 "/open"으로 끝나는 엔드포인트인 경우
     if (excludedPaths.some(path => req.path.includes(path)) || isOpenEndpoint(req.path)) {
-        // 토큰 없이 백엔드 호출
         try {
             const options = createRequestOptions(req.method, req.body);
             const response = await fetch(apiUrl, options);
 
-            // 응답 처리
             const ct = response.headers.get("content-type") || "";
             let data;
             if (ct.includes("application/json")) {
@@ -127,7 +103,6 @@ async function fetchWithAuth(req, res, next) {
 
     const {accessToken, refreshToken} = req.cookies || {};
 
-    // 토큰 모두 없으면 401 처리
     if (!accessToken && !refreshToken) {
         clearAuthCookies(res);
         return res.status(401).json({message: "인증 정보가 없습니다. 로그인 해주세요."});
@@ -135,7 +110,6 @@ async function fetchWithAuth(req, res, next) {
 
     let token = accessToken;
 
-    // 액세스 토큰 없고 리프레시만 있으면 재발급
     if (!token && refreshToken) {
         try {
             const tokens = await reissueAccessToken(refreshToken);
@@ -147,16 +121,26 @@ async function fetchWithAuth(req, res, next) {
         }
     }
 
-    // 백엔드 호출 함수
+    const rawHeaders = {...req.headers};
+    delete rawHeaders["host"];
+    delete rawHeaders["cookie"];
+
+    const isMultipart = rawHeaders["content-type"]?.startsWith("multipart/form-data");
+
     const callBackend = async (tok) => {
-        const options = createRequestOptions(req.method, req.body, tok);
+        const body = isMultipart
+            ? req.rawBody // multipart의 경우 Buffer 그대로 사용
+            : req.method === "GET"
+                ? null
+                : JSON.stringify(req.body);
+
+        const options = createRequestOptions(req.method, body, tok, rawHeaders);
         return fetch(apiUrl, options);
     };
 
     try {
         let response = await callBackend(token);
 
-        // 401 시 재발급 후 재시도
         if (response.status === 401 && refreshToken) {
             try {
                 const tokens = await reissueAccessToken(refreshToken);
@@ -169,7 +153,6 @@ async function fetchWithAuth(req, res, next) {
             }
         }
 
-        // 응답 처리
         const ct = response.headers.get("content-type") || "";
         let data;
         if (ct.includes("application/json")) {
@@ -183,7 +166,6 @@ async function fetchWithAuth(req, res, next) {
             }
         }
 
-        // 최종 응답 전달
         res.status(response.status).json(data);
     } catch (err) {
         console.error("프록시 처리 오류:", err);

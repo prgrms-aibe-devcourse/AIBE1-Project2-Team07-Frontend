@@ -7,7 +7,7 @@ let allReviews = []; // 모든 리뷰 데이터 저장
 
 window.currentUserId = 1;   // 나중에 로그인 한 사람으로 바꿔야 함
 
-const baseUrl = "https://dev.tuituiworld.store/api/v1/";
+const baseUrl = "/api/v1/";
 const accessToken = localStorage.getItem('accessToken');
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 트레이너 리뷰 데이터 로드 함수
 async function loadTrainerReviewByNickname(trainerNickname) {
     try {
-        const apiUrl = `/api/v1/reviews/trainers/${trainerNickname}/open`;
+        const apiUrl = baseUrl + 'reviews/trainers/' + trainerNickname;
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
@@ -294,8 +294,8 @@ function convertApiDataToSiteFormat(apiData) {
     // 서비스 요금이 없을 경우 기본 가격 설정
     if (prices.length === 0) {
         prices.push(
-            { type: "방문교육", duration: "60분", amount: 50000 },
-            { type: "영상교육", duration: "30분", amount: 30000 }
+            {type: "방문교육", duration: "60분", amount: 50000},
+            {type: "영상교육", duration: "30분", amount: 30000}
         );
     }
 

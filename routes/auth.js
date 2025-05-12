@@ -95,4 +95,15 @@ router.get("/login", (req, res) => {
     res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
+router.get("/status", (req, res) => {
+    const {refreshToken} = req.cookies || {};
+    const isLoggedIn = !!refreshToken;
+
+    if (isLoggedIn) {
+        return res.status(200).json({isLoggedIn});
+    }
+
+    return res.status(401).json({isLoggedIn});
+});
+
 module.exports = router;

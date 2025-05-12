@@ -14,6 +14,19 @@ var fetchWithAuth = require("./middlewares/proxyMiddleware");
 var app = express();
 
 app.use(logger("dev"));
+app.use((req, res, next) => {
+    const contentType = req.headers["content-type"] || "";
+    if (contentType.startsWith("multipart/form-data")) {
+        const chunks = [];
+        req.on("data", chunk => chunks.push(chunk));
+        req.on("end", () => {
+            req.rawBody = Buffer.concat(chunks);
+            next();
+        });
+    } else {
+        next();
+    }
+});
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());

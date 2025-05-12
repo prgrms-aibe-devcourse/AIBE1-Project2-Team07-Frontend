@@ -83,7 +83,7 @@ async function showDetailModal(item) {
 
     try {
         // API에서 상담 답변 가져오기 (URL 오타 수정 - ap1 → api)
-        const historyData = await apiRequest(`https://dev.tuituiworld.store/api/v1/match/${item.id}/answer`);
+        const historyData = await apiRequest(`/api/v1/match/${item.id}/answer`);
 
         // item.chats가 있으면 그것을 사용하고, 없으면 historyData를 사용
         if (item.chats && item.chats.length) {
@@ -158,7 +158,7 @@ async function handleAcceptConfirm() {
 
         // API 호출
         await apiRequest(
-            `https://dev.tuituiworld.store/api/v1/match/${adviceId}/status`,
+            `/api/v1/match/${adviceId}/status`,
             'POST',
             {
                 applyId: adviceId,
@@ -241,7 +241,7 @@ async function handleRejectConfirm() {
 
         // API 호출
         await apiRequest(
-            `https://dev.tuituiworld.store/api/v1/match/${adviceId}/status`,
+            `/api/v1/match/${adviceId}/status`,
             'POST',
             {
                 applyId: adviceId,
@@ -268,7 +268,7 @@ async function handleRejectConfirm() {
 async function viewReview(adviceId) {
     try {
         // API 호출하여 후기 데이터 가져오기
-        const reviewData = await apiRequest(`https://dev.tuituiworld.store/api/v1/reviews/applyId/${adviceId}`);
+        const reviewData = await apiRequest(`/api/v1/reviews/applyId/${adviceId}`);
 
         if (!reviewData) {
             throw new Error('후기 정보를 찾을 수 없습니다.');
