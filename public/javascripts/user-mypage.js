@@ -1,17 +1,12 @@
-const API_BASE_URL = "http://localhost:8444";
-
-// 로컬스토리지에서 user 정보
 const userJSON = localStorage.getItem('user');
 const accessToken = localStorage.getItem('accessToken');
-if (!userJSON) {
-    // 로그인 정보가 없으면 로그인 페이지로 이동
-    window.location.href = '/';
+let storedUser = null;
+
+try {
+    storedUser = JSON.parse(userJSON);
+} catch (e) {
+    console.error('로컬스토리지 사용자 정보 파싱 실패:', e);
 }
-let storedUser = JSON.parse(userJSON);
-const imgUrl = storedUser.profileImageUrl && storedUser.profileImageUrl.trim()
-    ? storedUser.profileImageUrl
-    : 'https://placehold.co/180x180';
-console.log(storedUser);
 
 // 전역 변수로 현재 페이지와 페이지당 아이템 개수 설정
 let currentPage = 1;
@@ -110,16 +105,11 @@ async function updateUserProfile() {
         profileImageUrl
     };
 
-    console.log(name)
-    console.log(nickname)
-    console.log(storedUser.profileImageUrl)
-
     // API 호출
-    const response = await fetch(`${API_BASE_URL}/api/v1/users/update`, {
+    const response = await fetch(`/api/v1/users/update`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${accessToken}`
         },
         body: JSON.stringify(updateData)
     });
@@ -337,10 +327,9 @@ function showReviewModal(adviceId, trainerName) {
         };
 
         try {
-            const res = await fetch(`${API_BASE_URL}/api/v1/reviews`, {
+            const res = await fetch(`/api/v1/reviews`, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -479,10 +468,9 @@ function showReviewEditModal(applyId, reviewData) {
 
         try {
             // PUT 요청으로 리뷰 업데이트
-            const res = await fetch(`${API_BASE_URL}/api/v1/reviews/${reviewId}`, {
+            const res = await fetch(`/api/v1/reviews/${reviewId}`, {
                 method: 'PUT',
                 headers: {
-                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify(payload)
@@ -591,7 +579,7 @@ async function showReviewDetailModal(applyId) {
 }
 
 // 상담 상세보기 모달 표시
-async function showAdviceDetailModal(adviceId, trainerName, content, status, petType, petBreed, petAge) {
+async function showAdviceDetailModal(adviceId, trainerName, content, status, petType, petBreed, petAge, imageUrl) {
     // 기존 모달이 있으면 제거
     let existingModal = document.getElementById('adviceDetailModal');
     if (existingModal) {
@@ -606,7 +594,6 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
             adviceData = await fetchAdviceDetail(adviceId);
         } catch (error) {
             console.error('상담 상세 정보 조회 실패:', error);
-            // 에러가 발생해도 기본 정보로 모달은 표시
             adviceData = {};
         }
     }
@@ -659,15 +646,15 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
                                     <p><strong>상담 날짜:</strong> ${adviceData.createdAt || '정보 없음'}</p>
                                     <p><strong>상담 상태:</strong> 
                                         <span class="badge ${status === 'PENDING' ? 'bg-warning'
-        : status === 'APPROVED' ? 'bg-info'
-            : status === 'REJECTED' ? 'bg-secondary'
-                : 'bg-success'
-    }">
-                                             ${status === 'PENDING' ? '답변 대기'
-        : status === 'APPROVED' ? '상담 수락'
-            : status === 'REJECTED' ? '상담 거절'
-                : status || '알 수 없음'
-    }
+                                                : status === 'APPROVED' ? 'bg-info'
+                                                    : status === 'REJECTED' ? 'bg-secondary'
+                                                        : 'bg-success'
+                                            }">
+                                                                                     ${status === 'PENDING' ? '답변 대기'
+                                                : status === 'APPROVED' ? '상담 수락'
+                                                    : status === 'REJECTED' ? '상담 거절'
+                                                        : status || '알 수 없음'
+                                            }
                                         </span>
                                     </p>
                                 </div>
@@ -679,10 +666,19 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
                         </div>
                         
                         <div class="advice-question-section mb-4">
-                            <h6 class="section-title">상담 요청 내용</h6>
-                            <div class="advice-question p-3 bg-light rounded">
-                                ${content || '내용 없음'}
-                            </div>
+                          <h6 class="section-title">상담 요청 내용</h6>
+                          <div class="advice-question p-3 bg-light rounded">
+                            ${content || '내용 없음'}${
+                                imageUrl
+                                    ? `<br><img
+                                     src="${imageUrl}"
+                                     alt="첨부 이미지"
+                                     class="img-fluid mt-2 rounded"
+                                     style="width:300px; height:auto;"
+                                   />`
+                                    : ''
+                            }
+                          </div>
                         </div>
 
                         <div class="advice-chat-section">
@@ -739,12 +735,11 @@ function attachUserAdviceEventListeners() {
             const petAge = rawMonth
                 ? `${Math.floor(rawMonth / 12)}년 ${rawMonth % 12}개월`
                 : '나이 정보 없음';
+            const imageUrl = this.dataset.imageUrl;
 
             const adviceData = currentPosts.find(a => a.applyId === parseInt(id, 10));
-            console.log(status);
             if (adviceData) {
-                showAdviceDetailModal(id, trainer, content, status, petType, petBreed, petAge);
-                console.log('상세보기 호출된 adviceId:', id);
+                showAdviceDetailModal(id, trainer, content, status, petType, petBreed, petAge, imageUrl);
             } else {
                 alert('상담 정보를 찾을 수 없습니다.');
             }
@@ -807,18 +802,18 @@ function showUserAdvices(filteredAdvices = null) {
                 <div class="advice-title-section">
                     <h5 class="advice-title">${advice.trainerName || '배정 대기중'} 훈련사</h5>
                     <span class="advice-status ${
-            advice.applyStatus === 'PENDING'  ? 'status-pending'
-                : advice.applyStatus === 'APPROVED' ? 'status-progress'
-                    : advice.applyStatus === 'REJECTED' ? 'status-completed'
-                        : 'status-completed'
-        }">
-  ${
-            advice.applyStatus === 'PENDING'  ? '상담 대기'
-                : advice.applyStatus === 'APPROVED' ? '상담 수락'
-                    : advice.applyStatus === 'REJECTED' ? '상담 거절'
-                        : advice.applyStatus || '알 수 없음'
-        }
-</span>
+                                advice.applyStatus === 'PENDING'  ? 'status-pending'
+                                    : advice.applyStatus === 'APPROVED' ? 'status-progress'
+                                        : advice.applyStatus === 'REJECTED' ? 'status-completed'
+                                            : 'status-completed'
+                            }">
+                      ${
+                                advice.applyStatus === 'PENDING'  ? '상담 대기'
+                                    : advice.applyStatus === 'APPROVED' ? '상담 수락'
+                                        : advice.applyStatus === 'REJECTED' ? '상담 거절'
+                                            : advice.applyStatus || '알 수 없음'
+                            }
+                    </span>
                 </div>
                 <div class="advice-meta">
                     <span class="advice-date">${advice.createdAt || '날짜 정보 없음'}</span>
@@ -836,7 +831,7 @@ function showUserAdvices(filteredAdvices = null) {
             </div>
             <div class="advice-actions">
                 <!-- 상세보기 버튼은 모든 상태에서 표시 -->
-                <button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" data-content="${advice.content}" data-status="${advice.applyStatus}" data-pet-type="${advice.petType}" data-pet-breed="${advice.petBreed}" data-pet-month-age="${advice.petMonthAge}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
+                <button data-id="${advice.applyId}" data-trainer="${advice.trainerName || '훈련사'}" data-content="${advice.content}" data-status="${advice.applyStatus}" data-pet-type="${advice.petType}" data-pet-breed="${advice.petBreed}" data-pet-month-age="${advice.petMonthAge}" data-image-url="${advice.imageUrl}" class="btn btn-primary btn-sm view-detail-btn">상세보기</button>
                 
                 <!-- 상담 수락 상태일 때만 리뷰 버튼 표시 (리뷰 작성 여부에 따라 다른 버튼 표시) -->
                 ${advice.applyStatus === 'APPROVED' ?
@@ -860,14 +855,13 @@ function showUserAdvices(filteredAdvices = null) {
 
 async function fetchMyPosts() {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/posts/users/me`, {
+        const res = await fetch(`/api/v1/posts/users/me`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Content-Type': 'application/json'
             }
         });
         if (!res.ok) throw new Error('내 게시물 조회 실패');
         const data = await res.json();
-        console.log('내 게시물:', data);
         return data;
     } catch (err) {
         console.error(err);
@@ -878,14 +872,13 @@ async function fetchMyPosts() {
 
 async function fetchLikedPosts() {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/posts/users/liked`, {
+        const res = await fetch(`/api/v1/posts/users/liked`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Content-Type': 'application/json'
             }
         });
         if (!res.ok) throw new Error('내가 좋아요한 게시물 조회 실패');
         const data = await res.json();
-        console.log('좋아요한 게시물:', data);
         return data;
     } catch (err) {
         console.error(err);
@@ -896,14 +889,13 @@ async function fetchLikedPosts() {
 
 async function fetchMyAdvice() {
     try {
-        const res = await fetch(`${API_BASE_URL}/api/v1/match/user`, {
+        const res = await fetch(`/api/v1/match/user`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Content-Type': 'application/json'
             }
         });
         if (!res.ok) throw new Error('내가 신청한 상담 조회 실패');
         const result = await res.json();
-        console.log(result.data);
         return result.data || [];
     } catch (err) {
         console.error(err);
@@ -914,17 +906,11 @@ async function fetchMyAdvice() {
 
 async function fetchAdviceDetail(applyId) {
     try {
-        console.log(`상담 상세 정보 요청: ID ${applyId}, URL: ${API_BASE_URL}/api/v1/match/${applyId}/answer`);
-        console.log('사용중인 accessToken:', accessToken);
-
-        const res = await fetch(`${API_BASE_URL}/api/v1/match/${applyId}/answer`, {
+        const res = await fetch(`/api/v1/match/${applyId}/answer`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
-
-        console.log('응답 상태:', res.status, res.statusText);
 
         if (!res.ok) {
             const errorText = await res.text();
@@ -933,18 +919,9 @@ async function fetchAdviceDetail(applyId) {
         }
 
         const data = await res.json();
-        console.log('상담 상세 데이터:', data);
         return data || {};
     } catch (err) {
         console.error('상담 상세 조회 중 오류 발생:', err);
-
-        // 토큰 만료 가능성 체크
-        if (err.message && err.message.includes('401')) {
-            alert('로그인 세션이 만료되었습니다. 다시 로그인해주세요.');
-            // 로그인 페이지로 리디렉션하는 코드 추가 가능
-            // window.location.href = '/login.html';
-            return {};
-        }
 
         alert('내가 신청한 상담 상세조회를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.');
         return {};
@@ -954,10 +931,9 @@ async function fetchAdviceDetail(applyId) {
 // 특정 상담(applyId)에 대한 리뷰 조회 함수
 async function fetchReviewByApplyId(applyId) {
     try {
-        // 1. 먼저 사용자의 모든 리뷰를 가져옵니다
-        const res = await fetch(`${API_BASE_URL}/api/v1/reviews/users/me`, {
+        const res = await fetch(`/api/v1/reviews/users/me`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`
+                'Content-Type': 'application/json'
             }
         });
 
@@ -968,17 +944,15 @@ async function fetchReviewByApplyId(applyId) {
         }
 
         const reviews = await res.json();
-        console.log('사용자의 모든 리뷰:', reviews);
 
         // 2. applyId에 해당하는 리뷰만 필터링
         const targetReview = reviews.find(review => review.applyId === parseInt(applyId));
 
         if (!targetReview) {
-            console.log(`applyId ${applyId}에 해당하는 리뷰를 찾을 수 없습니다.`);
+            console.error(`applyId ${applyId}에 해당하는 리뷰를 찾을 수 없습니다.`);
             return null;
         }
 
-        console.log('찾은 리뷰:', targetReview);
         return targetReview;
 
     } catch (err) {
@@ -1182,8 +1156,6 @@ function setupTabEvents() {
                 default:
                     showPostContent();
             }
-
-            console.log(`탭 ${this.textContent} 클릭됨 - ${currentPosts.length}개 게시글 로드됨`);
         });
     });
 }
@@ -1195,10 +1167,10 @@ async function uploadProfileImage(file) {
     formData.append('file', file);
 
     // API 호출
-    const response = await fetch(`${API_BASE_URL}/api/v1/users/updateImage`, {
+    const response = await fetch(`/api/v1/users/updateImage`, {
         method: 'PUT',
         headers: {
-            'Authorization': `Bearer ${accessToken}`
+            'Content-Type': 'application/json'
         },
         body: formData
     });

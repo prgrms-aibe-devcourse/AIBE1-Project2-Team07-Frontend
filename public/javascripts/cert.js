@@ -1,5 +1,3 @@
-const API_BASE_URL = "http://localhost:8444";
-
 // 로컬스토리지에서 user 정보
 const userJSON = localStorage.getItem('user');
 const accessToken = localStorage.getItem('accessToken');
@@ -44,9 +42,8 @@ async function fetchCertifications() {
             throw new Error('인증 토큰이 없습니다. 로그인이 필요합니다.');
         }
 
-        const res = await fetch(`${API_BASE_URL}/api/v1/admin/certifications`, {
+        const res = await fetch(`/api/v1/admin/certifications`, {
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -189,10 +186,9 @@ function processCertification(certId, action, actionText) {
 
     showStatus(`${actionText} 처리 중...`, 'loading');
 
-    fetch(`${API_BASE_URL}/api/v1/admin/certifications/${action}/${certId}`, {
+    fetch(`/api/v1/admin/certifications/${action}/${certId}`, {
         method: 'PUT',
         headers: {
-            'Authorization': `Bearer ${accessToken}`,
             'Content-Type': 'application/json'
         }
     })
