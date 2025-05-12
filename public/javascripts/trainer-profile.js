@@ -7,10 +7,10 @@ let allReviews = []; // 모든 리뷰 데이터 저장
 
 window.currentUserId = 1;   // 나중에 로그인 한 사람으로 바꿔야 함
 
-const baseUrl = "https://dev.tuituiworld.store/api/v1/";
+const baseUrl = "/api/v1/";
 const accessToken = localStorage.getItem('accessToken');
 // 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const path = window.location.pathname;
     let trainerNickname = null;
 
@@ -34,7 +34,6 @@ async function loadTrainerReviewByNickname(trainerNickname) {
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -86,7 +85,7 @@ function convertApiReviewsToSiteFormat(apiReviews) {
 function renderReviews(reviews, append = false) {
     const reviewsContainer = document.getElementById('reviews-container');
 
-    if(!reviewsContainer) {
+    if (!reviewsContainer) {
         console.log("없습니다")
         return;
     }
@@ -156,7 +155,7 @@ function renderReviews(reviews, append = false) {
 function setupLikeButtonEvents() {
     const likeButtons = document.querySelectorAll('.like-button');
     likeButtons.forEach(button => {
-        button.addEventListener('click', async function(event) {
+        button.addEventListener('click', async function (event) {
             event.preventDefault();
 
             const reviewId = this.dataset.reviewId;
@@ -176,7 +175,6 @@ function setupLikeButtonEvents() {
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `Bearer ${accessToken}`,
                         'Content-Type': 'application/json'
                     }
                 });
@@ -207,7 +205,7 @@ function setupLikeButtonEvents() {
 }
 
 // 페이지 로드 시 실행 함수 업데이트
-document.addEventListener('DOMContentLoaded', async function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const path = window.location.pathname;
     let trainerNickname = null;
 
@@ -226,6 +224,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         showError('유효한 트레이너 정보가 전달되지 않았습니다.');
     }
 });
+
 // 트레이너 데이터 로드 함수
 async function loadTrainerDataByNickname(trainerNickname) {
     try {
@@ -238,7 +237,6 @@ async function loadTrainerDataByNickname(trainerNickname) {
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -306,8 +304,8 @@ function convertApiDataToSiteFormat(apiData) {
     // 서비스 요금이 없을 경우 기본 가격 설정
     if (prices.length === 0) {
         prices.push(
-            { type: "방문교육", duration: "60분", amount: 50000 },
-            { type: "영상교육", duration: "30분", amount: 30000 }
+            {type: "방문교육", duration: "60분", amount: 50000},
+            {type: "영상교육", duration: "30분", amount: 30000}
         );
     }
 
@@ -324,7 +322,11 @@ function convertApiDataToSiteFormat(apiData) {
     } else {
         // 자격증이 없을 경우 기본 자격증 설정
         qualifications.push(
-            { title: "반려동물 행동 전문가", organization: "한국애견연맹", image: "https://cdn-icons-png.flaticon.com/512/190/190411.png" }
+            {
+                title: "반려동물 행동 전문가",
+                organization: "한국애견연맹",
+                image: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+            }
         );
     }
 
@@ -385,7 +387,7 @@ function renderTrainerProfile(data) {
     // 로그인 사용자 ID와 트레이너 ID가 같으면 “수정” 버튼 추가
     if (window.currentUserId === data.id) {
         const editBtn = document.createElement('button');
-        editBtn.type      = 'button';
+        editBtn.type = 'button';
         editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
         editBtn.textContent = '수정';
         editBtn.addEventListener('click', () => {
@@ -588,7 +590,7 @@ function setupEventListeners() {
     // 후기 더보기 버튼 클릭 이벤트
     const reviewMoreBtn = document.getElementById('load-more-reviews');
     if (reviewMoreBtn) {
-        reviewMoreBtn.addEventListener('click', function() {
+        reviewMoreBtn.addEventListener('click', function () {
             loadReviews(currentPage + 1, true);
         });
     }
