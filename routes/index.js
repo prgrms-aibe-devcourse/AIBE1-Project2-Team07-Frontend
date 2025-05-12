@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
 
     // 사용자 역할에 따라 다른 페이지 제공
     if (user.userRole === 'ADMIN') {
-        return res.sendFile(path.join(__dirname, '../public/cert.html'));
+        return res.sendFile(path.join(__dirname, '../public/admin.html'));
     } else {
         return res.sendFile(path.join(__dirname, '../public/home.html'));
     }

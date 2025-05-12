@@ -9,6 +9,7 @@ var communityRouter = require("./routes/community");
 var authRoutes = require("./routes/auth"); // 위 파일 경로에 맞게 조정
 var trainerRouter = require('./routes/trainers');
 var profileRouter = require('./routes/profile');
+var adminRouter = require('./routes/admin');
 var fetchWithAuth = require("./middlewares/proxyMiddleware");
 
 var app = express();
@@ -38,6 +39,7 @@ app.use('/community', communityRouter);
 app.use('/trainers', trainerRouter);
 app.use('/profile', profileRouter);
 app.use("/auth", authRoutes);
+app.use('/admin', adminRouter);
 app.use("/api", fetchWithAuth);
 
 module.exports = app;

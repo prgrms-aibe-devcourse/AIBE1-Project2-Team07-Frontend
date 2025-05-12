@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+
+    <link rel="icon" type="image/png" href="./images/favicon/favicon-96x96.png" sizes="96x96"/>
+    <link rel="icon" type="image/svg+xml" href="./images/favicon/favicon.svg"/>
+    <link rel="shortcut icon" href="./images/favicon/favicon.ico"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png"/>
+    <link rel="manifest" href="./images/favicon/site.webmanifest"/>
+
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./stylesheets/common.css"/>
+    <title>Admin Dashboard</title>
+    <style>
+        /* 관리자 대시보드 스타일 */
+        .admin-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            max-width: 1200px;
+            width: 100%;
+            margin: 40px auto;
+            padding: 40px;
+        }
+
+        .admin-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .admin-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 20px;
+        }
+
+        .admin-item {
+            background-color: #fafafa;
+            border-radius: 6px;
+            padding: 25px 15px;
+            text-decoration: none;
+            color: #333;
+            text-align: center;
+            transition: transform .2s, box-shadow .2s, background-color .2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .admin-item:hover {
+            background-color: #e8f4ff;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .admin-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            color: #4285f4;
+        }
+
+        .admin-label {
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 576px) {
+            .admin-container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            .admin-menu {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-white">
+    <div class="container position-relative">
+        <a class="navbar-brand" href="/">
+            <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
+        </a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-menu" id="navbarNav">
+            <ul class="navbar-nav ms-auto navbar-items">
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="/trainers">훈련사</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-item-link" href="/community">커뮤니티</a>
+                </li>
+                <li id="myProfile" class="nav-item dropdown">
+                    <a
+                            class="nav-link dropdown-toggle nav-item-link"
+                            href="#"
+                            id="profileDropdown"
+                            role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                    >
+                        <img src="./images/cat1.jpeg" alt="Profile" class="profile-img">
+                        <span class="profile-name"></span>
+                        <img src="./images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                        <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
+                        <li><a class="dropdown-item" href="/profile?tab=advice">상담 내역</a></li>
+                        <li><a class="dropdown-item logout-btn" href="/logout">로그아웃</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill login-btn" href="#" id="loginBtn"
+                       style="display: none">로그인</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div
+        class="modal fade"
+        id="loginModal"
+        tabindex="-1"
+        aria-labelledby="loginModalLabel"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                ></button>
+            </div>
+            <div class="modal-body text-center pb-5">
+                <!-- 로고 이미지 -->
+                <div class="logo-container my-5">
+                    <img
+                            src="./images/logo_large.png"
+                            alt="PetTalk Logo"
+                            class="modal-logo"
+                    />
+                </div>
+
+                <p class="mb-5">소셜 계정으로 간편하게 로그인하세요.</p>
+
+                <!-- 카카오 로그인 버튼 -->
+                <div class="d-grid login-buttons">
+                    <button class="btn btn-kakao">
+                        <img
+                                src="./images/kakao_login.png"
+                                alt="Kakao"
+                                class="login-img"
+                        />
+                    </button>
+
+                    <!-- 네이버 로그인 버튼 -->
+                    <button class="btn btn-naver">
+                        <img
+                                src="./images/naver_login.png"
+                                alt="Naver"
+                                class="login-img"
+                        />
+                    </button>
+                </div>
+
+                <p class="text-muted mt-4 small">
+                    로그인 시 이용약관과 개인정보처리방침에 동의하게 됩니다.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-container">
+    <h1 class="admin-title">관리자 대시보드</h1>
+
+    <div class="admin-menu">
+        <a href="/admin/cert" class="admin-item">
+            <div class="admin-icon">🔒</div>
+            <div class="admin-label">인증 관리</div>
+        </a>
+
+        <a href="/admin/post" class="admin-item">
+            <div class="admin-icon">📝</div>
+            <div class="admin-label">게시물 관리</div>
+        </a>
+
+        <a href="/admin/comment" class="admin-item">
+            <div class="admin-icon">💬</div>
+            <div class="admin-label">댓글 관리</div>
+        </a>
+
+        <a href="/admin/user" class="admin-item">
+            <div class="admin-icon">👤</div>
+            <div class="admin-label">사용자 관리</div>
+        </a>
+    </div>
+</div>
+
+<footer class="bg-dark text-white py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <!-- 회사 정보 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">㈜ 펫톡</h5>
+                <p class="mb-1">서울특별시 강아지구 고양이동 냥냥냥로 2층</p>
+                <p class="mb-1">사업자등록번호: 123-45-67890</p>
+                <p class="mb-1">대표: Lucky0111</p>
+                <p class="mb-0">문의: example@naver.com / 070-1111-2222</p>
+            </div>
+
+            <!-- 고객센터 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">고객센터</h5>
+                <p class="mb-1">📞 전화 상담: 070-1111-2222</p>
+                <p class="mb-1">💬 카카오톡: @펫톡상담</p>
+                <p class="mb-1">⏰ 운영시간: 평일 11:00 - 18:00</p>
+                <p class="mb-0">🍽 점심시간: 13:00 - 14:00</p>
+            </div>
+
+            <!-- 펫톡 소개 -->
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold mb-3">펫톡 소개</h5>
+                <p class="mb-1">반려인을 위한 훈련사 매칭 플랫폼</p>
+                <p class="mb-1">신뢰할 수 있는 전문가 연결, 간편한 상담</p>
+                <p class="mb-0">함께 더 나은 반려 생활을 만들어요 🐾</p>
+            </div>
+        </div>
+
+        <hr class="my-4 border-light"/>
+
+        <div class="text-center small">
+            <p class="mb-0">© 2025 PetTalk Inc. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"
+></script>
+<script src="./javascripts/common.js"></script>
+</body>
+</html>
