@@ -1,6 +1,4 @@
-const API_BASE_URL = 'https://dev.tuituiworld.store/api/v1/';
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const photoUploadInput = document.getElementById('photoUploadInput');
     const photoUploadBtn = document.getElementById('photoUploadBtn');
     const photoPreviewArea = document.querySelector('.photo-preview-area');
@@ -23,14 +21,33 @@ document.addEventListener('DOMContentLoaded', function () {
     let tags = []; // Array to store tag objects {id: number, name: string}
     let selectedTags = []; // Array to store selected tag IDs
 
-    if(localStorage.getItem("accessToken") == null){
-        alert("로그인을 해주세요");
-        location.href = "/community";
+    async function checkUserLoggedIn() {
+        try {
+            const response = await fetch('/auth/status', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('로그인 상태 확인 실패');
+            }
+
+            return true;
+        } catch (error) {
+            console.error('로그인 상태 확인 중 오류 발생:', error);
+            return false;
+        }
+    }
+
+    if (!await checkUserLoggedIn()) {
+        displayLoginModal();
         return;
     }
 
     // 태그 데이터 가져오기ㄴ
-    fetchTags();
+    await fetchTags();
 
     // Trigger file input click when button is clicked for photos
     photoUploadBtn.addEventListener('click', function () {
@@ -234,7 +251,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let currentFocus = -1;
 
 // 태그 입력 이벤트 처리
-        tagInput.addEventListener('input', function() {
+        tagInput.addEventListener('input', function () {
             const inputValue = this.value.trim();
 
             // 현재 포커스 초기화
@@ -272,7 +289,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
 // 키보드 방향키 및 엔터키 처리
-        tagInput.addEventListener('keydown', function(e) {
+        tagInput.addEventListener('keydown', function (e) {
             const items = autocompleteDropdown.querySelectorAll('.dropdown-item');
 
             if (!items.length) return;
@@ -399,11 +416,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // API에서 태그 데이터 가져오기
     async function fetchTags() {
         try {
-            const response = await fetch(API_BASE_URL + 'tags/open', {
+            const response = await fetch('/api/v1/tags/open', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
                 }
             });
             if (!response.ok) {
@@ -421,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Handle post submission
-    submitPostBtn.addEventListener('click', function () {
+    submitPostBtn.addEventListener('click', async function () {
         const title = postTitleInput.value.trim();
         const content = postContentTextarea.value.trim();
 
@@ -490,11 +506,8 @@ document.addEventListener('DOMContentLoaded', function () {
             formData.append('video', uploadedVideo);
         }
 
-        fetch(API_BASE_URL + 'posts', {
+        await fetch('/api/v1/posts', {
             method: 'POST',
-            headers: {
-                'Authorization': 'Bearer ' + localStorage.getItem('accessToken')
-            },
             body: formData
         })
             .then(response => {
