@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await initReviewCarousel();
 
     // 훈련사 캐러셀 초기화
-    initTrainerSection();
+    await initTrainerSection();
 
     // 자격증 초기화
     initCertificateSection();
@@ -102,8 +102,8 @@ async function initReviewCarousel() {
 /**
  * 훈련사 섹션 초기화 및 데이터 렌더링
  */
-function initTrainerSection() {
-    const trainers = fetchTrainers();
+async function initTrainerSection() {
+    const trainers = await fetchTrainers();
     renderTrainerCards(trainers);
     initTrainerCardClicks();
 }
@@ -310,54 +310,28 @@ async function fetchReviews() {
  * TODO: API 연결할 때 코드 수정 필요
  * @returns {Array} 훈련사 객체 배열
  */
-function fetchTrainers() {
-    return [
-        {
-            id: 1,
-            name: "김형욱 훈련사",
-            image: "https://placehold.co/400x400?text=Trainer+Image+1",
-            experience: "16년 경력",
-            specialties: ["반려동물 전문", "동물행동 전문"],
-            location: "의왕, 안양, 과천 주변 지역 상담가능",
-            features: [
-                "애견 교육 자격 코칭과정",
-                "초보자도 배울 수 있는 훈련법",
-                "디액션 애니멀 케어센터 대표",
-                "반려동물 행동 교정 전문가",
-                "국제 반려동물 관리사 1급 보유"
-            ]
-        },
-        {
-            id: 2,
-            name: "이민호 훈련사",
-            image: "https://placehold.co/400x400?text=Trainer+Image+2",
-            experience: "10년 경력",
-            specialties: ["반려견 전문", "문제행동 교정"],
-            location: "강남, 서초 주변 지역 상담가능",
-            features: [
-                "국가공인 반려동물 훈련사 1급",
-                "KKF 애견 훈련사 2급",
-                "반려동물 심리상담 전문가",
-                "펫케어 프리미엄 센터 소속",
-                "서울대 수의학 특별과정 수료"
-            ]
-        },
-        {
-            id: 3,
-            name: "박지윤 훈련사",
-            image: "https://placehold.co/400x400?text=Trainer+Image+3",
-            experience: "8년 경력",
-            specialties: ["반려묘 전문", "행동교정 전문"],
-            location: "일산, 김포 주변 지역 상담가능",
-            features: [
-                "고양이 행동 심리 전문가",
-                "반려묘 문제행동 교정 코칭",
-                "캣페어러 아카데미 수료",
-                "펠린 행동학 전문 과정 이수",
-                "동물매개치료사 자격증 보유"
-            ]
+async function fetchTrainers() {
+    const response = await fetch(`http://localhost:8444/api/v1/trainers/random/open`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${getAccessToken()}`
         }
-    ];
+    });
+
+    const data = await response.json();
+
+    console.log(data);
+
+    return data.map(trainer => ({
+        name: trainer.name + " 훈련사",
+        nickname: trainer.nickname,
+        image: trainer.profileImageUrl || "https://placehold.co/400x400?text=Trainer+Image",
+        experience: trainer.representativeCareer,
+        specialties: trainer.specializationText.split(","),
+        location: trainer.visitingAreas,
+        features: trainer.title
+    }));
+
 }
 
 /**
@@ -507,9 +481,7 @@ function createTrainerCard(trainer) {
     ).join('');
 
     // 특징 리스트 아이템 생성
-    const featureItems = trainer.features.map(feature =>
-        `<li>${feature}</li>`
-    ).join('');
+    const featureItems = `<li>${trainer.features}</li>`;
 
     col.innerHTML = `
         <div class="trainer-card" data-trainer-id="${trainer.id}">

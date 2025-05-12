@@ -841,6 +841,57 @@ function renderPagination(page, totalPages) {
             window.scrollTo(0, 0);
         });
     }
+
+    // 페이지 번호 버튼 생성
+    // 화면에 표시할 페이지 번호의 범위 계산 (최대 5개)
+    let startPage = Math.max(0, Math.min(page - 2, totalPages - 5));
+    let endPage = Math.min(startPage + 4, totalPages - 1);
+
+    // 페이지 수가 적으면 모든 페이지를 표시
+    if (totalPages <= 5) {
+        startPage = 0;
+        endPage = totalPages - 1;
+    }
+
+    // 페이지 번호 버튼 생성
+    for (let i = startPage; i <= endPage; i++) {
+        const pageLi = document.createElement('li');
+        pageLi.className = 'page-item' + (i === page ? ' active' : '');
+        pageLi.innerHTML = `<a class="page-link" href="#">${i + 1}</a>`;
+        paginationContainer.appendChild(pageLi);
+
+        // 페이지 번호 버튼 이벤트
+        pageLi.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (i !== page) {
+                currentPage = i;
+                updateURLFromState(false);
+                fetchAndRenderPosts();
+                window.scrollTo(0, 0);
+            }
+        });
+    }
+
+    // 다음 페이지 버튼
+    const nextLi = document.createElement('li');
+    nextLi.className = 'page-item' + (page >= totalPages - 1 ? ' disabled' : '');
+    nextLi.innerHTML = `
+        <a class="page-link" href="#" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+        </a>
+    `;
+    paginationContainer.appendChild(nextLi);
+
+    // 다음 페이지 버튼 이벤트
+    if (page < totalPages - 1) {
+        nextLi.addEventListener('click', function (e) {
+            e.preventDefault();
+            currentPage++;
+            updateURLFromState(false);
+            fetchAndRenderPosts();
+            window.scrollTo(0, 0);
+        });
+    }
 }
 
 /**
