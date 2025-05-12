@@ -41,10 +41,11 @@ document.addEventListener('DOMContentLoaded', function() {
 // 트레이너 리뷰 데이터 로드 함수
 async function loadTrainerReviewByNickname(trainerNickname) {
     try {
-        const apiUrl = baseUrl + 'reviews/trainers/' + trainerNickname;
+        const apiUrl = baseUrl + `reviews/trainers/${trainerNickname}/open`;
         const response = await fetch(apiUrl, {
             method: 'GET',
             headers: {
+                'Authorization': `Bearer ${accessToken}`,
                 'Content-Type': 'application/json'
             }
         });
@@ -54,6 +55,8 @@ async function loadTrainerReviewByNickname(trainerNickname) {
         }
 
         const apiReviews = await response.json();
+
+        console.log(apiReviews);
 
         // API 리뷰 데이터를 사이트 형식으로 변환
         allReviews = convertApiReviewsToSiteFormat(apiReviews);
@@ -80,7 +83,6 @@ function convertApiReviewsToSiteFormat(apiReviews) {
 
         // 이름 마스킹 처리 (이미 마스킹 처리되어 있다면 그대로 사용)
         const nameWithMask = review.userNickname + "님"
-
         return {
             id: review.reviewId,
             name: nameWithMask,
@@ -234,6 +236,7 @@ async function loadTrainerDataByNickname(trainerNickname) {
         }
 
         const apiData = await response.json();
+
 
         // API 데이터를 기존 사이트 형식으로 변환
         trainerData = convertApiDataToSiteFormat(apiData);

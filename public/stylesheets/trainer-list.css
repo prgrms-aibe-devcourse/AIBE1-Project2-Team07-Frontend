@@ -109,3 +109,66 @@ footer {
 footer p {
     margin-bottom: 0.5rem;
 }
+
+.sort-options {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+.sort-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sort-item {
+    margin-left: 15px;
+}
+
+.sort-item .sort-link {
+    color: #888;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.sort-item.active .sort-link {
+    color: #ff9800;
+    font-weight: bold;
+}
+
+.sort-item .sort-link:hover {
+    color: #ff9800;
+}
+
+/* trainer-list.css 또는 적절한 CSS 파일에 추가 */
+.trainer-search-container {
+    margin-bottom: 30px;
+}
+
+.search-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-category {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+    background-color: #f8f9fa;
+}
+
+.btn-search {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+/* 검색결과 없음 메시지 스타일 */
+.alert-info {
+    text-align: center;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 8px;
+}
