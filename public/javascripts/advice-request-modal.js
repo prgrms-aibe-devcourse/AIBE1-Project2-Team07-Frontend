@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (trainerNameElement && modalTitle) {
                             modalTitle.textContent = trainerNameElement.textContent;
                         }
-
-                        const inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
-                        inquiryModal.show();
                     });
 
                     // 이벤트 리스너 추가 후 관찰 중단
@@ -50,9 +47,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (trainerNameElement && modalTitle) {
                 modalTitle.textContent = trainerNameElement.textContent;
             }
-
-            const inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
-            inquiryModal.show();
+            if (checkUserLoggedIn()){
+                new bootstrap.Modal(document.getElementById('inquiryModal')).show();
+            }
+            else{
+                new bootstrap.Modal(document.getElementById('loginModal')).show();
+            }
         }
     });
 
@@ -294,7 +294,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // 모달이 열릴 때마다 파일 첨부 기능 설정 (이전 리스너 제거 후 새로 설정)
     document.addEventListener('shown.bs.modal', function (e) {
         if (e.target && e.target.id === 'inquiryModal') {
-            console.log('모달 표시됨');
             // 파일 목록 초기화
             selectedFile = null;
             updateFileListDisplay();
@@ -527,3 +526,8 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+function checkUserLoggedIn() {
+    // 실제 구현에서는 토큰이나 세션을 확인
+    return localStorage.getItem('accessToken') !== null;
+}
