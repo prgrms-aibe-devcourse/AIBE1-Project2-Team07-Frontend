@@ -4,21 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="icon" type="image/png" href="./images/favicon/favicon-96x96.png" sizes="96x96"/>
-  <link rel="icon" type="image/svg+xml" href="./images/favicon/favicon.svg"/>
-  <link rel="shortcut icon" href="./images/favicon/favicon.ico"/>
-  <link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/apple-touch-icon.png"/>
-  <link rel="manifest" href="./images/favicon/site.webmanifest"/>
+  <link rel="icon" type="image/png" href="/images/favicon/favicon-96x96.png" sizes="96x96"/>
+  <link rel="icon" type="image/svg+xml" href="/images/favicon/favicon.svg"/>
+  <link rel="shortcut icon" href="/images/favicon/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png"/>
+  <link rel="manifest" href="/images/favicon/site.webmanifest"/>
 
   <meta property="og:type" content="website">
   <meta property="og:title" content="PetTalk - 반려생활, 같이 고민해요">
   <meta property="og:description" content="믿을 수 있는 훈련사 매칭, 반려동물 상담, 다양한 후기까지! 반려생활의 모든 고민을 펫톡에서 해결하세요.">
-  <meta property="og:image" content="./images/logo_large.png">
+  <meta property="og:image" content="/images/logo_large.png">
   <meta property="og:url" content="https://pet-talk.onrender.com/">
   <meta property="og:site_name" content="PetTalk">
 
-  <title>댓글 관리</title>
-  <link rel="stylesheet" href="./stylesheets/common.css"/>
+  <title>관리자 댓글 관리</title>
+  <link rel="stylesheet" href="/stylesheets/common.css"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <!-- 부트스트랩 CSS -->
@@ -40,12 +40,11 @@
       100% { transform: rotate(360deg); }
     }
 
-    .truncate-2 {
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
+    .content-preview {
+      max-width: 300px;
       overflow: hidden;
       text-overflow: ellipsis;
+      white-space: nowrap;
     }
   </style>
 </head>
@@ -53,7 +52,7 @@
 <nav class="navbar navbar-expand-lg bg-white">
   <div class="container position-relative">
     <a class="navbar-brand" href="/">
-      <img src="./images/logo.png" alt="PetTalk Logo" height="50"/>
+      <img src="/images/logo.png" alt="PetTalk Logo" height="50"/>
     </a>
     <button
             class="navbar-toggler"
@@ -77,9 +76,9 @@
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
           >
-            <img src="./images/cat1.jpeg" alt="Profile" class="profile-img">
+            <img src="/images/cat1.jpeg" alt="Profile" class="profile-img">
             <span class="profile-name"></span>
-            <img src="./images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
+            <img src="/images/icons/check-circle-fill.svg" alt="trainer" class="trainer-badge-img">
           </a>
           <ul class="dropdown-menu" aria-labelledby="profileDropdown">
             <li><a class="dropdown-item" href="/profile">내 프로필</a></li>
@@ -94,31 +93,11 @@
     </div>
   </div>
 </nav>
+
 <div class="bg-gray-100">
   <div class="container mx-auto px-4 py-8">
     <div class="bg-white shadow-md rounded-lg p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">댓글 관리</h1>
-
-        <div class="flex space-x-2">
-          <!-- 검색 필드 -->
-          <div class="relative">
-            <input type="text" id="searchInput" placeholder="댓글 내용 검색"
-                   class="border rounded-md py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="searchBtn" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- 신고 필터 -->
-          <select id="reportFilter" class="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">모든 댓글</option>
-            <option value="reported">신고된 댓글만</option>
-          </select>
-        </div>
-      </div>
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">댓글 관리</h1>
 
       <!-- Status Message -->
       <div id="statusMessage" class="hidden mb-4 p-4 rounded-md"></div>
@@ -134,13 +113,11 @@
           <table class="min-w-full bg-white">
             <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th class="py-3 px-4 text-left">ID</th>
-              <th class="py-3 px-4 text-left">댓글 내용</th>
-              <th class="py-3 px-4 text-left">게시물</th>
-              <th class="py-3 px-4 text-left">작성자</th>
-              <th class="py-3 px-3 text-center">신고수</th>
-              <th class="py-3 px-3 text-center">작성일</th>
-              <th class="py-3 px-6 text-center">작업</th>
+              <th class="py-3 px-6 text-left">댓글 ID</th>
+              <th class="py-3 px-6 text-left">내용</th>
+              <th class="py-3 px-6 text-left">작성자</th>
+              <th class="py-3 px-6 text-left">작성일</th>
+              <th class="py-3 px-6 text-center">관리</th>
             </tr>
             </thead>
             <tbody id="commentsList" class="text-gray-600 text-sm">
@@ -149,41 +126,43 @@
           </table>
         </div>
 
-        <!-- Pagination -->
-        <div class="flex justify-between items-center mt-6">
-          <div class="text-sm text-gray-500">
-            <span id="totalCommentsCount">0</span>개의 댓글
-          </div>
-          <div class="flex space-x-1" id="pagination">
-            <!-- Pagination will be inserted here -->
-          </div>
-        </div>
-
         <div id="noCommentsMessage" class="hidden text-center py-8 text-gray-500">
-          댓글이 없습니다.
+          등록된 댓글이 없습니다.
         </div>
       </div>
 
-      <!-- Modal for Comment Detail View -->
-      <div id="commentDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-4 rounded-lg max-w-2xl w-full max-h-screen overflow-auto">
+      <!-- Modal for Comment Detail -->
+      <div id="commentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-4 rounded-lg max-w-xl w-full">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold" id="modalTitle">댓글 상세보기</h3>
-            <button id="closeCommentModal" class="text-gray-500 hover:text-gray-700">
+            <h3 class="text-xl font-bold" id="modalTitle">댓글 상세 보기</h3>
+            <button id="closeModal" class="text-gray-500 hover:text-gray-700">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
           </div>
 
-          <div id="commentDetailContent" class="mb-6">
-            <!-- Comment details will be inserted here -->
-          </div>
+          <!-- Comment content -->
+          <div class="mt-4">
+            <div class="mb-4">
+              <h4 class="text-sm text-gray-500">작성자 정보</h4>
+              <p id="modalUserInfo" class="font-medium"></p>
+            </div>
+            <div class="mb-4">
+              <h4 class="text-sm text-gray-500">작성일</h4>
+              <p id="modalCreatedAt" class="font-medium"></p>
+            </div>
+            <div class="mb-4">
+              <h4 class="text-sm text-gray-500">댓글 내용</h4>
+              <p id="modalContent" class="whitespace-pre-line"></p>
+            </div>
 
-          <div class="flex justify-end space-x-2">
-            <button id="closeDetailBtn" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 focus:ring-2 focus:ring-gray-300">
-              닫기
-            </button>
+            <div class="flex justify-end mt-6">
+              <button id="modalDeleteBtn" class="bg-red-500 text-white py-1 px-4 rounded hover:bg-red-600 focus:ring-2 focus:ring-red-300">
+                삭제하기
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -211,7 +190,7 @@
         <!-- 로고 이미지 -->
         <div class="logo-container my-5">
           <img
-                  src="./images/logo_large.png"
+                  src="/images/logo_large.png"
                   alt="PetTalk Logo"
                   class="modal-logo"
           />
@@ -223,7 +202,7 @@
         <div class="d-grid login-buttons">
           <button class="btn btn-kakao">
             <img
-                    src="./images/kakao_login.png"
+                    src="/images/kakao_login.png"
                     alt="Kakao"
                     class="login-img"
             />
@@ -232,7 +211,7 @@
           <!-- 네이버 로그인 버튼 -->
           <button class="btn btn-naver">
             <img
-                    src="./images/naver_login.png"
+                    src="/images/naver_login.png"
                     alt="Naver"
                     class="login-img"
             />
@@ -287,7 +266,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
-<script src="./javascripts/common.js"></script>
-<script src="./javascripts/comments.js"></script>
+<script src="/javascripts/common.js"></script>
+<script src="/javascripts/admin-comment.js"></script>
 </body>
 </html>
