@@ -302,55 +302,47 @@ function showReviewModal(adviceId, trainerName) {
     });
 
     // 리뷰 제출 이벤트
-    document.getElementById('submitReview').addEventListener('click', async function () {
+    document.getElementById('submitReview').addEventListener('click', async () => {
         const adviceId = document.getElementById('adviceId').value;
-        const rating = document.querySelector('input[name="rating"]:checked')?.value || 0;
-        const comment = document.getElementById('reviewContent').value;
-        const imageInput = document.getElementById('reviewImage');
-        const reviewImageUrl = imageInput.files[0]?.name || null;
+        const rating   = document.querySelector('input[name="rating"]:checked')?.value;
+        const comment  = document.getElementById('reviewContent').value;
+        const fileInput= document.getElementById('reviewImage');
 
-        if (rating === 0) {
-            alert('별점을 선택해주세요.');
-            return;
+        if (!rating)  return alert('별점을 선택해주세요.');
+        if (!comment.trim()) return alert('리뷰 내용을 입력해주세요.');
+
+        const formData = new FormData();
+        // JSON 부분은 Blob 으로
+        formData.append(
+            'requestDTO',
+            new Blob([JSON.stringify({
+                applyId:   Number(adviceId),
+                rating:    Number(rating),
+                comment:   comment
+            })], { type: 'application/json' })
+        );
+        // 파일이 있으면 첨부
+        if (fileInput.files.length > 0) {
+            formData.append('file', fileInput.files[0]);
         }
-
-        if (!comment.trim()) {
-            alert('리뷰 내용을 입력해주세요.');
-            return;
-        }
-
-        const payload = {
-            applyId: Number(adviceId),
-            rating: Number(rating),
-            comment,
-            reviewImageUrl  // 파일 이름만 문자열로 담깁니다
-        };
 
         try {
-            const res = await fetch(`/api/v1/reviews`, {
+            const res = await fetch('/api/v1/reviews', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
+                body: formData
             });
 
             if (!res.ok) {
-                const errText = await res.text();
-                console.error('리뷰 등록 실패:', errText);
-                throw new Error(`서버 오류 (상태 코드: ${res.status})`);
+                const errJson = await res.json().catch(()=>({}));
+                throw new Error(errJson.message || res.statusText);
             }
 
             alert('리뷰가 성공적으로 등록되었습니다!');
-
-            const reviewModalEl = document.getElementById('reviewModal');
-            bootstrap.Modal.getInstance(reviewModalEl).hide();
-
-            // 화면 갱신
+            bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
             showUserAdvices();
 
         } catch (err) {
-            console.error(err);
+            console.error('리뷰 등록 오류:', err);
             alert(`리뷰 등록 중 오류가 발생했습니다: ${err.message}`);
         }
     });
@@ -448,7 +440,6 @@ function showReviewEditModal(applyId, reviewData) {
         const rating = document.querySelector('input[name="rating"]:checked')?.value || 0;
         const comment = document.getElementById('reviewContent').value;
         const imageInput = document.getElementById('reviewImage');
-        const reviewImageUrl = imageInput.files[0]?.name || reviewData.reviewImageUrl || null;
 
         if (rating === 0) {
             alert('별점을 선택해주세요.');
@@ -462,8 +453,7 @@ function showReviewEditModal(applyId, reviewData) {
 
         const payload = {
             rating: Number(rating),
-            comment,
-            reviewImageUrl
+            comment
         };
 
         try {
