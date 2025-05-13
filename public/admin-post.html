@@ -114,10 +114,10 @@
 
           <!-- 카테고리 필터 -->
           <select id="categoryFilter" class="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="">모든 카테고리</option>
+            <option value="free">자유게시판</option>
             <option value="question">질문</option>
-            <option value="story">일상</option>
-            <option value="info">정보공유</option>
+            <option value="mypet">반려동물 자랑</option>
+            <option value="tool">정보공유</option>
           </select>
         </div>
       </div>
@@ -138,11 +138,13 @@
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
               <th class="py-3 px-4 text-left">ID</th>
               <th class="py-3 px-4 text-left">카테고리</th>
+              <th class="py-3 px-4 text-left">펫 카테고리</th>
               <th class="py-3 px-4 text-left">제목</th>
               <th class="py-3 px-4 text-left">작성자</th>
               <th class="py-3 px-3 text-center">좋아요</th>
               <th class="py-3 px-3 text-center">댓글</th>
               <th class="py-3 px-3 text-center">작성일</th>
+              <th class="py-3 px-3 text-center">옵션</th>
             </tr>
             </thead>
             <tbody id="postsList" class="text-gray-600 text-sm">
