@@ -9,7 +9,8 @@ const TrainerSearchType = {
     TITLE: 'TITLE',
     CONTENT: 'CONTENT',
     LOCATION: 'LOCATION',
-    NICKNAME: 'NICKNAME'
+    NICKNAME: 'NICKNAME',
+    NAME: 'NAME'
 };
 
 let currentSort = TrainerSortType.LATEST;
@@ -44,6 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         <option value="${TrainerSearchType.TITLE}">제목</option>
                         <option value="${TrainerSearchType.CONTENT}">내용</option>
                         <option value="${TrainerSearchType.LOCATION}">위치</option>
+                        <option value="${TrainerSearchType.NAME}">이름</option>
                         <option value="${TrainerSearchType.NICKNAME}">닉네임</option>
                     </select>
                     <input type="text" class="form-control" placeholder="검색어를 입력해주세요" id="searchKeywordInput">

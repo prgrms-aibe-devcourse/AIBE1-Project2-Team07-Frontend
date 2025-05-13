@@ -79,11 +79,6 @@ async function initReviewCarousel() {
     renderReviewCarousel(reviews, cardsPerSlide);
     setupCarouselAnimation();
 
-    // 디버깅 코드 추가
-    console.log('리뷰 데이터:', reviews);
-    console.log('리뷰 슬라이드 수:', Math.ceil(reviews.length / cardsPerSlide));
-    console.log('캐러셀 아이템 수:', document.querySelectorAll('#reviewCarousel .carousel-item').length);
-
     // 이벤트 리스너 추가로 문제 확인
     const nextButton = document.querySelector('#reviewCarousel .carousel-control-next');
     const prevButton = document.querySelector('#reviewCarousel .carousel-control-prev');
@@ -304,7 +299,8 @@ async function fetchReviews() {
     return data.map(review => ({
         trainer: review.trainerName,
         image: review.reviewImageUrl || "https://placehold.co/400x400?text=No+Image",
-        text: review.comment
+        text: review.comment,
+        rating: review.rating
     }));
 }
 
@@ -331,7 +327,8 @@ async function fetchTrainers() {
         experience: trainer.representativeCareer,
         specialties: trainer.specializationText.split(","),
         location: trainer.visitingAreas,
-        features: trainer.introduction
+        features: trainer.certifications,
+        tags: trainer.specializations
     }));
 }
 
@@ -470,6 +467,22 @@ function createCarouselItem(reviewChunk, isActive) {
  * 개별 리뷰 카드 생성
  */
 function createReviewCard(review) {
+    function generateStars(rating) {
+        const fullStar = '<i class="fas fa-star" style="color: gold;"></i>';
+        const emptyStar = '<i class="far fa-star" style="color: #ccc;"></i>';
+        let stars = '';
+
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += fullStar;
+            } else {
+                stars += emptyStar;
+            }
+        }
+
+        return stars;
+    }
+
     const card = document.createElement("div");
     card.className = "review-card";
     card.innerHTML = `
@@ -478,6 +491,10 @@ function createReviewCard(review) {
         </div>
         <div class="review-content">
             <h5>${review.trainer}</h5>
+            <div class="review-rating">
+                ${generateStars(review.rating)}
+                <span class="rating-text">(${review.rating}/5)</span>
+            </div>
             <p>${review.text}</p>
         </div>
     `;
@@ -510,29 +527,40 @@ function createTrainerCard(trainer) {
     const col = document.createElement('div');
     col.className = 'col-md-3';
 
-    // 전문 분야 스팬 생성
-    const specialtySpans = trainer.specialties.map(specialty =>
-        `<span>${specialty}</span>`
-    ).join('');
-
     // 특징 리스트 아이템 생성
-    const featureItems = `<li>${trainer.features}</li>`;
+    const featureItems = trainer.features.map(feature => `<li>${feature.certName}</li>`).join('');
+
+    const tagsSpans = trainer.tags.map(tag =>
+        `<span>#${tag}</span>`).join('');
 
     col.innerHTML = `
         <div class="trainer-card" data-trainer-id="${trainer.id}">
-            <div class="trainer-img-container">
-                <img src="${trainer.image}" alt="${trainer.name}" class="trainer-img">
+            <div class="trainer-card-content">
+                <div class="trainer-img-container">
+                    <img src="${trainer.image}" alt="${trainer.name}" class="trainer-img">
+                </div>
+                <h4>${trainer.name}</h4>
+                <div class="d-flex align-items-center">
+                    <span style="color: #FF7000; font-weight: bold; min-width: 80px;">대표 경력</span> 
+                    <span class="text-truncate">${trainer.experience}</span>
+                </div>
+                <div class="d-flex align-items-center">
+                    <span style="color: #FF7000; font-weight: bold; min-width: 80px;">전문 분야</span> 
+                    <span class="text-truncate">${trainer.specialties}</span>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <span style="color: #FF7000; font-weight: bold; min-width: 80px;">방문 지역</span> 
+                    <span class="text-truncate">${trainer.location}</span>
+                </div>
+                
+                
+                <ul class="trainer-features">
+                    ${featureItems}
+                </ul>
+                <div class="trainer-tags">${tagsSpans}</div>
             </div>
-            <h4>${trainer.name}</h4>
-            <div class="trainer-specialty">
-                <span>${trainer.experience}</span>
-                ${specialtySpans}
-            </div>
-            <p class="trainer-location">방문 지역 : ${trainer.location}</p>
-            <ul class="trainer-features">
-                ${featureItems}
-            </ul>
-            <button class="detail-btn btn btn-warning w-50 mx-auto d-block"'>자세히 보기</button>
+            <button class="detail-btn btn btn-warning w-50 mx-auto d-block">자세히 보기</button>
         </div>
     `;
 
