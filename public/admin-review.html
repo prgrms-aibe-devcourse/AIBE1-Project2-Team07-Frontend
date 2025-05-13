@@ -17,7 +17,7 @@
   <meta property="og:url" content="https://pet-talk.onrender.com/">
   <meta property="og:site_name" content="PetTalk">
 
-  <title>게시물 관리</title>
+  <title>관리자 리뷰 목록</title>
   <link rel="stylesheet" href="/stylesheets/common.css"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -40,12 +40,17 @@
       100% { transform: rotate(360deg); }
     }
 
-    .truncate-2 {
+    .ellipsis {
+      overflow: hidden;
+      text-overflow: ellipsis;
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    }
+
+    .star-rating {
+      color: #FFD700;
+      font-size: 18px;
     }
   </style>
 </head>
@@ -97,30 +102,7 @@
 <div class="bg-gray-100">
   <div class="container mx-auto px-4 py-8">
     <div class="bg-white shadow-md rounded-lg p-6">
-      <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">게시물 관리</h1>
-
-        <div class="flex space-x-2">
-          <!-- 검색 필드 -->
-          <div class="relative">
-            <input type="text" id="searchInput" placeholder="제목 또는 내용 검색"
-                   class="border rounded-md py-2 px-4 w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button id="searchBtn" class="absolute right-2 top-2 text-gray-500 hover:text-gray-700">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-
-          <!-- 카테고리 필터 -->
-          <select id="categoryFilter" class="border rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option value="free">자유게시판</option>
-            <option value="question">질문</option>
-            <option value="mypet">반려동물 자랑</option>
-            <option value="tool">정보공유</option>
-          </select>
-        </div>
-      </div>
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">리뷰 관리 목록</h1>
 
       <!-- Status Message -->
       <div id="statusMessage" class="hidden mb-4 p-4 rounded-md"></div>
@@ -130,63 +112,91 @@
         <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
       </div>
 
-      <!-- Posts List -->
-      <div id="postsListContainer" class="hidden">
+      <!-- Reviews List -->
+      <div id="reviewListContainer" class="hidden">
         <div class="overflow-x-auto">
           <table class="min-w-full bg-white">
             <thead>
             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-              <th class="py-3 px-4 text-left">ID</th>
-              <th class="py-3 px-4 text-left">카테고리</th>
-              <th class="py-3 px-4 text-left">펫 카테고리</th>
-              <th class="py-3 px-4 text-left">제목</th>
-              <th class="py-3 px-4 text-left">작성자</th>
-              <th class="py-3 px-3 text-center">좋아요/댓글</th>
-              <th class="py-3 px-3 text-center">작성일</th>
-              <th class="py-3 px-3 text-center">옵션</th>
+              <th class="py-3 px-6 text-left">작성자</th>
+              <th class="py-3 px-6 text-left">훈련사</th>
+              <th class="py-3 px-6 text-left">내용</th>
+              <th class="py-3 px-6 text-center">작성일</th>
+              <th class="py-3 px-6 text-center">좋아요 수</th>
+              <th class="py-3 px-6 text-center">작업</th>
             </tr>
             </thead>
-            <tbody id="postsList" class="text-gray-600 text-sm">
+            <tbody id="reviewList" class="text-gray-600 text-sm">
             <!-- Data will be inserted here -->
             </tbody>
           </table>
         </div>
 
-        <!-- Pagination -->
-        <div class="flex justify-between items-center mt-6">
-          <div class="text-sm text-gray-500">
-            <span id="totalPostsCount">0</span>개의 게시물
-          </div>
-          <div class="flex space-x-1" id="pagination">
-            <!-- Pagination will be inserted here -->
-          </div>
-        </div>
-
-        <div id="noPostsMessage" class="hidden text-center py-8 text-gray-500">
-          게시물이 없습니다.
+        <div id="noReviewsMessage" class="hidden text-center py-8 text-gray-500">
+          등록된 리뷰가 없습니다.
         </div>
       </div>
 
-      <!-- Modal for Post Detail View -->
-      <div id="postDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white p-4 rounded-lg max-w-4xl w-full max-h-screen overflow-auto">
+      <!-- Modal for Review Detail -->
+      <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-4 rounded-lg max-w-4xl w-full max-h-[80vh] overflow-y-auto">
           <div class="flex justify-between items-center mb-4">
-            <h3 class="text-xl font-bold" id="modalTitle">게시물 상세보기</h3>
-            <button id="closePostModal" class="text-gray-500 hover:text-gray-700">
+            <h3 class="text-xl font-bold" id="modalTitle">리뷰 상세</h3>
+            <button id="closeModal" class="text-gray-500 hover:text-gray-700">
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
               </svg>
             </button>
           </div>
 
-          <div id="postDetailContent" class="mb-6">
-            <!-- Post details will be inserted here -->
+          <!-- Modal loading state -->
+          <div id="modalLoading" class="flex justify-center my-8">
+            <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12"></div>
           </div>
 
-          <div class="flex justify-end space-x-2">
-            <button id="closeDetailBtn" class="bg-gray-300 text-gray-700 py-2 px-4 rounded hover:bg-gray-400 focus:ring-2 focus:ring-gray-300">
-              닫기
-            </button>
+          <!-- Modal error state -->
+          <div id="modalError" class="hidden text-center py-8 text-red-500">
+            리뷰 정보를 불러오는데 실패했습니다.
+          </div>
+
+          <!-- Review detail container -->
+          <div id="reviewDetailContainer" class="mt-4 hidden">
+            <div class="flex items-center mb-4">
+              <div class="flex-shrink-0 mr-3">
+                <img id="userImage" src="" alt="사용자 이미지" class="w-12 h-12 rounded-full object-cover">
+              </div>
+              <div>
+                <div class="font-medium" id="userNickname"></div>
+                <div class="text-sm text-gray-500" id="reviewDate"></div>
+              </div>
+              <div class="ml-auto">
+                <div class="star-rating" id="ratingStars"></div>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4 mb-4">
+              <div class="flex items-center mb-4">
+                <div class="flex-shrink-0 mr-3">
+                  <img id="trainerImage" src="" alt="훈련사 이미지" class="w-12 h-12 rounded-full object-cover">
+                </div>
+                <div>
+                  <div class="font-medium" id="trainerName"></div>
+                  <div class="text-sm text-gray-500" id="trainerNickname"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-200 pt-4 mb-4">
+              <div class="mb-4" id="reviewComment"></div>
+
+              <div id="reviewImageContainer" class="hidden mb-4">
+                <img id="reviewImage" src="" alt="리뷰 이미지" class="w-full max-h-80 object-contain rounded">
+              </div>
+
+              <div class="flex items-center text-sm text-gray-500">
+                <div id="likeCount"></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -291,6 +301,6 @@
         integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
         crossorigin="anonymous"></script>
 <script src="/javascripts/common.js"></script>
-<script src="/javascripts/admin-post.js"></script>
+<script src="/javascripts/admin-review.js"></script>
 </body>
 </html>
