@@ -577,9 +577,9 @@
 
 @media (max-width: 767px) {
     .review-card {
-        flex: 0 0 calc(33.333% - 14px);
-        min-width: calc(33.333% - 14px);
-        max-width: calc(33.333% - 14px);
+        flex: 0 0 100%;
+        min-width: 100%;
+        max-width: 100%;
         min-height: auto;
         padding: 10px;
     }
@@ -595,6 +595,9 @@
     .review-card p {
         font-size: 0.8rem;
         -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
     }
 }
 

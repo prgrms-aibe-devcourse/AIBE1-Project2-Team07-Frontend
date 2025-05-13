@@ -73,8 +73,14 @@ function initChatInput() {
 async function initReviewCarousel() {
     const reviews = await fetchReviews();
 
+    let cardsPerSlide = 3;
     // 항상 3개씩 보여주도록 고정
-    const cardsPerSlide = 3;
+    if (window.innerWidth<=767){
+        cardsPerSlide = 1
+    }
+    else if (window.innerWidth<=991){
+        cardsPerSlide = 2
+    }
 
     renderReviewCarousel(reviews, cardsPerSlide);
     setupCarouselAnimation();
@@ -463,25 +469,26 @@ function createCarouselItem(reviewChunk, isActive) {
     return item;
 }
 
+function generateStars(rating) {
+    const fullStar = '<i class="fas fa-star" style="color: gold;"></i>';
+    const emptyStar = '<i class="far fa-star" style="color: #ccc;"></i>';
+    let stars = '';
+
+    for (let i = 1; i <= 5; i++) {
+        if (i <= rating) {
+            stars += fullStar;
+        } else {
+            stars += emptyStar;
+        }
+    }
+
+    return stars;
+}
 /**
  * 개별 리뷰 카드 생성
  */
 function createReviewCard(review) {
-    function generateStars(rating) {
-        const fullStar = '<i class="fas fa-star" style="color: gold;"></i>';
-        const emptyStar = '<i class="far fa-star" style="color: #ccc;"></i>';
-        let stars = '';
 
-        for (let i = 1; i <= 5; i++) {
-            if (i <= rating) {
-                stars += fullStar;
-            } else {
-                stars += emptyStar;
-            }
-        }
-
-        return stars;
-    }
 
     const card = document.createElement("div");
     card.className = "review-card";
