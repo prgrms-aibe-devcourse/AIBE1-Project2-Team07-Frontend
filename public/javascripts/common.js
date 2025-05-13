@@ -3,6 +3,7 @@
     const loginBtn = document.getElementById("loginBtn");
     const myProfile = document.getElementById("myProfile");
     const profileName = document.querySelector(".profile-name");
+    const profileImg = document.querySelector(".profile-img");
     const trainerBadge = document.querySelector(".trainer-badge-img");
     const userData = JSON.parse(localStorage.getItem("user"));
 
@@ -13,6 +14,7 @@
             loginBtn.style.display = "none";
             myProfile.style.display = "block";
             profileName.textContent = userData.nickname;
+            profileImg.src = userData.profileImageUrl;
             if (userData.userRole === "TRAINER") {
                 // 트레이너일 때 배지 보이기
                 trainerBadge.style.visibility = "inline";

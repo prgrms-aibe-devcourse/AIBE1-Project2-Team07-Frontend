@@ -83,19 +83,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // 검색 버튼 클릭 이벤트
-        searchBtn.addEventListener('click', function() {
+        searchBtn.addEventListener('click', function () {
             performSearch();
         });
 
         // 엔터 키 이벤트
-        searchKeywordInput.addEventListener('keypress', function(e) {
+        searchKeywordInput.addEventListener('keypress', function (e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
 
         // 검색 타입 변경 이벤트 (선택적)
-        searchTypeSelect.addEventListener('change', function() {
+        searchTypeSelect.addEventListener('change', function () {
             // 검색 타입만 변경하고 즉시 검색은 실행하지 않음
             currentSearchType = this.value;
         });
@@ -135,9 +135,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // 정렬 옵션 생성
         const sortOptions = [
-            { text: '최신순', value: TrainerSortType.LATEST },
-            { text: '리뷰많은순', value: TrainerSortType.REVIEWS },
-            { text: '평점높은순', value: TrainerSortType.RATING }
+            {text: '최신순', value: TrainerSortType.LATEST},
+            {text: '리뷰많은순', value: TrainerSortType.REVIEWS},
+            {text: '평점높은순', value: TrainerSortType.RATING}
         ];
 
         // 정렬 옵션 아이템 생성 및 이벤트 연결
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', function () {
             sortList.appendChild(sortItem);
 
             // 클릭 이벤트 핸들러
-            sortItem.addEventListener('click', function(e) {
+            sortItem.addEventListener('click', function (e) {
                 e.preventDefault();
 
                 // 활성화 클래스 제거
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 trainerImage.src = trainer.photos?.[0]?.fileUrl || 'images/cat.png';
             }
 
-            const profileImg = cardClone.querySelector('.profile-img');
+            const profileImg = cardClone.querySelector('.trainer-profile-img');
             if (profileImg) {
                 profileImg.src = trainer.profileImageUrl || 'images/basic_profile.png';
             }
