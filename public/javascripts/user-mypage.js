@@ -1038,20 +1038,26 @@ function addPaginationEvents() {
             e.preventDefault();
 
             const text = this.textContent;
+            const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
 
+            // 페이지 번호 처리
             if (text === '«') {
                 if (currentPage > 1) {
                     currentPage--;
-                    renderPosts(currentPosts, currentPage);
                 }
             } else if (text === '»') {
                 const totalPages = Math.ceil(currentPosts.length / itemsPerPage);
                 if (currentPage < totalPages) {
                     currentPage++;
-                    renderPosts(currentPosts, currentPage);
                 }
             } else {
                 currentPage = parseInt(text);
+            }
+
+            // 현재 활성화된 탭에 따라 적절한 렌더링 함수 호출
+            if (activeTab === 'tab-advice') {
+                showUserAdvices(currentPosts);
+            } else {
                 renderPosts(currentPosts, currentPage);
             }
         });
