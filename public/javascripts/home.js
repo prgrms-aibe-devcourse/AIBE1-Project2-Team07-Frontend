@@ -345,21 +345,21 @@ function fetchCertificates() {
         {
             id: 1,
             title: "반려동물행동교정사",
-            image: "https://placehold.co/400x400?text=Certificate+Image+1",
+            image: "./images/main1.jfif",
             description: "반려견 행동 교정전문가로, 문제행동 교정과 해결을 위한 전문 지식과 경험을 갖춘 자격증입니다. 반려견의 행동과 심리를 정확히 이해하고 문제 행동을 교정하고, 행동의 원인을 파악해 해결책을 제시합니다.",
             imageRight: false
         },
         {
             id: 2,
             title: "수의 행동학 전문가",
-            image: "https://placehold.co/400x400?text=Certificate+Image+2",
+            image: "./images/main2.jfif",
             description: "수의학 지식과 동물 행동학을 접목한 전문가입니다. 반려 동물의 행동적 특성과 심리적인 문제를 이해하고, 의학적인 접근과 함께 행동 치료를 할 수 있습니다. 반려견 학대와 같은 이상 행동에 수의적 관점에서 문제를 해결하는 전문가 입니다.",
             imageRight: true
         },
         {
             id: 3,
             title: "반려동물훈련사",
-            image: "https://placehold.co/400x400?text=Certificate+Image+3",
+            image: "./images/main3.png",
             description: "강아지 훈련 전문가라는 기본적인 특성 외에도 가정에서 효과적으로 훈련할 수 있도록 지도하는 역할도 수행합니다. 견종별 특성과 개별 성향에 맞는 맞춤형 훈련 프로그램을 설계하고, 일관성 있게 훈련을 진행하는 방법을 알려드립니다.",
             imageRight: false
         }

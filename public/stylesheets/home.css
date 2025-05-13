@@ -346,6 +346,9 @@
     min-width: calc(33.333% - 14px);
     max-width: calc(33.333% - 14px);
     margin: 0;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .review-card p {
