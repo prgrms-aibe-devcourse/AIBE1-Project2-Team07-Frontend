@@ -137,8 +137,6 @@ async function fetchWithAuth(req, res, next) {
                 : JSON.stringify(req.body);
 
         const options = createRequestOptions(req.method, body, tok, rawHeaders);
-        console.log("apiUrl:", apiUrl);
-        console.log("options:", options);
         return fetch(apiUrl, options);
     };
 

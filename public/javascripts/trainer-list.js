@@ -77,6 +77,25 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    function generateStars(rating) {
+        const fullStar = '<i class="fas fa-star" style="color: gold;"></i>';
+        const halfStar = '<i class="fas fa-star-half-alt" style="color: gold;"></i>';
+        const emptyStar = '<i class="far fa-star" style="color: #ccc;"></i>';
+        let stars = '';
+
+        for (let i = 1; i <= 5; i++) {
+            if (i <= Math.floor(rating)) {
+                stars += fullStar;
+            } else if (i - 0.5 <= rating) {
+                stars += halfStar;
+            } else {
+                stars += emptyStar;
+            }
+        }
+
+        return stars;
+    }
+
     function initSearchEventHandlers() {
         const searchBtn = document.getElementById('searchBtn');
         const searchKeywordInput = document.getElementById('searchKeywordInput');
@@ -243,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const rating = cardClone.querySelector('.rating');
             if (rating) {
-                rating.textContent = `평점: ${trainer.averageRating || '0'}/5점`;
+                rating.innerHTML = generateStars(trainer.averageRating) + ` ${trainer.averageRating.toFixed(1)}/5점 (${trainer.reviewCount}명)`;
             }
 
             const trainerTags = cardClone.querySelector('.trainer-tags');
