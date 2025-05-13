@@ -5,7 +5,6 @@ let storedUser = null;
 
 try {
     storedUser = JSON.parse(userJSON);
-    console.log(storedUser);
 } catch (e) {
     console.error('로컬스토리지 사용자 정보 파싱 실패:', e);
 }

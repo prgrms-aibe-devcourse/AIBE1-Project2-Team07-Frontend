@@ -5,7 +5,6 @@ let storedUser = null;
 
 try {
     storedUser = JSON.parse(userJSON);
-    console.log(storedUser);
 } catch (e) {
     console.error('로컬스토리지 사용자 정보 파싱 실패:', e);
 }
@@ -18,9 +17,19 @@ let currentCategory = '';
 let currentSearch = '';
 
 document.addEventListener('DOMContentLoaded', function() {
+    // 초기 카테고리 값 설정 (기본값: 자유게시판)
+    currentCategory = document.getElementById('categoryFilter').value;
+
     // Show loading initially
     document.getElementById('loader').classList.remove('hidden');
     document.getElementById('postsListContainer').classList.add('hidden');
+
+    // 로그인 여부 확인
+    if (!accessToken) {
+        showStatus('로그인이 필요합니다. 로그인 후 이용해주세요.', 'error');
+        document.getElementById('loader').classList.add('hidden');
+        return;
+    }
 
     fetchPosts()
         .finally(() => {
@@ -31,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 검색 기능 이벤트 리스너
     document.getElementById('searchBtn').addEventListener('click', function() {
+        console.log('검색 버튼 클릭됨');
         currentSearch = document.getElementById('searchInput').value.trim();
         currentPage = 1;
         fetchPosts();
@@ -39,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 검색 필드에서 엔터키 입력 처리
     document.getElementById('searchInput').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
+            console.log('검색 엔터키 입력됨');
             currentSearch = document.getElementById('searchInput').value.trim();
             currentPage = 1;
             fetchPosts();
@@ -47,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 카테고리 필터 변경 이벤트 리스너
     document.getElementById('categoryFilter').addEventListener('change', function() {
+        console.log('카테고리 변경됨:', this.value);
         currentCategory = this.value;
         currentPage = 1;
         fetchPosts();
@@ -85,17 +97,25 @@ async function fetchPosts() {
             limit: postsPerPage
         });
 
+        // 카테고리 필터 값을 대문자로 변환 (API가 대문자 예상할 경우)
         if (currentCategory) {
-            params.append('category', currentCategory);
+            const categoryValue = currentCategory.toUpperCase();
+            console.log('API 요청 카테고리:', categoryValue);
+            params.append('category', categoryValue);
         }
 
-        if (currentSearch) {
+        if (currentSearch && currentSearch !== '') {
+            console.log('API 요청 검색어:', currentSearch);
             params.append('search', currentSearch);
         }
 
-        const res = await fetch(`/api/v1/admin/posts`, {
+        // URL에 파라미터 추가
+        const url = `/api/v1/admin/posts?${params.toString()}`;
+        console.log('요청 URL:', url);
+
+        const res = await fetch(url, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         });
 
@@ -105,14 +125,30 @@ async function fetchPosts() {
         }
 
         const data = await res.json();
-        console.log('게시물 목록:', data);
+        console.log('게시물 목록 응답:', data);
 
-        // 데이터 구조에 따라 조정 필요
-        renderPosts(data.posts);
-        updatePagination(data.totalPosts, data.totalPages);
-        document.getElementById('totalPostsCount').textContent = data.totalPosts || 0;
+        // 응답 구조 확인 및 데이터 추출
+        let posts = [];
+        let totalPosts = 0;
 
-        return data;
+        if (Array.isArray(data)) {
+            // 응답이 배열인 경우
+            posts = data;
+            totalPosts = data.length;
+        } else if (data && typeof data === 'object') {
+            // 응답이 객체인 경우
+            posts = data.posts || data.content || data.data || [];
+            totalPosts = data.totalPosts || data.totalElements || posts.length;
+            totalPages = data.totalPages || Math.ceil(totalPosts / postsPerPage);
+        }
+
+        console.log(`총 ${totalPosts}개의 게시물, ${totalPages} 페이지`);
+
+        renderPosts(posts);
+        updatePagination(totalPosts, totalPages);
+        document.getElementById('totalPostsCount').textContent = totalPosts || 0;
+
+        return { posts, totalPosts, totalPages };
     } catch (err) {
         console.error('게시물 목록 조회 오류:', err);
         showStatus(`게시물 목록 조회 실패: ${err.message}`, 'error');
@@ -137,7 +173,13 @@ function renderPosts(posts) {
     posts.forEach(post => {
         // 카테고리 표시 스타일
         let categoryClass, categoryText;
-        switch(post.category) {
+        let petCategoryClass, petCategoryText;
+
+        // 카테고리 값 정규화 (대소문자 구분 없이 처리)
+        const postCategory = post.postCategory?.toUpperCase() || '';
+        const petCategory = post.petCategory?.toUpperCase() || '';
+
+        switch(postCategory) {
             case 'QUESTION':
                 categoryClass = 'bg-blue-100 text-blue-800';
                 categoryText = '질문';
@@ -147,16 +189,34 @@ function renderPosts(posts) {
                 categoryText = '자유게시판';
                 break;
             case 'MYPET':
-                categoryClass = 'bg-green-100 text-green-800';
-                categoryText = '자랑하기';
+                categoryClass = 'bg-purple-100 text-purple-800';
+                categoryText = '반려동물 자랑';
                 break;
             case 'TOOL':
                 categoryClass = 'bg-yellow-100 text-yellow-800';
-                categoryText = '펫 도구 사용 후기';
+                categoryText = '정보공유';
                 break;
             default:
                 categoryClass = 'bg-gray-100 text-gray-800';
                 categoryText = '기타';
+        }
+
+        switch(petCategory) {
+            case 'CAT':
+                petCategoryClass = 'bg-green-100 text-green-800';
+                petCategoryText = '고양이';
+                break;
+            case 'DOG':
+                petCategoryClass = 'bg-yellow-100 text-yellow-800';
+                petCategoryText = '강아지';
+                break;
+            case 'ETC':
+                petCategoryClass = 'bg-green-100 text-gray-800';
+                petCategoryText = '기타';
+                break;
+            default:
+                petCategoryClass = 'bg-gray-100 text-gray-800';
+                petCategoryText = '없음';
         }
 
         // 날짜 포맷팅
@@ -166,31 +226,45 @@ function renderPosts(posts) {
         const row = document.createElement('tr');
         row.className = 'border-b border-gray-200 hover:bg-gray-100';
         row.innerHTML = `
-          <td class="py-3 px-4">${post.id}</td>
+          <td class="py-3 px-4">${post.postId}</td>
           <td class="py-3 px-4">
             <span class="${categoryClass} text-xs py-1 px-2 rounded-full">${categoryText}</span>
+          </td>
+          <td class="py-3 px-4">
+            <span class="${petCategoryClass} text-xs py-1 px-2 rounded-full">${petCategoryText}</span>
           </td>
           <td class="py-3 px-4">
             <div class="font-medium truncate-2 w-48">${post.title}</div>
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center">
-              ${post.authorProfileImage ?
-            `<img src="${post.authorProfileImage}" alt="프로필" class="w-6 h-6 rounded-full mr-2">` :
-            '<div class="w-6 h-6 rounded-full bg-gray-300 mr-2"></div>'}
-              <span>${post.authorNickname}</span>
+              <span>${post.userNickname || '알 수 없음'}${post.userName ? `(이름: ${post.userName})` : ''}</span>
             </div>
           </td>
-          <td class="py-3 px-3 text-center">${post.viewCount || 0}</td>
-          <td class="py-3 px-3 text-center">${post.likeCount || 0}</td>
-          <td class="py-3 px-3 text-center">${post.commentCount || 0}</td>
+          <td class="py-4 px-6 text-center">
+            <div class="flex justify-center space-x-4">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                </svg>
+                ${post.likeCount || 0}
+              </span>
+              <span class="flex items-center">
+                <svg class="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+                </svg>
+                ${post.commentCount || 0}
+              </span>
+            </div>
+          </td>
+          
           <td class="py-3 px-3 text-center">${formattedDate}</td>
           <td class="py-3 px-6 text-center">
             <div class="flex justify-center space-x-2">
               <button class="bg-blue-500 text-white py-1 px-3 rounded hover:bg-blue-600 focus:ring-2 focus:ring-blue-300"
-                      onclick="viewPostDetail('${post.id}')">보기</button>
+                      onclick="viewPostDetail('${post.postId}')">보기</button>
               <button class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-600 focus:ring-2 focus:ring-red-300"
-                      onclick="deletePost('${post.id}')">삭제</button>
+                      onclick="deletePost('${post.postId}')">삭제</button>
             </div>
           </td>
         `;
@@ -260,9 +334,9 @@ async function viewPostDetail(postId) {
     try {
         showStatus('게시물 상세 정보를 불러오는 중...', 'loading');
 
-        const res = await fetch(`/api/v1/admin/posts`, {
+        const res = await fetch(`/api/v1/posts/${postId}/open`, {
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         });
 
@@ -272,13 +346,17 @@ async function viewPostDetail(postId) {
         }
 
         const post = await res.json();
+        console.log('게시물 상세:', post);
 
         // 카테고리 표시 텍스트
         let categoryText;
-        switch(post.category) {
-            case 'question': categoryText = '질문'; break;
-            case 'story': categoryText = '일상'; break;
-            case 'info': categoryText = '정보공유'; break;
+        const postCategory = post.postCategory?.toUpperCase() || '';
+
+        switch(postCategory) {
+            case 'QUESTION': categoryText = '질문'; break;
+            case 'FREE': categoryText = '자유'; break;
+            case 'TOOL': categoryText = '정보공유'; break;
+            case 'MYPET': categoryText = '반려동물 자랑'; break;
             default: categoryText = '기타';
         }
 
@@ -294,17 +372,14 @@ async function viewPostDetail(postId) {
                         <span class="text-gray-500 text-sm">${formattedDate}</span>
                     </div>
                     <div class="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>조회수 ${post.viewCount || 0}</span>
                         <span>좋아요 ${post.likeCount || 0}</span>
                         <span>댓글 ${post.commentCount || 0}</span>
                     </div>
                 </div>
                 <h2 class="text-xl font-bold mb-2">${post.title}</h2>
                 <div class="flex items-center">
-                    ${post.authorProfileImage ?
-            `<img src="${post.authorProfileImage}" alt="프로필" class="w-8 h-8 rounded-full mr-2">` :
-            '<div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>'}
-                    <span class="font-medium">${post.authorNickname}</span>
+                    <div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
+                    <span class="font-medium">${post.userNickname || '알 수 없음'}${post.userName ? `(${post.userName})` : ''}</span>
                 </div>
             </div>
             <div class="mt-4 whitespace-pre-wrap">${post.content}</div>
@@ -334,10 +409,10 @@ async function deletePost(postId) {
     try {
         showStatus('게시물 삭제 중...', 'loading');
 
-        const res = await fetch(`/api/v1/admin/posts/delete/${postId}`, {
+        const res = await fetch(`/api/v1/admin/posts/${postId}`, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             }
         });
 
@@ -376,3 +451,7 @@ function showStatus(message, type) {
         }, 5000);
     }
 }
+
+// 전역 함수로 등록 (HTML 이벤트에서 호출 가능하도록)
+window.viewPostDetail = viewPostDetail;
+window.deletePost = deletePost;

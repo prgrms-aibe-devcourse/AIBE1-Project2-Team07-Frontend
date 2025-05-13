@@ -157,14 +157,19 @@ async function handleAcceptConfirm() {
         }
 
         // API 호출
-        await apiRequest(
+        await fetch(
             `/api/v1/match/${adviceId}/status`,
-            'POST',
             {
-                applyId: adviceId,
-                applyStatus: 'APPROVED',
-                applyReason: 'ACCEPTED',
-                content: msg
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    applyId: adviceId,
+                    applyStatus: 'APPROVED',
+                    applyReason: 'ACCEPTED',
+                    content: msg
+                })
             }
         );
 
@@ -240,14 +245,19 @@ async function handleRejectConfirm() {
         };
 
         // API 호출
-        await apiRequest(
+        await fetch(
             `/api/v1/match/${adviceId}/status`,
-            'POST',
             {
-                applyId: adviceId,
-                applyStatus: 'REJECTED',
-                applyReason: reasonMap[reason],
-                content: msg
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    applyId: adviceId,
+                    applyStatus: 'REJECTED',
+                    applyReason: reasonMap[reason],
+                    content: msg
+                })
             }
         );
 

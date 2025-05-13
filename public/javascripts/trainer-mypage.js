@@ -37,21 +37,10 @@ function validateToken() {
 async function apiRequest(url, method = 'GET', body = null, isFormData = false) {
     try {
         const options = {
-            method: method,
-            headers: {
-                'accept': '*/*',
-            }
+            method: method
         };
 
-        if (body) {
-            if (!isFormData) {
-                options.headers['Content-Type'] = 'application/json';
-                options.body = JSON.stringify(body);
-            } else {
-                // FormData의 경우 Content-Type 헤더를 설정하지 않음 (브라우저가 자동으로 설정)
-                options.body = body;
-            }
-        }
+        options.body = body;
 
         const response = await fetch(url, options);
 
@@ -900,128 +889,6 @@ function showAdviceDetail(adviceId, adviceData) {
     }
 }
 
-// 상담 수락 모달 표시
-function showAcceptModal(adviceId, adviceData) {
-    try {
-        const advice = adviceData.find(item => item.applyId == adviceId);
-        if (!advice) {
-            throw new Error('해당 상담 정보를 찾을 수 없습니다.');
-        }
-
-        const modalElement = document.getElementById('acceptModal');
-        if (!modalElement) {
-            throw new Error('상담 수락 모달을 찾을 수 없습니다.');
-        }
-
-        // 모달 데이터 설정
-        modalElement.querySelector('.advice-author').textContent = `작성자: ${advice.userNickname || '미상'}`;
-        modalElement.querySelector('.advice-date').textContent = `신청일: ${advice.createdAt || '미상'}`;
-        modalElement.querySelector('.advice-title').textContent = advice.serviceType || '제목 미상';
-        modalElement.querySelector('.pet-type').textContent = advice.petType || '반려동물 종류 미상';
-        modalElement.querySelector('.pet-breed').textContent = advice.petBreed || '품종 미상';
-        modalElement.querySelector('.pet-age').textContent = advice.petMonthAge ?
-            `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
-        modalElement.querySelector('.advice-content').textContent = advice.content || '내용 미상';
-
-        // 모달 표시
-        const bsModal = new bootstrap.Modal(modalElement);
-        bsModal.show();
-
-        // 수락 버튼 이벤트
-        const acceptBtn = modalElement.querySelector('.accept-confirm-btn');
-        if (acceptBtn) {
-            acceptBtn.onclick = async function () {
-                const messageElement = modalElement.querySelector('#acceptMessage');
-                if (!messageElement) return;
-
-                const message = messageElement.value.trim();
-                if (!message) {
-                    alert('수락 메시지를 입력해주세요.');
-                    return;
-                }
-
-                try {
-                    await acceptAdvice(adviceId, message);
-                    alert('상담이 성공적으로 수락되었습니다.');
-                    bsModal.hide();
-                    showMyAdvices();
-                } catch (error) {
-                    alert('상담 수락 중 오류가 발생했습니다.');
-                }
-            };
-        }
-
-    } catch (error) {
-        console.error('상담 수락 모달 표시 중 오류 발생:', error);
-        alert('상담 수락 화면을 불러오는 중 오류가 발생했습니다.');
-    }
-}
-
-// 상담 거절 모달 표시
-function showRejectModal(adviceId, adviceData) {
-    try {
-        const advice = adviceData.find(item => item.applyId == adviceId);
-        if (!advice) {
-            throw new Error('해당 상담 정보를 찾을 수 없습니다.');
-        }
-
-        const modalElement = document.getElementById('rejectModal');
-        if (!modalElement) {
-            throw new Error('상담 거절 모달을 찾을 수 없습니다.');
-        }
-
-        // 모달 데이터 설정
-        modalElement.querySelector('.advice-author').textContent = `작성자: ${advice.userNickname || '미상'}`;
-        modalElement.querySelector('.advice-date').textContent = `신청일: ${advice.createdAt || '미상'}`;
-        modalElement.querySelector('.advice-title').textContent = advice.serviceType || '제목 미상';
-        modalElement.querySelector('.pet-type').textContent = advice.petType || '반려동물 종류 미상';
-        modalElement.querySelector('.pet-breed').textContent = advice.petBreed || '품종 미상';
-        modalElement.querySelector('.pet-age').textContent = advice.petMonthAge ?
-            `${Math.floor(advice.petMonthAge / 12)}년 ${advice.petMonthAge % 12}개월` : '나이 미상';
-        modalElement.querySelector('.advice-content').textContent = advice.content || '내용 미상';
-
-        // 모달 표시
-        const bsModal = new bootstrap.Modal(modalElement);
-        bsModal.show();
-
-        // 거절 버튼 이벤트
-        const rejectBtn = modalElement.querySelector('.reject-confirm-btn');
-        if (rejectBtn) {
-            rejectBtn.onclick = async function () {
-                const reasonSelect = modalElement.querySelector('#rejectReason');
-                const messageElement = modalElement.querySelector('#rejectMessage');
-                if (!reasonSelect || !messageElement) return;
-
-                const reason = reasonSelect.value;
-                const message = messageElement.value.trim();
-
-                if (!reason) {
-                    alert('거절 사유를 선택해주세요.');
-                    return;
-                }
-
-                if (!message) {
-                    alert('거절 메시지를 입력해주세요.');
-                    return;
-                }
-
-                try {
-                    await rejectAdvice(adviceId, reason, message);
-                    alert('상담이 성공적으로 거절되었습니다.');
-                    bsModal.hide();
-                    showMyAdvices();
-                } catch (error) {
-                    alert('상담 거절 중 오류가 발생했습니다.');
-                }
-            };
-        }
-
-    } catch (error) {
-        console.error('상담 거절 모달 표시 중 오류 발생:', error);
-        alert('상담 거절 화면을 불러오는 중 오류가 발생했습니다.');
-    }
-}
-
 // 후기 조회 함수
 async function viewAdviceReview(adviceId) {
     try {
@@ -1039,21 +906,16 @@ async function viewAdviceReview(adviceId) {
 
 // API 함수들
 async function acceptAdvice(adviceId, message) {
-    return await apiRequest(`/api/v1/match/trainer/${adviceId}/accept`, 'POST', {
-        message: message
+    return await fetch(`/api/v1/match/trainer/${adviceId}/status`, {
+        method: 'POST',
+        body: message
     });
 }
 
 async function rejectAdvice(adviceId, reason, message) {
-    return await apiRequest(`/api/v1/match/trainer/${adviceId}/reject`, 'POST', {
+    return await apiRequest(`/api/v1/match/trainer/${adviceId}/status`, 'POST', {
         reason: reason,
         message: message
-    });
-}
-
-async function sendAdviceReply(adviceId, message) {
-    return await apiRequest(`/api/v1/match/trainer/${adviceId}/message`, 'POST', {
-        content: message
     });
 }
 
@@ -1411,38 +1273,6 @@ function attachAdviceEventListeners(adviceData) {
                 } catch (error) {
                     console.error('상담 상세 보기 버튼 클릭 처리 중 오류 발생:', error);
                     alert('상담 상세 정보를 불러올 수 없습니다.');
-                }
-            });
-        });
-
-        // 수락하기 버튼 이벤트
-        document.querySelectorAll('.accept-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                try {
-                    const adviceId = this.getAttribute('data-id');
-                    if (!adviceId) {
-                        throw new Error('상담 ID를 찾을 수 없습니다.');
-                    }
-                    showAcceptModal(adviceId, adviceData);
-                } catch (error) {
-                    console.error('상담 수락 버튼 클릭 처리 중 오류 발생:', error);
-                    alert('상담 수락 화면을 불러올 수 없습니다.');
-                }
-            });
-        });
-
-        // 거절하기 버튼 이벤트
-        document.querySelectorAll('.reject-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                try {
-                    const adviceId = this.getAttribute('data-id');
-                    if (!adviceId) {
-                        throw new Error('상담 ID를 찾을 수 없습니다.');
-                    }
-                    showRejectModal(adviceId, adviceData);
-                } catch (error) {
-                    console.error('상담 거절 버튼 클릭 처리 중 오류 발생:', error);
-                    alert('상담 거절 화면을 불러올 수 없습니다.');
                 }
             });
         });

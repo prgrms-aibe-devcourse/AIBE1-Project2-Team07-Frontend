@@ -27,5 +27,9 @@ router.get('/user', function(req, res, next) {
     return res.sendFile(path.join(__dirname, '../public/admin-user.html'));
 });
 
+router.get('/review', function(req, res, next) {
+    return res.sendFile(path.join(__dirname, '../public/admin-review.html'));
+});
+
 
 module.exports = router;
