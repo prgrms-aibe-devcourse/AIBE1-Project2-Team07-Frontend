@@ -20,6 +20,13 @@ body {
     justify-content: center;
 }
 
+.post-category {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+}
+
 .tab-menu .nav-link {
     color: #666;
     font-weight: 500;

@@ -14,6 +14,14 @@ const itemsPerPage = 5;
 // 현재 로드된 게시물을 전역 변수로 저장 (검색에 사용)
 let currentPosts = [];
 let searchQuery = '';
+let currentTab = 'profile';
+
+const tabStates = {
+    profile: {currentPage: 1},
+    mypost: {currentPage: 1},
+    liked: {currentPage: 1},
+    advice: {currentPage: 1}
+};
 
 async function setupSearchButton() {
     const searchButton = document.getElementById('search-button');
@@ -25,7 +33,6 @@ async function setupSearchButton() {
             searchQuery = query;
 
             if (query) {
-                const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
                 let searchResults = [];
 
                 // 현재 로드된 게시물에서 검색
@@ -35,8 +42,14 @@ async function setupSearchButton() {
                         (post.content && post.content.toLowerCase().includes(query))
                     );
 
-                    currentPage = 1;
-                    renderPosts(searchResults, currentPage);
+                    tabStates[currentTab].currentPage = 1;
+
+                    // 현재 활성화된 탭에 따라 적절한 렌더링 함수 호출
+                    if (currentTab === 'advice') {
+                        showUserAdvices(searchResults);
+                    } else {
+                        renderPosts(searchResults, 1);
+                    }
                 } else {
                     // 검색할 데이터가 없는 경우
                     alert('검색할 데이터가 없습니다. 먼저 게시물을 불러와주세요.');
@@ -47,17 +60,7 @@ async function setupSearchButton() {
                 }
             } else {
                 // 검색어가 비었을 경우 전체 목록 표시
-                const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
-
-                if (activeTab === 'tab-mypost') {
-                    const myPosts = await fetchMyPosts();
-                    currentPosts = myPosts;
-                    renderPosts(myPosts, 1);
-                } else if (activeTab === 'tab-liked') {
-                    const likedPosts = await fetchLikedPosts();
-                    currentPosts = likedPosts;
-                    renderPosts(likedPosts, 1);
-                }
+                switchTab(currentTab, false);
             }
         });
 
@@ -971,29 +974,72 @@ function renderPosts(posts, page = 1) {
         return;
     }
 
+    // 카테고리 매핑 (trainer-mypage.js와 일관성 유지)
+    const postCategoryMap = {
+        'FREE': '자유',
+        'QNA': '질문',
+        'TOOL': '펫 도구',
+        'MYPET': '자랑하기'
+    };
+
+    const petCategoryMap = {
+        'DOG': '강아지',
+        'CAT': '고양이',
+        'ETC': '기타'
+    };
+
+    // 게시글 렌더링
     paginatedPosts.forEach((post) => {
-        const postElement = document.createElement('div');
-        postElement.className = 'post-item';
+        try {
+            // API 응답 구조에 맞게 필드 접근 (안전하게 속성 확인)
+            const postCategory = post.postCategory ? (postCategoryMap[post.postCategory] || post.postCategory) : '카테고리 없음';
+            const petCategory = post.petCategory ? (petCategoryMap[post.petCategory] || post.petCategory) : '';
+            const imageUrl = post.imageUrls && post.imageUrls.length > 0 ? post.imageUrls[0] : null;
+            const createdAt = post.createdAt || '날짜 없음';
+            const title = post.title || '제목 없음';
+            const content = post.content || '내용 없음';
+            const likeCount = post.likeCount !== undefined ? post.likeCount : 0;
+            const commentCount = post.commentCount !== undefined ? post.commentCount : 0;
 
-        // 이미지 URL 확인 및 기본값 설정
-        const imageUrl = post.imageUrls && post.imageUrls.length > 0
-            ? post.imageUrls[0]
-            : 'https://placehold.co/300x200';
+            // 태그 표시
+            const tagsHtml = post.tags && post.tags.length > 0
+                ? `<div class="post-tags">${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join(' ')}</div>`
+                : '';
 
-        postElement.innerHTML = `
-            <div class="post-info">
-                <h3 class="post-title">${post.postCategory || '카테고리 없음'}</h3>
-                <h4>${post.title || '제목 없음'}</h4>
-                <p class="post-content">${post.content || '내용 없음'}</p>
-                <div class="post-meta">
-                    좋아요 수: ${post.likeCount || 0} &nbsp;&nbsp; 댓글 수: ${post.commentCount || 0}
+            const postElement = document.createElement('div');
+            postElement.className = 'post-item';
+            postElement.onclick = function() {
+                window.location.href = `/community/post/${post.postId}`;
+            };
+            postElement.style.cursor = 'pointer';
+
+            postElement.innerHTML = `
+                <div class="post-info">
+                    <div class="post-categories">
+                        <span class="post-category">${postCategory}</span>
+                        ${petCategory ? `<span class="pet-category">${petCategory}</span>` : ''}
+                    </div>
+                    <h4 class="post-title">${title}</h4>
+                    <p class="post-content">${content}</p>
+                    ${tagsHtml}
+                    <div class="post-meta">
+                        ${createdAt} &nbsp;&nbsp; 
+                        <span class="like-count">♥ ${likeCount}</span> &nbsp;&nbsp; 
+                        <span class="comment-count">💬 ${commentCount}</span>
+                    </div>
                 </div>
-            </div>
-            <div class="post-image">
-                <img src="${imageUrl}" alt="게시글 이미지">
-            </div>
-        `;
-        postListElement.appendChild(postElement);
+                <div class="post-image">
+                    ${imageUrl ? `<img src="${imageUrl}" alt="게시글 이미지" onerror="this.src='https://placehold.co/200x200?text=이미지+없음'">` : ''}
+                </div>
+            `;
+            postListElement.appendChild(postElement);
+        } catch (error) {
+            console.error('게시글 렌더링 중 오류 발생:', error, post);
+            const errorElement = document.createElement('div');
+            errorElement.className = 'post-item error';
+            errorElement.textContent = '게시글을 표시할 수 없습니다.';
+            postListElement.appendChild(errorElement);
+        }
     });
 
     // 페이지네이션 업데이트
@@ -1040,27 +1086,29 @@ function addPaginationEvents() {
             e.preventDefault();
 
             const text = this.textContent;
-            const activeTab = document.querySelector('.tab-menu .nav-link.active').id;
+
+            // 현재 탭의 페이지 상태
+            const currentTabState = tabStates[currentTab];
 
             // 페이지 번호 처리
             if (text === '«') {
-                if (currentPage > 1) {
-                    currentPage--;
+                if (currentTabState.currentPage > 1) {
+                    currentTabState.currentPage--;
                 }
             } else if (text === '»') {
                 const totalPages = Math.ceil(currentPosts.length / itemsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
+                if (currentTabState.currentPage < totalPages) {
+                    currentTabState.currentPage++;
                 }
             } else {
-                currentPage = parseInt(text);
+                currentTabState.currentPage = parseInt(text);
             }
 
             // 현재 활성화된 탭에 따라 적절한 렌더링 함수 호출
-            if (activeTab === 'tab-advice') {
+            if (currentTab === 'advice') {
                 showUserAdvices(currentPosts);
             } else {
-                renderPosts(currentPosts, currentPage);
+                renderPosts(currentPosts, currentTabState.currentPage);
             }
         });
     });
@@ -1112,49 +1160,12 @@ function setupTabEvents() {
     document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
         tab.addEventListener('click', async function (e) {
             e.preventDefault();
-            // 모든 탭에서 active 클래스 제거
-            document.querySelectorAll('.tab-menu .nav-link').forEach(t => {
-                t.classList.remove('active');
-            });
-            // 클릭된 탭에 active 클래스 추가
-            this.classList.add('active');
 
-            // 탭에 따른 게시글 필터링
-            const tabId = this.id;
+            // 클릭된 탭의 ID에서 'tab-' 접두사 제거
+            const tabId = this.id.replace('tab-', '');
 
-            // 페이지 초기화
-            currentPage = 1;
-
-            // 검색어 초기화
-            const searchInput = document.getElementById('search-input');
-            if (searchInput) searchInput.value = '';
-            searchQuery = '';
-
-            // 필터링 적용
-            switch (tabId) {
-                case 'tab-profile':
-                    renderProfile();
-                    break;
-                case 'tab-mypost':
-                    showPostContent();
-                    const myPosts = await fetchMyPosts();
-                    currentPosts = myPosts; // 현재 로드된 게시물 저장
-                    renderPosts(myPosts, currentPage);
-                    break;
-                case 'tab-liked':
-                    showPostContent();
-                    const likedPosts = await fetchLikedPosts();
-                    currentPosts = likedPosts; // 현재 로드된 게시물 저장
-                    renderPosts(likedPosts, currentPage);
-                    break;
-                case 'tab-advice':
-                    const myAdvices = await fetchMyAdvice();
-                    currentPosts = myAdvices; // 현재 로드된 게시물 저장
-                    showUserAdvices(myAdvices, currentPage);
-                    break;
-                default:
-                    showPostContent();
-            }
+            // switchTab 함수 호출
+            switchTab(tabId);
         });
     });
 }
@@ -1253,25 +1264,96 @@ function setupProfileButtons() {
         }
     });
 }
+function switchTab(tabName, updateUrl = true) {
+    // 현재 활성화된 탭 정보 저장
+    currentTab = tabName;
+
+    // 모든 탭에서 active 클래스 제거
+    document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
+        tab.classList.remove('active');
+    });
+
+    // 선택된 탭에 active 클래스 추가 (tab- 접두사 추가)
+    const tabElement = document.getElementById(`tab-${tabName}`);
+    if (tabElement) {
+        tabElement.classList.add('active');
+    }
+
+    // 현재 탭 페이지 상태 사용
+    currentPage = tabStates[tabName].currentPage || 1;
+
+    // URL 업데이트 (필요한 경우)
+    if (updateUrl) {
+        const url = new URL(window.location);
+        url.searchParams.set('tab', tabName);
+        window.history.pushState({tab: tabName}, '', url);
+    }
+
+    // 검색어 초기화
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) searchInput.value = '';
+    searchQuery = '';
+
+    // 탭에 따른 컨텐츠 로드
+    switch (tabName) {
+        case 'profile':
+            renderProfile();
+            break;
+        case 'mypost':
+            showPostContent();
+            // 비동기로 데이터 로드
+            fetchMyPosts().then(posts => {
+                currentPosts = posts;
+                renderPosts(posts, tabStates[tabName].currentPage);
+            });
+            break;
+        case 'liked':
+            showPostContent();
+            // 비동기로 데이터 로드
+            fetchLikedPosts().then(posts => {
+                currentPosts = posts;
+                renderPosts(posts, tabStates[tabName].currentPage);
+            });
+            break;
+        case 'advice':
+            // 비동기로 데이터 로드
+            fetchMyAdvice().then(advices => {
+                currentPosts = advices;
+                showUserAdvices(advices);
+            });
+            break;
+        default:
+            showPostContent();
+    }
+}
 
 // 페이지 로드 시 초기화
 window.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+
     // 이벤트 리스너 설정
     setupTabEvents();
     setupProfileButtons();
     setupSearchButton();
     setupProfileImage();
 
-    // 기본적으로 프로필 탭을 활성화하고 프로필 정보 표시
-    const profileTab = document.getElementById('tab-profile');
-    if (profileTab) {
-        // 다른 모든 탭에서 active 클래스 제거
-        document.querySelectorAll('.tab-menu .nav-link').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        // 프로필 탭에 active 클래스 추가
-        profileTab.classList.add('active');
-        // 프로필 정보 표시
-        renderProfile();
+    // URL 히스토리 변경 감지
+    window.addEventListener('popstate', function (event) {
+        if (event.state && event.state.tab) {
+            // URL 업데이트 없이 탭 전환
+            switchTab(event.state.tab, false);
+        } else {
+            // 기본 탭으로 돌아가기
+            switchTab('profile', false);
+        }
+    });
+
+    // 파라미터에 따른 탭 선택 또는 기본 탭(프로필) 선택
+    if (tabParam && ['profile', 'mypost', 'liked', 'advice'].includes(tabParam)) {
+        switchTab(tabParam);
+    } else {
+        // 기본적으로 프로필 탭 활성화
+        switchTab('profile');
     }
 });
