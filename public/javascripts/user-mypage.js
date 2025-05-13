@@ -656,20 +656,22 @@ async function showAdviceDetailModal(adviceId, trainerName, content, status, pet
                         </div>
                         
                         <div class="advice-question-section mb-4">
-                          <h6 class="section-title">상담 요청 내용</h6>
-                          <div class="advice-question p-3 bg-light rounded">
-                            ${content || '내용 없음'}${
-        imageUrl
-            ? `<br><img
-                                     src="${imageUrl}"
-                                     alt="첨부 이미지"
-                                     class="img-fluid mt-2 rounded"
-                                     style="width:300px; height:auto;"
-                                   />`
-            : ''
-    }
+                            <h6 class="section-title">상담 요청 내용</h6>
+                            <div class="advice-question p-3 bg-light rounded">
+                              ${content || '내용 없음'}
+                            </div>
+                            ${imageUrl ? `
+                              <div class="advice-image mt-2">
+                                <img
+                                  src="${imageUrl}"
+                                  alt="첨부 이미지"
+                                  class="img-fluid rounded"
+                                  style="width:300px; height:auto;"
+                                  onerror="this.remove()"
+                                />
+                              </div>
+                            ` : ''}
                           </div>
-                        </div>
 
                         <div class="advice-chat-section">
                             <h6 class="section-title">상담 내역</h6>

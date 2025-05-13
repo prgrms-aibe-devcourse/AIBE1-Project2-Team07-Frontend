@@ -17,13 +17,6 @@ let currentCategory = '';
 let currentSearch = '';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 초기 카테고리 값 설정 (기본값: 자유게시판)
-    currentCategory = document.getElementById('categoryFilter').value;
-
-    // Show loading initially
-    document.getElementById('loader').classList.remove('hidden');
-    document.getElementById('postsListContainer').classList.add('hidden');
-
     // 로그인 여부 확인
     if (!accessToken) {
         showStatus('로그인이 필요합니다. 로그인 후 이용해주세요.', 'error');
@@ -37,32 +30,6 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('loader').classList.add('hidden');
             document.getElementById('postsListContainer').classList.remove('hidden');
         });
-
-    // 검색 기능 이벤트 리스너
-    document.getElementById('searchBtn').addEventListener('click', function() {
-        console.log('검색 버튼 클릭됨');
-        currentSearch = document.getElementById('searchInput').value.trim();
-        currentPage = 1;
-        fetchPosts();
-    });
-
-    // 검색 필드에서 엔터키 입력 처리
-    document.getElementById('searchInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            console.log('검색 엔터키 입력됨');
-            currentSearch = document.getElementById('searchInput').value.trim();
-            currentPage = 1;
-            fetchPosts();
-        }
-    });
-
-    // 카테고리 필터 변경 이벤트 리스너
-    document.getElementById('categoryFilter').addEventListener('change', function() {
-        console.log('카테고리 변경됨:', this.value);
-        currentCategory = this.value;
-        currentPage = 1;
-        fetchPosts();
-    });
 
     // 모달 닫기 버튼 이벤트 리스너
     document.getElementById('closePostModal').addEventListener('click', function() {
@@ -365,35 +332,77 @@ async function viewPostDetail(postId) {
         const formattedDate = `${createdAt.getFullYear()}-${(createdAt.getMonth()+1).toString().padStart(2, '0')}-${createdAt.getDate().toString().padStart(2, '0')} ${createdAt.getHours().toString().padStart(2, '0')}:${createdAt.getMinutes().toString().padStart(2, '0')}`;
 
         document.getElementById('postDetailContent').innerHTML = `
-            <div class="border-b pb-4 mb-4">
-                <div class="flex justify-between items-center mb-2">
-                    <div>
-                        <span class="bg-gray-100 text-gray-800 text-xs py-1 px-2 rounded-full mr-2">${categoryText}</span>
-                        <span class="text-gray-500 text-sm">${formattedDate}</span>
-                    </div>
-                    <div class="flex items-center space-x-4 text-sm text-gray-500">
-                        <span>좋아요 ${post.likeCount || 0}</span>
-                        <span>댓글 ${post.commentCount || 0}</span>
-                    </div>
-                </div>
-                <h2 class="text-xl font-bold mb-2">${post.title}</h2>
-                <div class="flex items-center">
-                    <div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
-                    <span class="font-medium">${post.userNickname || '알 수 없음'}${post.userName ? `(${post.userName})` : ''}</span>
-                </div>
+          <div class="border-b pb-4 mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <div>
+                <span class="bg-gray-100 text-gray-800 text-xs py-1 px-2 rounded-full mr-2">${categoryText}</span>
+                <span class="text-gray-500 text-sm">${formattedDate}</span>
+              </div>
+              <div class="flex items-center space-x-4 text-sm text-gray-500">
+                <span>좋아요 ${post.likeCount || 0}</span>
+                <span>댓글 ${post.commentCount || 0}</span>
+              </div>
             </div>
-            <div class="mt-4 whitespace-pre-wrap">${post.content}</div>
+            <h2 class="text-xl font-bold mb-2">${post.title}</h2>
+            <div class="flex items-center mb-4">
+              <div class="w-8 h-8 rounded-full bg-gray-300 mr-2"></div>
+              <span class="font-medium">
+                ${post.userNickname || '알 수 없음'}${post.userName ? `(${post.userName})` : ''}
+              </span>
+            </div>
+          </div>
+        
+          <div class="mt-4 whitespace-pre-wrap mb-4">${post.content}</div>
+        
+          ${
+            // imageUrls 배열에 값이 있을 때만 첫 번째 이미지를 '추가 사진'으로 보여줍니다
+            Array.isArray(post.imageUrls) && post.imageUrls.length > 0
+                ? `<div class="mb-4">
+           <h6 class="font-medium mb-2">추가 사진</h6>
+           <img
+             src="${post.imageUrls[0]}"
+             alt="첨부 사진"
+             class="w-full max-w-md rounded shadow"
+             onerror="this.remove()"
+           />
+         </div>`
+                : ''
+        }
 
-            ${post.images && post.images.length > 0 ? `
-                <div class="mt-4 grid grid-cols-2 gap-2">
-                    ${post.images.map(img => `
-                        <div class="border rounded overflow-hidden">
-                            <img src="${img}" alt="게시물 이미지" class="w-full h-auto">
-                        </div>
-                    `).join('')}
-                </div>
-            ` : ''}
-        `;
+  ${
+            // post.videoUrl 이 있고 빈 문자열이 아닐 때만 동영상을 보여줍니다
+            post.videoUrl && post.videoUrl.trim() !== ''
+                ? `<div class="mb-4">
+           <h6 class="font-medium mb-2">첨부 동영상</h6>
+           <video
+             controls
+             class="w-full max-w-md rounded shadow"
+             onerror="this.remove()"
+           >
+             <source src="${post.videoUrl}" type="video/mp4" />
+             동영상을 지원하지 않는 브라우저입니다.
+           </video>
+         </div>`
+                : ''
+        }
+
+  ${
+            Array.isArray(post.images) && post.images.length > 0
+                ? `<div class="mt-4 grid grid-cols-2 gap-2">
+           ${post.images.map(img => `
+             <div class="border rounded overflow-hidden">
+               <img
+                 src="${img}"
+                 alt="게시물 이미지"
+                 class="w-full h-auto"
+                 onerror="this.remove()"
+               />
+             </div>
+           `).join('')}
+         </div>`
+                : ''
+        }
+`;
 
         document.getElementById('postDetailModal').classList.remove('hidden');
         document.getElementById('statusMessage').classList.add('hidden');
