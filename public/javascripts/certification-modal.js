@@ -85,20 +85,45 @@ function setupTrainerModal() {
 
             formData.append('file', certificateImage);
 
-
             try {
-                const response = await fetch('/api/v1/trainers/apply', {
-                    method: 'POST',
-                    body: formData
-                });
+                let user= null;
+                try {
+                    user = JSON.parse(localStorage.getItem('user'))
+                }catch (e){
+                    return
+                }
+                if(user.userRole === 'USER') {
+                    const response = await fetch('/api/v1/trainers/apply', {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                if (!response.ok) {
-                    throw new Error('어플라이 데이터를 가져오는데 실패했습니다.');
+                    if (!response.ok) {
+                        throw new Error('어플라이 데이터를 가져오는데 실패했습니다.');
+                    }
+
+                    data = await response.json();
+
+                    console.log(data);
                 }
 
-                data = await response.json();
+                else if(user.userRole === 'TRAINER') {
+                    const response = await fetch(`/api/v1/trainers/certifications`, {
+                        method: 'POST',
+                        body: formData
+                    });
 
-                console.log(data);
+                    console.log("asdasdss")
+
+                    if (!response.ok) {
+                        throw new Error('어플라이 데이터를 가져오는데 실패했습니다.');
+                    }
+
+                    data = await response.json();
+
+                    console.log(data);
+                }
+
 
             } catch (error) {
                 console.error('신청 데이터 로드 오류:', error);
