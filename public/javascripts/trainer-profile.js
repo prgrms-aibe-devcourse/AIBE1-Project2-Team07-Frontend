@@ -306,8 +306,8 @@ function convertApiDataToSiteFormat(apiData) {
     if (apiData.certifications && apiData.certifications.length > 0) {
         apiData.certifications.forEach(cert => {
             qualifications.push({
-                title: cert.name || "자격증",
-                organization: cert.issuingOrganization || "발급기관",
+                title: cert.certName || "자격증",
+                organization: cert.issuingBody || "발급기관",
                 image: "https://cdn-icons-png.flaticon.com/512/190/190411.png" // 기본 이미지
             });
         });

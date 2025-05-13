@@ -237,6 +237,8 @@
 }
 
 .trainer-card {
+    display: flex;
+    flex-direction: column;
     background-color: var(--white-color);
     border-radius: 10px;
     padding: 20px;
@@ -253,6 +255,7 @@
     border-radius: 10px;
     overflow: hidden;
     margin-bottom: 15px;
+    flex-grow: 1;
 }
 
 .trainer-img {
@@ -346,6 +349,9 @@
     min-width: calc(33.333% - 14px);
     max-width: calc(33.333% - 14px);
     margin: 0;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .review-card p {
@@ -590,4 +596,21 @@
         font-size: 0.8rem;
         -webkit-line-clamp: 2;
     }
+}
+
+.trainer-tags span {
+    background-color: #f0f0f0;
+    color: #495057;
+    font-size: 0.85rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+.detail-btn {
+    margin-top: auto;
+    margin-bottom: 15px; /* 원하는 하단 여백 설정 */
 }
