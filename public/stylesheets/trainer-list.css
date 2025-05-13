@@ -47,10 +47,15 @@ body {
     -webkit-box-orient: vertical;
 }
 
-.profile-img {
-    width: 60px;
-    height: 60px;
+.trainer-profile-img {
+    width: 100px;
+    height: 100px;
     object-fit: cover;
+}
+
+.price-buttons {
+    display: flex;
+    align-items: end;
 }
 
 .price-value {
@@ -74,10 +79,10 @@ body {
     .trainer-contact {
         margin-top: 1rem;
         padding-top: 1rem;
-        border-top: 1px solid rgba(0,0,0,0.1);
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    .profile-img {
+    .trainer-profile-img {
         width: 50px;
         height: 50px;
     }
@@ -88,14 +93,17 @@ body {
     justify-content: center;
     margin-top: 2rem;
 }
+
 .pagination .page-item.active .page-link {
     background-color: #ffc107;
     border-color: #ffc107;
     color: #000;
 }
+
 .pagination .page-link {
     color: #000;
 }
+
 .pagination .page-link:hover {
     background-color: #ffdb6d;
     border-color: #ffc107;
