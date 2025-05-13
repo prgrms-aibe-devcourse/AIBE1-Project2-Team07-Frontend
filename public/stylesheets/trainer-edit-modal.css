@@ -165,3 +165,117 @@
 .input-group-text {
     background-color: #f8f9fa;
 }
+
+/* 사진 편집 관련 스타일 */
+.photo-edit-container {
+    margin-bottom: 20px;
+}
+
+.photo-edit-container img {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.photo-edit-container img:hover {
+    opacity: 0.8;
+}
+
+.main-photo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.main-photo-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.main-photo {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.main-photo-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.thumbnail-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.thumbnail-item {
+    position: relative;
+    height: 140px;
+    overflow: hidden;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.thumbnail-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 5px;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.thumbnail-item:hover .thumbnail-actions {
+    transform: translateY(0);
+}
+
+.empty-main-photo, .add-photo-slot {
+    height: 100%;
+    border: 2px dashed #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.empty-main-photo {
+    height: 300px;
+}
+
+.empty-main-photo:hover, .add-photo-slot:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.upload-placeholder {
+    text-align: center;
+    color: #666;
+}
+
+.upload-placeholder i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.upload-placeholder p {
+    margin: 0;
+}
