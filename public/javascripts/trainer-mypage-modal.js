@@ -58,23 +58,36 @@ async function showDetailModal(item) {
         : item.status.includes('진행') ? 'status-progress'
             : 'status-completed';
 
+    // 모달 제목 부분
     M.querySelector('.modal-title').innerHTML = `
-    상담 신청 상세 내용
-    <span class="status-badge ${badgeClass}">${item.status}</span>
-  `;
+        상담 상세내역 &nbsp <span class="btn btn-primary rounded-pill">${item.postTitle}</span>
+    `;
+
+    // 2x2 그리드 형태의 메타 정보
     M.querySelector('.advice-meta').innerHTML = `
-    <div class="d-flex justify-content-between">
-      <span><strong>작성자:</strong> ${item.author}</span>
-      <span class="ms-3"><strong>신청일:</strong> ${item.date}</span>
+        <div class="advice-meta-grid">
+            <div class="meta-item">
+                <strong>상담 날짜:</strong> ${item.date}
+            </div>
+            <div class="meta-item">
+                <strong>반려동물:</strong> ${item.petType} (${item.petBreed}, ${item.petAge})
+            </div>
+            <div class="meta-item">
+                <strong>상담 상태:</strong> <span class="status-badge ${badgeClass}">${item.status}</span>
+            </div>
+            <div class="meta-item">
+                <strong>신청자:</strong> ${item.author}
+            </div>
+        </div>
+    `;
+    // 상담 요청 제목 및 내용
+    M.querySelector('.advice-title').innerHTML = `<div class="section-title">상담 요청 내용</div>`;
+    M.querySelector('.advice-content').innerHTML = `
+    <div class="card-body">
+        ${item.imgUrl ? `<img src="${item.imgUrl}" class="img-fluid mb-3 rounded">` : ''}
+        <p class="card-text">${item.comment}</p>
     </div>
-  `;
-    M.querySelector('.advice-title').textContent = item.postTitle;
-    M.querySelector('.pet-info').innerHTML = `
-    <span class="pet-type">${item.petType}</span>
-    <span class="pet-breed">${item.petBreed}</span>
-    <span class="pet-age">${item.petAge}</span>
-  `;
-    M.querySelector('.advice-content').textContent = item.comment;
+`;
 
     // 로딩 메시지 표시
     M.querySelector('.chat-messages').innerHTML = '<p class="text-center">상담 내역을 불러오는 중...</p>';
@@ -82,38 +95,38 @@ async function showDetailModal(item) {
     let historyHTML = '';
 
     try {
-        // API에서 상담 답변 가져오기 (URL 오타 수정 - ap1 → api)
+        // API에서 상담 답변 가져오기
         const historyData = await apiRequest(`/api/v1/match/${item.id}/answer`);
+        console.log(historyData);
 
-        // item.chats가 있으면 그것을 사용하고, 없으면 historyData를 사용
+        // 채팅 내역 표시
         if (item.chats && item.chats.length) {
             item.chats.forEach(c => {
                 historyHTML += `
-                <div class="advice-chat-item advice-${c.type}">
-                  <div>${c.message}</div>
-                  <span class="chat-time">${c.time}</span>
-                </div>
-              `;
+                    <div class="advice-chat-item advice-${c.type}">
+                        <div>${c.message}</div>
+                        <span class="chat-time">${c.time}</span>
+                    </div>
+                `;
             });
         } else if (historyData && historyData.content) {
-            // 백틱 내에서 템플릿 리터럴을 사용하려면 ${}를 이스케이프 처리하거나 concatenation 사용
-            historyHTML = '<p class="text-muted">' + historyData.content + '</p>';
-
-            // 또는 이렇게도 가능:
-            // historyHTML = `<p class="text-muted">${historyData.content}</p>`;
+            historyHTML = `${historyData.content}`;
         } else {
             historyHTML = '<p class="text-muted">아직 상담 내역이 없습니다.</p>';
         }
     } catch (error) {
         console.error('상담 내역 가져오기 오류:', error);
-        historyHTML = '<p class="">아직 상담 내역이 없습니다.</p>';
+        historyHTML = '<p class="text-muted">아직 상담 내역이 없습니다.</p>';
     }
 
     M.querySelector('.chat-messages').innerHTML = historyHTML;
 
     // 답변 폼과 버튼 숨기기 (항상 숨김 처리)
-    M.querySelector('.reply-form').style.display = 'none';
-    M.querySelector('.reply-btn').style.display = 'none';
+    const replyForm = M.querySelector('.reply-form');
+    if (replyForm) replyForm.style.display = 'none';
+
+    const replyBtn = M.querySelector('.reply-btn');
+    if (replyBtn) replyBtn.style.display = 'none';
 
     new bootstrap.Modal(M).show();
 }
@@ -128,11 +141,6 @@ function showAcceptModal(item) {
     <span class="ms-3"><strong>신청일:</strong> ${item.date}</span>
   `;
     M.querySelector('.advice-title').textContent = item.postTitle;
-    M.querySelector('.pet-info').innerHTML = `
-    <span class="pet-type">${item.petType}</span>
-    <span class="pet-breed">${item.petBreed}</span>
-    <span class="pet-age">${item.petAge}</span>
-  `;
     M.querySelector('.advice-content').textContent = item.comment;
     M.querySelector('#acceptMessage').value = '';
 
@@ -196,11 +204,6 @@ function showRejectModal(item) {
     <span class="ms-3"><strong>신청일:</strong> ${item.date}</span>
   `;
     M.querySelector('.advice-title').textContent = item.postTitle;
-    M.querySelector('.pet-info').innerHTML = `
-    <span class="pet-type">${item.petType}</span>
-    <span class="pet-breed">${item.petBreed}</span>
-    <span class="pet-age">${item.petAge}</span>
-  `;
     M.querySelector('.advice-content').textContent = item.comment;
     M.querySelector('#rejectReason').value = '';
     M.querySelector('#rejectMessage').value = '';

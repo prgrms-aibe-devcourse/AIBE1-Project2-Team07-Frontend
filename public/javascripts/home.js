@@ -306,7 +306,8 @@ async function fetchReviews() {
         trainer: review.trainerName,
         image: review.reviewImageUrl || "https://placehold.co/400x400?text=No+Image",
         text: review.comment,
-        rating: review.rating
+        rating: review.rating,
+        userNickname: review.userNickname
     }));
 }
 
@@ -497,8 +498,10 @@ function createReviewCard(review) {
             <img src="${review.image}" alt="Review" class="review-img">
         </div>
         <div class="review-content">
-            <h5>${review.trainer}</h5>
+            <h5>${review.trainer} 훈련사</h5>
             <div class="review-rating">
+                ${review.userNickname}
+                <br>
                 ${generateStars(review.rating)}
                 <span class="rating-text">(${review.rating}/5)</span>
             </div>

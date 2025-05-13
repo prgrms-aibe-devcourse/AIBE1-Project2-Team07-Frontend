@@ -257,7 +257,6 @@ async function showProfile() {
 
         try {
             userData = await apiRequest('/api/v1/users/me');
-            // certifications = await apiRequest('https://dev.tuituiworld.store/api/v1/certifications/users/me');
         } catch (error) {
             if (error.message.includes('로그인이 필요한 서비스입니다')) {
                 document.getElementById('profile-section').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
@@ -270,6 +269,19 @@ async function showProfile() {
         if (!userData) {
             throw new Error('사용자 정보를 불러올 수 없습니다.');
         }
+
+        try{
+            trainerData = await apiRequest(`/api/v1/trainers/${userData.nickname}/open`);
+        }catch(error){
+            if (error.message.includes('로그인이 필요한 서비스입니다')) {
+                document.getElementById('profile-section').innerHTML = '<p class="no-results">로그인이 필요한 서비스입니다.</p>';
+                return;
+            }
+            throw error;
+        }
+
+
+        certifications = trainerData.certifications
 
         // 프로필 데이터 렌더링
         const profileHTML = `
@@ -318,8 +330,9 @@ async function showProfile() {
                     ${certifications && certifications.length > 0 ?
             certifications.map((cert, index) => `
                         <div class="cert-item">
-                            <img src="${cert.imageUrl || 'https://placehold.co/210x297'}" alt="${cert.name}">
-                            <div class="cert-label">${cert.name || '자격증 이름 없음'}</div>
+                            <img src="${cert.imgUrl || 'https://placehold.co/210x297'}" alt="${cert.name}">
+                            <div class="cert-label">${cert.certName || '자격증 이름 없음'}</div>
+                            <div class="cert-label">${cert.issuingBody || '협회 이름 없음'}</div>
                         </div>
                     `).join('') :
             '<p style="display: flex; align-items: center; justify-content: center">등록된 자격증이 없습니다.</p>'}
@@ -355,23 +368,6 @@ function attachProfileEventListeners() {
         });
     }
 
-    // 자격증 추가 버튼 이벤트 연결
-    const addCertBtn = document.getElementById('add-cert-btn');
-    if (addCertBtn) {
-        addCertBtn.addEventListener('click', function () {
-            try {
-                const modalElement = document.getElementById('trainerApplicationModal');
-                if (!modalElement) {
-                    throw new Error('자격증 등록 모달을 찾을 수 없습니다.');
-                }
-                const modal = new bootstrap.Modal(modalElement);
-                modal.show();
-            } catch (error) {
-                console.error('자격증 모달 표시 중 오류 발생:', error);
-                alert('자격증 등록 화면을 표시할 수 없습니다. 페이지를 새로고침해 주세요.');
-            }
-        });
-    }
 
     // 프로필 수정 버튼 이벤트 연결
     const editProfileBtn = document.getElementById('profile-edit-btn');
@@ -720,6 +716,7 @@ async function showMyAdvices(filteredAdvices = null) {
                     petBreed: item.petBreed || '품종 미상',
                     petAge: item.petMonthAge ? `${Math.floor(item.petMonthAge / 12)}년 ${item.petMonthAge % 12}개월` : '나이 미상',
                     comment: item.content || '내용 미상',
+                    imgUrl: item.imageUrl,
                     status: item.applyStatus === 'PENDING' ? '상담 대기중' :
                         item.applyStatus === 'APPROVED' ? '상담 진행중' : '상담 완료',
                     chats: item.chats || [],
@@ -1188,75 +1185,6 @@ async function updateProfileData() {
     }
 }
 
-// 자격증 제출 함수
-async function submitCertification() {
-    try {
-        const token = validateToken();
-
-        const certName = document.getElementById('certificateName')?.value.trim();
-        const certOrg = document.getElementById('certificateOrg')?.value.trim();
-        const certDate = document.getElementById('certificateDate')?.value;
-        const certFile = document.getElementById('certificateImage')?.files[0];
-
-        if (!certName || !certOrg || !certDate || !certFile) {
-            alert('모든 필드를 채워주세요.');
-            return;
-        }
-
-        // 자격증 이미지 업로드
-        const formData = new FormData();
-        formData.append('file', certFile);
-
-        const uploadResponse = await fetch('/api/v1/files/upload', {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!uploadResponse.ok) {
-            throw new Error(`이미지 업로드 실패: ${uploadResponse.status}`);
-        }
-
-        const uploadResult = await uploadResponse.json();
-        const imageUrl = uploadResult.url; // API 응답에서 이미지 URL 추출
-
-        // 자격증 데이터 제출
-        const certData = {
-            name: certName,
-            organization: certOrg,
-            issueDate: certDate,
-            imageUrl: imageUrl
-        };
-
-        const certResponse = await fetch('/api/v1/certifications', {
-            method: 'POST',
-            headers: {
-                'accept': '*/*',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(certData)
-        });
-
-        if (!certResponse.ok) {
-            throw new Error(`자격증 등록 실패: ${certResponse.status}`);
-        }
-
-        alert('자격증이 성공적으로 등록되었습니다.');
-        // 모달 닫기
-        const modalElement = document.getElementById('trainerApplicationModal');
-        if (modalElement) {
-            const modal = bootstrap.Modal.getInstance(modalElement);
-            if (modal) {
-                modal.hide();
-            }
-        }
-        // 프로필 다시 로드
-        await showProfile();
-
-    } catch (error) {
-        console.error('자격증 등록 중 오류 발생:', error);
-        alert('자격증 등록 중 오류가 발생했습니다. 다시 시도해주세요.');
-    }
-}
 
 // 상담 관련 이벤트 리스너 연결
 function attachAdviceEventListeners(adviceData) {

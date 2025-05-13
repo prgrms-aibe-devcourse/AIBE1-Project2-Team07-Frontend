@@ -8,6 +8,13 @@ body {
     margin: 0 auto;
 }
 
+/* 모달 기본 스타일 */
+.modal-content {
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
 .trainer-modal-header {
     background-color: #ffc107;
     color: #212529;
@@ -25,17 +32,17 @@ body {
 .modal-body {
     padding: 20px;
     padding-top: 10px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background-color: #ffffff;
 }
 
-.status-badge {
-    display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    margin-left: 12px;
+.modal-footer {
+    border-top: 1px solid #eee;
+    padding: 15px 20px;
 }
 
+/* 모달 버튼 스타일 */
 .modal-footer .btn-primary {
     background-color: #fbd01e;
     border-color: #fbd01e;
@@ -56,6 +63,73 @@ body {
     background-color: #f0f0f0;
 }
 
+/* 스크롤바 스타일 */
+.modal-body::-webkit-scrollbar,
+.advice-history::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-body::-webkit-scrollbar-track,
+.advice-history::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 8px;
+}
+
+.modal-body::-webkit-scrollbar-thumb,
+.advice-history::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 8px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover,
+.advice-history::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+/* 상태 배지 스타일 */
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 12px;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-progress {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-completed {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+/* 상세보기 모달 그리드 레이아웃 */
+.advice-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.meta-item {
+    padding: 12px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    font-size: 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+/* 반려동물 정보 스타일 */
 .pet-info {
     display: flex;
     flex-wrap: wrap;
@@ -76,12 +150,14 @@ body {
     font-weight: 500;
 }
 
+/* 상담 메타 정보 */
 .advice-meta {
     margin-bottom: 15px;
     color: #666;
     font-size: 14px;
 }
 
+/* 상담 내용 스타일 */
 .advice-content {
     margin-bottom: 20px;
     line-height: 1.6;
@@ -91,42 +167,73 @@ body {
     border-left: 3px solid #fbd01e;
 }
 
-.form-label {
-    font-weight: 500;
+/* 섹션 제목 스타일 */
+.section-title {
+    font-weight: 600;
+    margin-top: 20px;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+}
+
+/* 카드 스타일 */
+.card {
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.consultation-card {
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
+    background-color: #ffffff;
+}
+
+.consultation-card .card-body {
+    padding: 15px;
+    background-color: #ffffff;
+}
+
+.consultation-card .card-subtitle {
     color: #555;
-}
-
-.sample-button-container {
-    margin-bottom: 40px;
-}
-
-.status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 12px;
     font-weight: 500;
-    margin-left: 10px;
+    margin-bottom: 10px;
 }
 
-.status-pending {
-    background-color: #fff3cd;
-    color: #856404;
+.consultation-card .card-text {
+    color: #666;
+    line-height: 1.6;
 }
 
-.status-progress {
-    background-color: #d1ecf1;
-    color: #0c5460;
+/* 상담 내역 섹션 */
+.consultation-history {
+    margin-top: 25px;
 }
 
-.status-completed {
-    background-color: #d4edda;
-    color: #155724;
+.consultation-history-title {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 16px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 8px;
 }
 
-/* 향상된 채팅 스타일 */
+/* 상담 내역 내용 */
+.history-content {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+    color: #444;
+    line-height: 1.6;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+}
+
+/* 채팅 스타일 */
 .advice-history {
-    max-height: 300px; /* 높이 증가 */
+    max-height: 300px;
     overflow-y: auto;
     padding: 15px;
     background-color: #f8f9fa;
@@ -150,6 +257,7 @@ body {
     max-width: 85%;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     line-height: 1.5;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .advice-trainer {
@@ -159,11 +267,25 @@ body {
     margin-left: auto;
 }
 
-.advice-client {
+.advice-client, .advice-user {
     background-color: #f0f0f0;
     border-left: 3px solid #bdbdbd;
     align-self: flex-start;
     margin-right: auto;
+}
+
+.chat-bubble {
+    background-color: #f8f9fa;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+}
+
+.advice-user .chat-bubble {
+    background-color: #e9ecef;
+}
+
+.advice-trainer .chat-bubble {
+    background-color: #d1e7dd;
 }
 
 .chat-time {
@@ -172,6 +294,12 @@ body {
     display: block;
     text-align: right;
     margin-top: 5px;
+}
+
+/* 폼 관련 스타일 */
+.form-label {
+    font-weight: 500;
+    color: #555;
 }
 
 .advice-form textarea {
@@ -193,7 +321,7 @@ body {
     font-size: 13px;
 }
 
-/* 답변 폼 스타일 개선 */
+/* 답변 폼 스타일 */
 .reply-form {
     background-color: #f9f9f9;
     padding: 15px;
@@ -216,52 +344,13 @@ body {
     border-color: #FF9800;
 }
 
-/* 모달 개선 스타일 */
-.modal-content {
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+/* 기타 스타일 */
+.sample-button-container {
+    margin-bottom: 40px;
 }
 
-.modal-title {
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-}
-
-.modal-body {
-    padding: 20px;
-}
-
-.modal-footer {
-    border-top: 1px solid #eee;
-    padding: 15px 20px;
-}
-
-.advice-history::-webkit-scrollbar {
-    width: 8px;
-}
-
-.advice-history::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 8px;
-}
-
-.advice-history::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 8px;
-}
-
-.advice-history::-webkit-scrollbar-thumb:hover {
-    background: #bbb;
-}
-
-/* 추가: 애니메이션 효과 */
+/* 애니메이션 */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
-}
-
-.advice-chat-item {
-    animation: fadeIn 0.3s ease-out;
 }
