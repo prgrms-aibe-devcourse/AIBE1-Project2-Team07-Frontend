@@ -5,7 +5,6 @@ let storedUser = null;
 
 try {
     storedUser = JSON.parse(userJSON);
-    console.log('로그인된 사용자 정보:', storedUser);
 } catch (e) {
     console.error('로컬스토리지 사용자 정보 파싱 실패:', e);
 }
@@ -242,8 +241,23 @@ function renderPosts(posts) {
               <span>${post.userNickname || '알 수 없음'}${post.userName ? `(이름: ${post.userName})` : ''}</span>
             </div>
           </td>
-          <td class="py-3 px-3 text-center">${post.likeCount || 0}</td>
-          <td class="py-3 px-3 text-center">${post.commentCount || 0}</td>
+          <td class="py-4 px-6 text-center">
+            <div class="flex justify-center space-x-4">
+              <span class="flex items-center">
+                <svg class="w-4 h-4 text-red-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                </svg>
+                ${post.likeCount || 0}
+              </span>
+              <span class="flex items-center">
+                <svg class="w-4 h-4 text-blue-500 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"></path>
+                </svg>
+                ${post.commentCount || 0}
+              </span>
+            </div>
+          </td>
+          
           <td class="py-3 px-3 text-center">${formattedDate}</td>
           <td class="py-3 px-6 text-center">
             <div class="flex justify-center space-x-2">
