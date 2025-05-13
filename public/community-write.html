@@ -164,7 +164,20 @@
                 <!-- Tags Input -->
                 <div class="mb-4">
                     <label for="postTags" class="form-label">태그 입력</label>
+                    <button type="button" id="tagSuggestionBtn" class="btn btn-custom btn-tag-suggestion">
+                        <i class="fa fa-magic me-1"></i> AI 추천
+                    </button>
+                    <div><br></div>
                     <input type="text" class="form-control" id="postTags" placeholder="예: 강아지, 도구 후기, 펫테리어 (쉼표로 구분)">
+                    <div id="tagSuggestionContainer" class="tag-suggestion-container" style="display: none;">
+                        <div class="tag-suggestion-loading" style="display: none;">
+                            <div class="spinner-border spinner-border-sm text-primary" role="status">
+                                <span class="visually-hidden">로딩중...</span>
+                            </div>
+                            <span class="ms-2">태그 분석 중...</span>
+                        </div>
+                        <div class="tag-suggestion-results"></div>
+                    </div>
                 </div>
 
                 <div class="mb-4">

@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const rating = cardClone.querySelector('.rating');
             if (rating) {
-                rating.innerHTML = generateStars(trainer.averageRating) + ` ${trainer.averageRating}/5점 (${trainer.reviewCount}명)`;
+                rating.innerHTML = generateStars(trainer.averageRating) + ` ${trainer.averageRating.toFixed(1)}/5점 (${trainer.reviewCount}명)`;
             }
 
             const trainerTags = cardClone.querySelector('.trainer-tags');
