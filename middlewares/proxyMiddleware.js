@@ -78,7 +78,9 @@ async function fetchWithAuth(req, res, next) {
 
     if (excludedPaths.some(path => req.path.includes(path)) || isOpenEndpoint(req.path)) {
         try {
-            const options = createRequestOptions(req.method, req.body);
+            const token =  req.cookies["accessToken"] || null;
+            console.log("token:", token);
+            const options = createRequestOptions(req.method, req.body, token);
             const response = await fetch(apiUrl, options);
 
             const ct = response.headers.get("content-type") || "";

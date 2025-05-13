@@ -54,7 +54,7 @@ function setupTrainerModal() {
     // 제출 버튼 이벤트 처리
     const submitButton = document.getElementById('submitTrainerApplication');
     if (submitButton) {
-        submitButton.addEventListener('click', () => {
+        submitButton.addEventListener('click', async () => {
             const form = document.getElementById('trainerApplicationForm');
 
             // 입력 필드 검증
@@ -72,6 +72,40 @@ function setupTrainerModal() {
             // 실제 서버에 데이터를 전송하는 코드가 들어갈 자리입니다.
             // 현재는 백엔드가 연결되지 않았으므로 성공 메시지만 표시합니다.
             // alert('훈련사 신청이 완료되었습니다. 관리자 승인 후 훈련사로 활동하실 수 있습니다.');
+            const certificationDTO = {
+                certName: certificateName,
+                issuingBody: certificateOrg,
+                issueDate: certificateDate
+            }
+
+            const formData = new FormData();
+            formData.append('certification', new Blob([JSON.stringify(certificationDTO)], {
+                type: 'application/json'
+            }));
+
+            formData.append('file', certificateImage);
+
+
+            try {
+                const response = await fetch('/api/v1/trainers/apply', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    throw new Error('어플라이 데이터를 가져오는데 실패했습니다.');
+                }
+
+                data = await response.json();
+
+                console.log(data);
+
+            } catch (error) {
+                console.error('신청 데이터 로드 오류:', error);
+                alert('신청 데이터를 불러오는데 실패했습니다.');
+            }
+
+
 
             // 모달 닫기
             const modal = bootstrap.Modal.getInstance(document.getElementById('trainerApplicationModal'));
