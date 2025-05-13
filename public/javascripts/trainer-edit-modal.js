@@ -1,18 +1,19 @@
 // 트레이너 프로필 편집 모달 관련 스크립트
 let editTrainerModal;
 let currentPhotos = []; // 현재 사진 목록 저장
+let originalPhotos = []; // 원본 사진 저장용
 
 // 문서 로드 후 초기화
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function () {
     // 모달 요소 가져오기
     editTrainerModal = new bootstrap.Modal(document.getElementById('editTrainerModal'));
 
     // 모달 내 요소들에 대한 이벤트 리스너 설정
-    setupModalEventListeners();
+    await setupModalEventListeners();
 });
 
 // 모달 이벤트 리스너 설정
-function setupModalEventListeners() {
+async function setupModalEventListeners() {
     // 사진 추가 버튼 이벤트
     const addPhotoBtn = document.getElementById('add-photo-btn');
     if (addPhotoBtn) {
@@ -22,7 +23,7 @@ function setupModalEventListeners() {
     // 저장 버튼 이벤트
     const saveTrainerBtn = document.getElementById('save-trainer-btn');
     if (saveTrainerBtn) {
-        saveTrainerBtn.addEventListener('click', saveTrainerProfile);
+        saveTrainerBtn.addEventListener('click', await saveTrainerProfile);
     }
 
     // 교육 문의 모달 관련 이벤트 리스너
@@ -34,7 +35,7 @@ function setupInquiryModalListeners() {
     // 교육 문의 버튼 클릭 시 모달 열기
     const inquiryButton = document.getElementById('inquiry-button');
     if (inquiryButton) {
-        inquiryButton.addEventListener('click', function() {
+        inquiryButton.addEventListener('click', function () {
             const inquiryModal = new bootstrap.Modal(document.getElementById('inquiryModal'));
 
             // 트레이너 이름을 모달 제목에 설정
@@ -52,7 +53,7 @@ function setupInquiryModalListeners() {
     const charCount = document.getElementById('charCount');
 
     if (inquiryMessage && charCount) {
-        inquiryMessage.addEventListener('input', function() {
+        inquiryMessage.addEventListener('input', function () {
             const count = this.value.length;
             charCount.textContent = count;
 
@@ -70,12 +71,12 @@ function setupInquiryModalListeners() {
     const inquiryFileInput = document.getElementById('inquiryFileInput');
 
     if (fileAttachmentBtn && inquiryFileInput) {
-        fileAttachmentBtn.addEventListener('click', function() {
+        fileAttachmentBtn.addEventListener('click', function () {
             inquiryFileInput.click();
         });
 
         // 파일 선택 시 파일명 표시
-        inquiryFileInput.addEventListener('change', function() {
+        inquiryFileInput.addEventListener('change', function () {
             const fileList = document.getElementById('fileList');
             if (fileList) {
                 fileList.innerHTML = '';
@@ -126,6 +127,8 @@ function openEditTrainerModal(trainerData) {
         document.getElementById('video-price').value = videoPrice.amount;
     }
 
+    originalPhotos = trainerData.photos;
+
     // 사진 정보 설정
     setupPhotosInModal(trainerData.photos);
 
@@ -140,7 +143,7 @@ function setupPhotosInModal(photos) {
     currentPhotos = [...photos];
 
     // 사진 프리뷰 렌더링
-    currentPhotos.forEach((url, idx) => addPhotoPreview(url, idx));
+    currentPhotos.forEach((photo, idx) => addPhotoPreview(photo, idx));
 
     // 사진 추가 버튼 활성/비활성
     const addBtn = document.getElementById('add-photo-btn');
@@ -150,7 +153,7 @@ function setupPhotosInModal(photos) {
 }
 
 // 사진 미리보기 추가
-function addPhotoPreview(photoUrl, index) {
+function addPhotoPreview(photo, index) {
     const photosContainer = document.getElementById('photos-container');
 
     const photoCol = document.createElement('div');
@@ -159,7 +162,7 @@ function addPhotoPreview(photoUrl, index) {
 
     photoCol.innerHTML = `
         <div class="photo-preview-container">
-            <img src="${photoUrl}" class="img-fluid photo-preview" alt="트레이너 사진">
+            <img src="${photo.fileUrl}" class="img-fluid photo-preview" alt="트레이너 사진">
             <button type="button" class="btn btn-danger btn-sm delete-photo" data-index="${index}">
                 <i class="bi bi-trash"></i> 삭제
             </button>
@@ -168,7 +171,7 @@ function addPhotoPreview(photoUrl, index) {
 
     // 삭제 버튼에 이벤트 리스너 추가
     const deleteBtn = photoCol.querySelector('.delete-photo');
-    deleteBtn.addEventListener('click', function() {
+    deleteBtn.addEventListener('click', function () {
         const index = parseInt(this.dataset.index);
         deletePhoto(index);
     });
@@ -188,12 +191,13 @@ function addPhotoInput() {
     fileInput.accept = 'image/*';
     fileInput.style.display = 'none';
 
-    fileInput.addEventListener('change', function() {
+    fileInput.addEventListener('change', function () {
         if (this.files && this.files[0]) {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                currentPhotos.push(e.target.result);
-                addPhotoPreview(e.target.result, currentPhotos.length - 1);
+            reader.onload = function (e) {
+                const photo = {fileUrl: e.target.result};
+                currentPhotos.push(photo);
+                addPhotoPreview(photo, currentPhotos.length - 1);
                 // 사진 추가 버튼 활성/비활성 재검사
                 document.getElementById('add-photo-btn').disabled = currentPhotos.length >= 2;
             };
@@ -216,7 +220,7 @@ function deletePhoto(index) {
 }
 
 // 트레이너 프로필 저장
-function saveTrainerProfile() {
+async function saveTrainerProfile() {
     // 폼 데이터 수집
     const trainerData = {
         id: document.getElementById('trainer-id').value,
@@ -246,7 +250,7 @@ function saveTrainerProfile() {
     }
 
     // API 호출 (백엔드 연동 시)
-    // updateTrainerProfile(trainerData);
+    await updateTrainerProfile(trainerData);
 
     // 임시로 로컬 데이터 업데이트
     Object.assign(window.trainerData, trainerData);
@@ -259,6 +263,67 @@ function saveTrainerProfile() {
 
     // 성공 메시지 표시
     showSuccessMessage('트레이너 정보가 성공적으로 업데이트되었습니다.');
+}
+
+async function updateTrainerProfile(trainerData) {
+    const formData = new FormData();
+
+    const profileData = {
+        title: trainerData.title,
+        representativeCareer: trainerData.career,
+        specializationText: trainerData.specialties,
+        visitingAreas: trainerData.locations,
+        serviceFees: trainerData.prices.map(price => ({
+            serviceType: price.type === "방문교육" ? "VISIT_TRAINING" : "VIDEO_TRAINING",
+            time: price.duration.split('분')[0],
+            price: price.amount
+        })),
+        tags: [],
+        introduction: trainerData.description
+    };
+
+    // Add profile data as JSON
+    formData.append('profileData', new Blob([JSON.stringify(profileData)], {
+        type: 'application/json'
+    }));
+
+    if (isPhotoModified(originalPhotos, trainerData.photos)) {
+        const photoFiles = await Promise.all(
+            trainerData.photos.map(async (photoData, index) => {
+                if (photoData instanceof File) return photoData;
+                const response = await fetch(photoData.fileUrl || photoData);
+                const blob = await response.blob();
+                return new File([blob], `trainer_photo_${index}.jpg`, {type: blob.type || 'image/jpeg'});
+            })
+        );
+        photoFiles.forEach(file => {
+            formData.append('photos', file);
+        });
+    }
+
+    // Send the PUT request
+    const response = await fetch(`/api/v1/trainers/${trainerData.id}`, {
+        method: 'PUT',
+        body: formData,
+    });
+
+    // Check if the response is successful
+    if (!response.ok) {
+        // Parse error response
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update trainer profile');
+    }
+}
+
+function isPhotoModified(original, current) {
+    if (original.length !== current.length) return true;
+
+    for (let i = 0; i < original.length; i++) {
+        if (original[i].fileUrl !== current[i].fileUrl || original[i].fileName !== current[i].fileName) {
+            return true;
+        }
+    }
+    return false;
 }
 
 // 폼 검증

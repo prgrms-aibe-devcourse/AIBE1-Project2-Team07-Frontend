@@ -10,7 +10,7 @@ window.currentUserId = 1;   // 나중에 로그인 한 사람으로 바꿔야 �
 const baseUrl = "/api/v1/";
 const accessToken = localStorage.getItem('accessToken');
 // 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function () {
     const btn = document.getElementById('toggle-description-btn');
     const desc = document.getElementById('trainer-description');
 
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     if (trainerNickname) {
-        loadTrainerDataByNickname(trainerNickname);
+        await loadTrainerDataByNickname(trainerNickname);
     } else {
         showError('유효한 트레이너 정보가 전달되지 않았습니다.');
     }
@@ -55,8 +55,6 @@ async function loadTrainerReviewByNickname(trainerNickname) {
         }
 
         const apiReviews = await response.json();
-
-        console.log(apiReviews);
 
         // API 리뷰 데이터를 사이트 형식으로 변환
         allReviews = convertApiReviewsToSiteFormat(apiReviews);
@@ -101,7 +99,7 @@ function convertApiReviewsToSiteFormat(apiReviews) {
 function renderReviews(reviews, append = false) {
     const reviewsContainer = document.getElementById('reviews-container');
 
-    if(!reviewsContainer) {
+    if (!reviewsContainer) {
         return;
     }
 
@@ -168,7 +166,7 @@ function renderReviews(reviews, append = false) {
 function setupLikeButtonEvents() {
     const likeButtons = document.querySelectorAll('.like-button');
     likeButtons.forEach(button => {
-        button.addEventListener('click', async function(event) {
+        button.addEventListener('click', async function (event) {
             event.preventDefault();
 
             if (!checkUserLoggedIn()) {
@@ -241,9 +239,9 @@ async function loadTrainerDataByNickname(trainerNickname) {
         // API 데이터를 기존 사이트 형식으로 변환
         trainerData = convertApiDataToSiteFormat(apiData);
         window.nickname = apiData.nickname;
+        window.trainerData = trainerData;
         // UI 렌더링
         renderTrainerProfile(trainerData);
-
 
 
         // 이벤트 리스너 설정
@@ -275,6 +273,7 @@ function convertApiDataToSiteFormat(apiData) {
     const prices = [];
     if (apiData.serviceFees && Array.isArray(apiData.serviceFees)) {
         apiData.serviceFees.forEach(fee => {
+            console.log(fee);
             // 서비스 타입을 한글로 변환
             let type = "교육";
             if (fee.serviceType === "VIDEO_TRAINING") {
@@ -315,7 +314,11 @@ function convertApiDataToSiteFormat(apiData) {
     } else {
         // 자격증이 없을 경우 기본 자격증 설정
         qualifications.push(
-            { title: "반려동물 행동 전문가", organization: "한국애견연맹", image: "https://cdn-icons-png.flaticon.com/512/190/190411.png" }
+            {
+                title: "반려동물 행동 전문가",
+                organization: "한국애견연맹",
+                image: "https://cdn-icons-png.flaticon.com/512/190/190411.png"
+            }
         );
     }
 
@@ -363,6 +366,7 @@ function convertApiDataToSiteFormat(apiData) {
 
 // 트레이너 프로필 렌더링 함수
 function renderTrainerProfile(data) {
+    console.log(data);
     // 템플릿 복제
     const template = document
         .getElementById('trainer-profile-template')
@@ -376,11 +380,11 @@ function renderTrainerProfile(data) {
 
 
     // 로그인 사용자 ID와 트레이너 ID가 같으면 “수정” 버튼 추가
-    try{
+    try {
         const user = JSON.parse(localStorage.getItem('user'));
         if (user.name === data.name) {
             const editBtn = document.createElement('button');
-            editBtn.type      = 'button';
+            editBtn.type = 'button';
             editBtn.className = 'btn btn-outline-secondary btn-sm btn-edit';
             editBtn.textContent = '수정';
             editBtn.addEventListener('click', () => {
@@ -388,10 +392,9 @@ function renderTrainerProfile(data) {
             });
             titleContainer.appendChild(editBtn);
         }
-    }catch(e){
+    } catch (e) {
 
     }
-
 
 
     // 기본 정보 설정
@@ -452,7 +455,7 @@ function renderTrainerProfile(data) {
         colDiv.className = 'col-md-6';
 
         const img = document.createElement('img');
-        img.src = photo;
+        img.src = photo.fileUrl;
         img.alt = `트레이너 사진 ${index + 1}`;
         img.className = 'img-fluid cat-photo';
 
@@ -522,10 +525,9 @@ function renderTrainerProfile(data) {
         const radio = document.querySelector(`input[name="serviceType"][value="${serviceType}"]`);
         if (radio) radio.checked = true;
 
-        if (checkUserLoggedIn()){
+        if (checkUserLoggedIn()) {
             new bootstrap.Modal(document.getElementById('inquiryModal')).show();
-        }
-        else{
+        } else {
             new bootstrap.Modal(document.getElementById('loginModal')).show();
         }
 
@@ -582,7 +584,7 @@ function setupEventListeners() {
     // 후기 더보기 버튼 클릭 이벤트
     const reviewMoreBtn = document.getElementById('load-more-reviews');
     if (reviewMoreBtn) {
-        reviewMoreBtn.addEventListener('click', function() {
+        reviewMoreBtn.addEventListener('click', function () {
             loadReviews(currentPage + 1, true);
         });
     }
