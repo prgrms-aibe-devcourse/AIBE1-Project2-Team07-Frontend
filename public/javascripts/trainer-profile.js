@@ -243,7 +243,6 @@ async function loadTrainerDataByNickname(trainerNickname) {
         // UI 렌더링
         renderTrainerProfile(trainerData);
 
-
         // 이벤트 리스너 설정
         setupEventListeners();
 
@@ -259,7 +258,6 @@ async function loadTrainerDataByNickname(trainerNickname) {
 }
 
 // API 데이터를 사이트 형식으로 변환하는 함수
-// API 데이터를 사이트 형식으로 변환하는 함수
 function convertApiDataToSiteFormat(apiData) {
     // 기본 이미지 URL (프로필 이미지가 없을 경우 사용)
     const defaultProfileImage = "https://placedog.net/200/200?random=1";
@@ -273,7 +271,6 @@ function convertApiDataToSiteFormat(apiData) {
     const prices = [];
     if (apiData.serviceFees && Array.isArray(apiData.serviceFees)) {
         apiData.serviceFees.forEach(fee => {
-            console.log(fee);
             // 서비스 타입을 한글로 변환
             let type = "교육";
             if (fee.serviceType === "VIDEO_TRAINING") {
@@ -323,24 +320,35 @@ function convertApiDataToSiteFormat(apiData) {
     }
 
     // 사진 배열 처리
-    let photos = [defaultPhoto, defaultPhoto];
+    let photos = [
+        {fileUrl: defaultPhoto, position: 0},
+        {fileUrl: defaultPhoto, position: 1}
+    ];
+
     if (apiData.photos) {
         try {
             // 문자열이면 파싱 시도
             if (typeof apiData.photos === 'string') {
                 const parsedPhotos = JSON.parse(apiData.photos);
                 if (Array.isArray(parsedPhotos) && parsedPhotos.length > 0) {
-                    photos = parsedPhotos;
+                    photos = parsedPhotos.slice(0, 2).map((p, idx) => ({
+                        fileUrl: typeof p === 'string' ? p : p.fileUrl,
+                        position: idx
+                    }));
                 }
             }
-            // 이미 배열이면 그대로 사용
+            // 이미 배열이면 객체 형태로 매핑
             else if (Array.isArray(apiData.photos) && apiData.photos.length > 0) {
-                photos = apiData.photos;
+                photos = apiData.photos.slice(0, 2).map((p, idx) => ({
+                    fileUrl: typeof p === 'string' ? p : p.fileUrl,
+                    position: idx
+                }));
             }
         } catch (error) {
             console.error("사진 데이터 파싱 오류:", error);
         }
     }
+
 
     return {
         id: apiData.trainerId,
@@ -366,7 +374,6 @@ function convertApiDataToSiteFormat(apiData) {
 
 // 트레이너 프로필 렌더링 함수
 function renderTrainerProfile(data) {
-    console.log(data);
     // 템플릿 복제
     const template = document
         .getElementById('trainer-profile-template')
@@ -377,7 +384,6 @@ function renderTrainerProfile(data) {
     const titleContainer = template.querySelector('#trainer-title-container');
     const titleEl = template.querySelector('#trainer-title');
     titleEl.textContent = data.title;
-
 
     // 로그인 사용자 ID와 트레이너 ID가 같으면 “수정” 버튼 추가
     try {
@@ -395,8 +401,7 @@ function renderTrainerProfile(data) {
     } catch (e) {
 
     }
-
-
+    
     // 기본 정보 설정
     template.querySelector('#trainer-title').textContent = data.title;
     template.querySelector('#trainer-name').textContent = data.nickname + ` (${data.name} 훈련사)`;
@@ -451,11 +456,16 @@ function renderTrainerProfile(data) {
     // 트레이너 사진 갤러리
     const photosContainer = template.querySelector('#trainer-photos');
     data.photos.forEach((photo, index) => {
+        // photo 가 여전히 문자열일 수도, 객체일 수도 있으니 안전하게 꺼내기
+        const url = typeof photo === 'string'
+            ? photo
+            : photo.fileUrl;
+
         const colDiv = document.createElement('div');
         colDiv.className = 'col-md-6';
 
         const img = document.createElement('img');
-        img.src = photo.fileUrl;
+        img.src = url;
         img.alt = `트레이너 사진 ${index + 1}`;
         img.className = 'img-fluid cat-photo';
 
