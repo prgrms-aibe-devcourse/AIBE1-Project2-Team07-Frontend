@@ -60,17 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
         const containerDiv = document.querySelector('.trainer-section .container');
         if (containerDiv) {
             // h1 요소 찾기
-            const trainerSectionTitle = containerDiv.querySelector('h1');
+            const trainerSectionTitle = containerDiv.querySelector('.text');
 
             if (trainerSectionTitle) {
-                // h1 요소 다음에 검색 UI 삽입
                 containerDiv.insertBefore(searchContainer, trainerSectionTitle.nextSibling);
             } else {
-                // h1 요소가 없는 경우 컨테이너의 첫 번째 자식으로 삽입
                 containerDiv.prepend(searchContainer);
             }
-
-            // 이벤트 핸들러 추가
             initSearchEventHandlers();
         } else {
             console.error('.trainer-section .container 요소를 찾을 수 없습니다.');
