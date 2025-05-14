@@ -682,7 +682,7 @@ function createPostElement(post) {
         case 'FREE':
             postCategoryText = '자유게시판';
             break;
-        case 'REVIEW':
+        case 'TOOL':
             postCategoryText = '펫 도구 후기';
             break;
         case 'QNA':

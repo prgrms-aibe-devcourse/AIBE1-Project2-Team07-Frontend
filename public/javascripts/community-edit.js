@@ -52,13 +52,51 @@ document.addEventListener('DOMContentLoaded', async function () {
     let videoToDelete = false; // 비디오 삭제 여부
     let tags = []; // 모든 태그 배열 [{tagId: number, tagName: string}]
     let selectedTags = [];
+    let selectedTagsContainer;
     // 선택된 태그 ID 배열
+    window.addTag = function(tag) {
+        // 태그 ID로 중복 체크
+        if (selectedTags.includes(tag.tagId)) {
+            return;
+        }
+
+        // 태그 이름으로 중복 체크 (같은 이름의 태그가 이미 선택되어 있는지)
+        const isTagNameAlreadySelected = Array.from(document.querySelectorAll('.selected-tag span:first-child'))
+            .some(span => span.textContent === `#${tag.tagName}`);
+
+        if (isTagNameAlreadySelected) {
+            return;
+        }
+
+        selectedTags.push(tag.tagId);
+
+        // 선택한 태그 UI 생성
+        const tagElement = document.createElement('div');
+        tagElement.classList.add('selected-tag', 'd-inline-flex', 'align-items-center', 'rounded', 'py-1', 'px-2', 'me-1', 'mb-1');
+
+        const tagText = document.createElement('span');
+        tagText.textContent = `#${tag.tagName}`;
+
+        const removeBtn = document.createElement('span');
+        removeBtn.classList.add('ms-2', 'cursor-pointer');
+        removeBtn.innerHTML = '&times;';
+        removeBtn.addEventListener('click', () => removeTag(tag.tagId, tagElement));
+
+        tagElement.appendChild(tagText);
+        tagElement.appendChild(removeBtn);
+        selectedTagsContainer.appendChild(tagElement);
+
+        // hidden input 업데이트
+        updateTagsInput();
+    };
 
     // 태그 데이터 가져오기
     fetchTags();
 
     // 게시글 데이터 가져오기
     fetchPostData();
+
+    initTagBtn()
 
     // 이벤트 리스너 설정
     photoUploadBtn.addEventListener('click', function () {
@@ -397,7 +435,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 throw new Error('태그 데이터를 가져오는데 실패했습니다.');
             }
 
+            // 가져온 태그 데이터를 전역 변수에도 저장
             tags = await response.json();
+            window.tags = tags;  // window 객체에 태그 정보 저장
 
             // 태그 입력 UI 설정
             setupTagInput();
@@ -424,6 +464,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // 태그 비교
         if (selectedTags.length !== originalData.tags.length) return true;
+
+        // 태그 내용 비교 (ID와 이름 매핑하여 비교)
+        const selectedTagNames = selectedTags.map(tagId => {
+            const tag = tags.find(t => t.tagId === tagId);
+            return tag ? tag.tagName : null;
+        }).filter(name => name !== null).sort();
+
+        const originalTagNames = [...originalData.tags].sort();
+
+        // 배열 내용 비교
+        for (let i = 0; i < selectedTagNames.length; i++) {
+            if (selectedTagNames[i] !== originalTagNames[i]) {
+                return true; // 태그가 변경됨
+            }
+        }
 
         // 삭제 예정 사진/비디오 확인
         if (photosToDelete.length > 0) return true;
@@ -547,12 +602,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         // 태그 입력 컨테이너 생성
         const tagInputContainer = document.createElement('div');
         tagInputContainer.classList.add('tag-input-container', 'd-flex', 'flex-wrap', 'align-items-center');
+        tagInputContainer.style.position = 'relative';
+
 
         // 기존 태그 입력란의 부모 요소
         const tagInputParent = postTagsInput.parentElement;
 
         // 선택된 태그들이 표시될 영역
-        const selectedTagsContainer = document.createElement('div');
+        selectedTagsContainer = document.createElement('div');
         selectedTagsContainer.classList.add('selected-tags-container', 'd-flex', 'flex-wrap');
 
         // 태그 입력을 위한 input 요소
@@ -563,9 +620,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // 자동완성 드롭다운
         const autocompleteDropdown = document.createElement('div');
-        autocompleteDropdown.classList.add('autocomplete-dropdown', 'position-absolute', 'w-100', 'shadow-sm');
+        autocompleteDropdown.classList.add('autocomplete-dropdown', 'position-absolute', 'bg-white', 'border', 'rounded', 'mt-1', 'w-100', 'shadow-sm');
         autocompleteDropdown.style.display = 'none';
         autocompleteDropdown.style.zIndex = '1000';
+        autocompleteDropdown.style.maxHeight = '200px';
+        autocompleteDropdown.style.top = '100%';
+        autocompleteDropdown.style.overflowY = 'auto';
 
         // 원래 input 숨기기
         postTagsInput.style.display = 'none';
@@ -573,10 +633,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         // 새 요소들 추가
         tagInputContainer.appendChild(selectedTagsContainer);
         tagInputContainer.appendChild(tagInput);
+        tagInputContainer.appendChild(autocompleteDropdown);
 
         // 기존 입력란 다음에 새 컨테이너 추가
         tagInputParent.insertBefore(tagInputContainer, postTagsInput.nextSibling);
-        tagInputParent.appendChild(autocompleteDropdown);
 
         // 키보드 네비게이션을 위한 변수
         let currentFocus = -1;
@@ -703,7 +763,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // UI에 태그 추가
     function addTagToUI(tag) {
-        const selectedTagsContainer = document.querySelector('.selected-tags-container');
+        selectedTagsContainer = document.querySelector('.selected-tags-container');
 
         // 태그 UI 요소 생성
         const tagElement = document.createElement('div');
@@ -728,8 +788,125 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (index > -1) {
             selectedTags.splice(index, 1);
             element.remove();
+            // hidden input 업데이트
+            updateTagsInput();
         }
     }
+
+    function updateTagsInput() {
+        postTagsInput.value = JSON.stringify(selectedTags);
+    }
+
+    async function initTagBtn(){
+        const tagSuggestionBtn = document.getElementById('tagSuggestionBtn');
+        const tagSuggestionContainer = document.getElementById('tagSuggestionContainer');
+        const tagSuggestionLoading = document.querySelector('.tag-suggestion-loading');
+        const tagSuggestionResults = document.querySelector('.tag-suggestion-results');
+        const postContentTextarea = document.getElementById('postContent');
+        const postTitleInput = document.getElementById('postTitle');
+
+        if (!tagSuggestionBtn) return;
+
+        tagSuggestionBtn.addEventListener('click', async function() {
+            // 제목과 내용이 있는지 확인
+            const title = postTitleInput.value.trim();
+            const content = postContentTextarea.value.trim();
+
+            if (!title && !content) {
+                alert('태그를 추천받으려면 제목 또는 내용을 입력해주세요.');
+                return;
+            }
+
+            // 로딩 상태 표시
+            tagSuggestionContainer.style.display = 'block';
+            tagSuggestionLoading.style.display = 'flex';
+            tagSuggestionResults.innerHTML = '';
+
+            try {
+                // AI API 호출
+                const response = await fetch('/api/v1/mcp/tag/post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        content
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('태그 추천을 가져오는데 실패했습니다.');
+                }
+
+                const responseData = await response.json();
+
+                // tags 속성에서 태그 배열 추출
+                const suggestedTags = responseData.tags || [];
+
+                // 로딩 숨기기
+                tagSuggestionLoading.style.display = 'none';
+
+                // 결과가 있는 경우
+                if (suggestedTags && suggestedTags.length > 0) {
+                    suggestedTags.forEach(tagName => {
+                        const tagElement = document.createElement('div');
+                        tagElement.classList.add('suggested-tag');
+                        tagElement.innerHTML = `<i class="fa fa-tag"></i>${tagName}`;
+
+                        // 이미 선택된 태그인지 확인 (문자열로 확인)
+                        const isAlreadySelected = Array.from(document.querySelectorAll('.selected-tag span:first-child'))
+                            .some(span => span.textContent === `#${tagName}`);
+
+                        if (isAlreadySelected) {
+                            tagElement.classList.add('selected');
+                        }
+
+                        // 태그 클릭 이벤트
+                        tagElement.addEventListener('click', function() {
+                            // 태그 목록이 존재하는지 확인
+                            if (window.tags && Array.isArray(window.tags)) {
+                                // 모든 태그에서 이름이 일치하는 태그 찾기
+                                const matchingTag = window.tags.find(tag => tag.tagName === tagName);
+                                if (matchingTag) {
+                                    // 선택된 스타일 적용
+                                    tagElement.classList.add('selected');
+                                    // 글로벌 스코프에 있는 addTag 함수 호출
+                                    window.addTag(matchingTag);
+                                    return; // 추가 후 함수 종료
+                                }
+                            }
+
+                            // 태그가 시스템에 없거나 tags 배열이 없는 경우 (새 태그)
+                            // 임시 태그 객체 생성 (ID는 실제 생성 시 백엔드에서 부여)
+                            const tempTag = {
+                                tagId: `5000000`, // 임시 ID
+                                tagName: tagName
+                            };
+
+                            // 선택된 스타일 적용
+                            tagElement.classList.add('selected');
+                            // 글로벌 스코프에 있는 addTag 함수 호출
+                            window.addTag(tempTag);
+
+                        });
+
+                        tagSuggestionResults.appendChild(tagElement);
+                    });
+                } else {
+                    // 결과가 없는 경우
+                    tagSuggestionResults.innerHTML = '<div class="text-muted small">내용에 맞는 태그를 찾을 수 없습니다. 직접 입력해주세요.</div>';
+                }
+
+            } catch (error) {
+                console.error('태그 추천 오류:', error);
+                tagSuggestionLoading.style.display = 'none';
+                tagSuggestionResults.innerHTML = '<div class="text-danger small">태그 추천 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</div>';
+            }
+        });
+    }
+
+
 
     // 확인 모달 표시
     function showConfirmModal(message, callback) {
