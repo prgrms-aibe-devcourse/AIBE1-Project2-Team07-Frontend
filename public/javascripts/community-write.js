@@ -48,15 +48,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     };
 
-    // removeTag 함수도 외부로 이동
     function removeTag(tagId, element) {
         const index = selectedTags.indexOf(tagId);
         if (index > -1) {
             selectedTags.splice(index, 1);
             element.remove();
-            updateTagsInput();
         }
     }
+
 
     // hidden input 업데이트 함수도 외부로 이동
     function updateTagsInput() {
@@ -118,8 +117,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             try {
                 // AI API 호출
-                const response = await fetch('/api/v1/mcp/tag/post?title=' + title + '&content=' + content, {
-                    method: 'GET'
+                const response = await fetch('/api/v1/mcp/tag/post', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title,
+                        content
+                    })
                 });
 
                 if (!response.ok) {
@@ -153,32 +159,30 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                         // 태그 클릭 이벤트
                         tagElement.addEventListener('click', function() {
-                            if (!isAlreadySelected) {
-                                // 태그 목록이 존재하는지 확인
-                                if (window.tags && Array.isArray(window.tags)) {
-                                    // 모든 태그에서 이름이 일치하는 태그 찾기
-                                    const matchingTag = window.tags.find(tag => tag.tagName === tagName);
-                                    if (matchingTag) {
-                                        // 선택된 스타일 적용
-                                        tagElement.classList.add('selected');
-                                        // 글로벌 스코프에 있는 addTag 함수 호출
-                                        window.addTag(matchingTag);
-                                        return; // 추가 후 함수 종료
-                                    }
+                            // 태그 목록이 존재하는지 확인
+                            if (window.tags && Array.isArray(window.tags)) {
+                                // 모든 태그에서 이름이 일치하는 태그 찾기
+                                const matchingTag = window.tags.find(tag => tag.tagName === tagName);
+                                if (matchingTag) {
+                                    // 선택된 스타일 적용
+                                    tagElement.classList.add('selected');
+                                    // 글로벌 스코프에 있는 addTag 함수 호출
+                                    window.addTag(matchingTag);
+                                    return; // 추가 후 함수 종료
                                 }
-
-                                // 태그가 시스템에 없거나 tags 배열이 없는 경우 (새 태그)
-                                // 임시 태그 객체 생성 (ID는 실제 생성 시 백엔드에서 부여)
-                                const tempTag = {
-                                    tagId: `temp-${Date.now()}`, // 임시 ID
-                                    tagName: tagName
-                                };
-
-                                // 선택된 스타일 적용
-                                tagElement.classList.add('selected');
-                                // 글로벌 스코프에 있는 addTag 함수 호출
-                                window.addTag(tempTag);
                             }
+
+                            // 태그가 시스템에 없거나 tags 배열이 없는 경우 (새 태그)
+                            // 임시 태그 객체 생성 (ID는 실제 생성 시 백엔드에서 부여)
+                            const tempTag = {
+                                tagId: `500000`, // 임시 ID
+                                tagName: tagName
+                            };
+
+                            // 선택된 스타일 적용
+                            tagElement.classList.add('selected');
+                            // 글로벌 스코프에 있는 addTag 함수 호출
+                            window.addTag(tempTag);
                         });
 
                         tagSuggestionResults.appendChild(tagElement);
@@ -366,6 +370,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         // 태그 입력란 요소
         const tagInputContainer = document.createElement('div');
         tagInputContainer.classList.add('tag-input-container', 'd-flex', 'flex-wrap', 'align-items-center', 'border', 'rounded', 'p-2');
+        tagInputContainer.style.position = 'relative';
 
         // 기존 태그 입력란을 감싸는 부모 요소
         const tagInputParent = postTagsInput.parentElement;
@@ -386,6 +391,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         autocompleteDropdown.style.display = 'none';
         autocompleteDropdown.style.zIndex = '1000';
         autocompleteDropdown.style.maxHeight = '200px';
+        autocompleteDropdown.style.top = '100%';
         autocompleteDropdown.style.overflowY = 'auto';
 
         // 원래 input 숨기기
@@ -393,11 +399,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // 새 요소들 추가
         tagInputContainer.appendChild(selectedTagsContainer);
-        tagInputContainer.appendChild(tagInput);
+        tagInputContainer.appendChild(tagInput)
+        tagInputContainer.appendChild(autocompleteDropdown);
 
         // 기존 입력란 다음에 새 컨테이너 추가
         tagInputParent.insertBefore(tagInputContainer, postTagsInput.nextSibling);
-        tagInputParent.appendChild(autocompleteDropdown);
 
         // 키보드 네비게이션을 위한 변수들
         let currentFocus = -1;
