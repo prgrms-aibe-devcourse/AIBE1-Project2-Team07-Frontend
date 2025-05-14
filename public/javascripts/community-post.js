@@ -662,7 +662,7 @@ async function renderPostDetail(post) {
             case 'FREE':
                 categoryText = '자유 게시판';
                 break;
-            case 'REVIEW':
+            case 'TOOL':
                 categoryText = '펫 도구 후기';
                 break;
             case 'QNA':
